@@ -3,6 +3,7 @@ import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
+import OnboardingWizard from './pages/onboarding/OnboardingWizard';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/onboarding" element={<div className="p-8">Onboarding (Coming Soon)</div>} />
+        <Route path="/onboarding" element={<OnboardingWizard />} />
         <Route path="/dashboard" element={<div className="p-8">Dashboard (Coming Soon)</div>} />
         <Route path="/checkout" element={<div className="p-8">Checkout (Coming Soon)</div>} />
       </Routes>
