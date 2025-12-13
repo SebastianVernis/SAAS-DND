@@ -3,6 +3,7 @@ import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
+import OnboardingWizard from './pages/onboarding/OnboardingWizard';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardHome from './pages/dashboard/Home';
 import Projects from './pages/dashboard/Projects';
@@ -16,7 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/onboarding" element={<div className="p-8">Onboarding (Agente trabajando...)</div>} />
+        <Route path="/onboarding" element={<OnboardingWizard />} />
         <Route path="/checkout" element={<div className="p-8">Checkout (Coming Soon)</div>} />
         
         {/* Dashboard Routes */}
