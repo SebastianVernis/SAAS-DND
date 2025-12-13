@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify your email</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
+    .header h1 { margin: 0 0 10px; font-size: 28px; }
+    .header p { margin: 0; font-size: 16px; opacity: 0.9; }
+    .content { padding: 40px 30px; color: #333; }
+    .content h2 { color: #333; margin-top: 0; }
+    .otp-code { font-size: 36px; font-weight: bold; letter-spacing: 8px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; padding: 30px 20px; margin: 30px 0; border: 2px dashed #667eea; border-radius: 8px; }
+    .info-box { background: #f9f9f9; border-left: 4px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    .footer { background: #f9f9f9; padding: 20px; text-align: center; color: #666; font-size: 14px; }
+    .footer a { color: #667eea; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 DragNDrop</h1>
+      <p>Verify your email address</p>
+    </div>
+    
+    <div class="content">
+      <h2>Hi {{name}}! 👋</h2>
+      <p>Thanks for signing up for DragNDrop! To complete your registration, please verify your email address using the code below:</p>
+      
+      <div class="otp-code">{{otpCode}}</div>
+      
+      <div class="info-box">
+        <strong>⏰ Important:</strong> This code expires in 10 minutes.
+      </div>
+      
+      <p>If you didn't create an account with DragNDrop, you can safely ignore this email.</p>
+      
+      <p>Need help? Reply to this email or visit our <a href="https://dragndrop.com/support">support center</a>.</p>
+    </div>
+    
+    <div class="footer">
+      <p><strong>DragNDrop</strong> - Visual HTML Editor</p>
+      <p>© 2024 DragNDrop. All rights reserved.</p>
+      <p><a href="https://dragndrop.com">Website</a> | <a href="https://dragndrop.com/privacy">Privacy</a> | <a href="https://dragndrop.com/terms">Terms</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Confirmed</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 40px 20px; text-align: center; }
+    .header h1 { margin: 0 0 10px; font-size: 28px; }
+    .content { padding: 40px 30px; color: #333; }
+    .success-icon { text-align: center; font-size: 60px; margin: 20px 0; }
+    .plan-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; padding: 25px; margin: 25px 0; text-align: center; }
+    .plan-box h2 { margin: 0 0 10px; font-size: 32px; }
+    .plan-box p { margin: 5px 0; opacity: 0.9; }
+    .invoice-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+    .invoice-table td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
+    .invoice-table td:first-child { color: #666; }
+    .invoice-table td:last-child { text-align: right; font-weight: bold; }
+    .total-row td { font-size: 18px; color: #667eea; border-bottom: none; padding-top: 20px; }
+    .btn { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
+    .features-box { background: #f9f9f9; border-radius: 8px; padding: 20px; margin: 25px 0; }
+    .features-box h3 { margin-top: 0; color: #10b981; }
+    .footer { background: #f9f9f9; padding: 20px; text-align: center; color: #666; font-size: 14px; }
+    .footer a { color: #667eea; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Subscription Confirmed</h1>
+      <p>Thank you for upgrading!</p>
+    </div>
+    
+    <div class="content">
+      <div class="success-icon">✅</div>
+      <h2 style="text-align: center; color: #10b981;">Welcome to {{planName}}!</h2>
+      <p style="text-align: center; font-size: 16px;">Your subscription is now active and ready to use.</p>
+      
+      <div class="plan-box">
+        <h2>{{planName}} Plan</h2>
+        <p>{{billingCycle}} Billing</p>
+      </div>
+      
+      <table class="invoice-table">
+        <tr>
+          <td>Plan:</td>
+          <td>{{planName}}</td>
+        </tr>
+        <tr>
+          <td>Billing Cycle:</td>
+          <td>{{billingCycle}}</td>
+        </tr>
+        <tr>
+          <td>Next Billing Date:</td>
+          <td>{{nextBillingDate}}</td>
+        </tr>
+        <tr class="total-row">
+          <td>Amount:</td>
+          <td>${{amount}}</td>
+        </tr>
+      </table>
+      
+      <div style="text-align: center; margin: 25px 0;">
+        <a href="{{invoiceLink}}" class="btn">Download Invoice</a>
+      </div>
+      
+      <div class="features-box">
+        <h3>✨ What's included:</h3>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Unlimited projects</li>
+          <li>Unlimited AI features</li>
+          <li>Premium templates</li>
+          <li>Deploy automation</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+      
+      <div style="background: #fff9e6; border-left: 4px solid #ffc107; padding: 15px; margin: 25px 0; border-radius: 4px;">
+        <strong>💳 Billing Info:</strong> You'll be charged ${{amount}} on {{nextBillingDate}}. You can cancel anytime from your dashboard.
+      </div>
+      
+      <p>Questions about your subscription? Visit our <a href="https://dragndrop.com/billing-faq" style="color: #667eea;">billing FAQ</a> or contact support.</p>
+      
+      <p style="margin-top: 30px;">Thank you for choosing DragNDrop! 🎉</p>
+      <p><strong>The DragNDrop Team</strong></p>
+    </div>
+    
+    <div class="footer">
+      <p><strong>DragNDrop</strong> - Visual HTML Editor</p>
+      <p>© 2024 DragNDrop. All rights reserved.</p>
+      <p><a href="https://dragndrop.com">Website</a> | <a href="https://dragndrop.com/privacy">Privacy</a> | <a href="https://dragndrop.com/terms">Terms</a></p>
+    </div>
+  </div>
+</body>
+</html>

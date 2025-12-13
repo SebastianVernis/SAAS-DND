@@ -1,0 +1,62 @@
+{
+  "name": "@dragndrop/backend",
+  "version": "1.0.0",
+  "description": "DragNDrop Backend API - Authentication, Payments, Team Management",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "build": "echo 'No build needed for Node.js'",
+    "test": "NODE_ENV=test jest --coverage",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "test:integration": "NODE_ENV=test jest --testPathPattern=tests/integration",
+    "lint": "eslint src --ext .js",
+    "lint:fix": "eslint src --ext .js --fix",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "node scripts/seed.js"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "authentication",
+    "payments",
+    "saas"
+  ],
+  "author": "Sebastian Vernis",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "better-auth": "^1.0.7",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.36.4",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "postgres": "^3.4.5",
+    "redis": "^5.10.0",
+    "socket.io": "^4.8.1",
+    "stripe": "^14.10.0",
+    "uuid": "^9.0.1",
+    "y-websocket": "^3.0.0",
+    "yjs": "^13.6.27",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.28.1",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

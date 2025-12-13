@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Invitation</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
+    .header h1 { margin: 0 0 10px; font-size: 28px; }
+    .content { padding: 40px 30px; color: #333; }
+    .invite-box { background: #f9f9f9; border: 2px solid #667eea; border-radius: 8px; padding: 25px; margin: 25px 0; text-align: center; }
+    .invite-box h2 { margin: 0 0 15px; color: #667eea; }
+    .btn { display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; margin: 20px 0; }
+    .btn:hover { opacity: 0.9; }
+    .message-box { background: #fff9e6; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; font-style: italic; }
+    .info { background: #e8f4f8; border-left: 4px solid #2196F3; padding: 15px; margin: 20px 0; border-radius: 4px; font-size: 14px; }
+    .footer { background: #f9f9f9; padding: 20px; text-align: center; color: #666; font-size: 14px; }
+    .footer a { color: #667eea; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 DragNDrop</h1>
+      <p>Team Invitation</p>
+    </div>
+    
+    <div class="content">
+      <h2>You've been invited! 🎉</h2>
+      <p><strong>{{inviterName}}</strong> has invited you to join their team on DragNDrop.</p>
+      
+      <div class="invite-box">
+        <h2>{{organizationName}}</h2>
+        <p>Role: <strong>{{role}}</strong></p>
+      </div>
+      
+      {{#if message}}
+      <div class="message-box">
+        <strong>Message from {{inviterName}}:</strong><br>
+        "{{message}}"
+      </div>
+      {{/if}}
+      
+      <div style="text-align: center;">
+        <a href="{{inviteLink}}" class="btn">Accept Invitation</a>
+      </div>
+      
+      <div class="info">
+        <strong>ℹ️ What's next?</strong><br>
+        Click the button above to accept the invitation. If you don't have a DragNDrop account yet, you'll be able to create one during the process.
+      </div>
+      
+      <p style="font-size: 12px; color: #666; margin-top: 30px;">
+        This invitation expires in 7 days. If you don't want to join this team, you can safely ignore this email.
+      </p>
+      
+      <p style="font-size: 12px; color: #999;">
+        If the button doesn't work, copy and paste this link into your browser:<br>
+        <a href="{{inviteLink}}" style="color: #667eea; word-break: break-all;">{{inviteLink}}</a>
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p><strong>DragNDrop</strong> - Visual HTML Editor</p>
+      <p>© 2024 DragNDrop. All rights reserved.</p>
+      <p><a href="https://dragndrop.com">Website</a> | <a href="https://dragndrop.com/privacy">Privacy</a> | <a href="https://dragndrop.com/terms">Terms</a></p>
+    </div>
+  </div>
+</body>
+</html>
