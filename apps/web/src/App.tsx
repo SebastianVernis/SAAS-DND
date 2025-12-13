@@ -5,6 +5,8 @@ import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardHome from './pages/dashboard/Home';
+import Projects from './pages/dashboard/Projects';
+import Team from './pages/dashboard/Team';
 
 function App() {
   return (
@@ -20,8 +22,8 @@ function App() {
         {/* Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<DashboardHome />} />
-          <Route path="projects" element={<div className="p-8">Projects (Coming Soon)</div>} />
-          <Route path="team" element={<div className="p-8">Team (Coming Soon)</div>} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="team" element={<Team />} />
           <Route path="settings" element={<div className="p-8">Settings (Coming Soon)</div>} />
           <Route path="billing" element={<div className="p-8">Billing (Coming Soon)</div>} />
         </Route>
