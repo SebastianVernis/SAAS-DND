@@ -29,8 +29,8 @@
   "author": "Sebastian Vernis",
   "license": "PROPRIETARY",
   "dependencies": {
-    "better-auth": "^1.0.7",
     "bcryptjs": "^2.4.3",
+    "better-auth": "^1.0.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.4",
@@ -49,11 +49,13 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.28.1",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
-    "supertest": "^7.0.0"
+    "supertest": "^7.1.4"
   },
   "engines": {
     "node": ">=18.0.0",
