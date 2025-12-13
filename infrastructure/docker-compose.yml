@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: saasdnd-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-saasdnd}
+      POSTGRES_USER: ${DB_USER:-saasdnd}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-saasdnd_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - saasdnd-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-saasdnd}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis (cache & sessions)
+  redis:
+    image: redis:7-alpine
+    container_name: saasdnd-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - saasdnd-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # API Backend
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: ../../infrastructure/docker/api.Dockerfile
+    container_name: saasdnd-api
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3001
+      DATABASE_URL: postgresql://${DB_USER:-saasdnd}:${DB_PASSWORD:-saasdnd_password}@postgres:5432/${DB_NAME:-saasdnd}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-change-this-secret}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - saasdnd-network
+    restart: unless-stopped
+    command: npm run dev
+
+  # Web Frontend (Next.js)
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: ../../infrastructure/docker/web.Dockerfile
+    container_name: saasdnd-web
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost/api}
+    env_file:
+      - ./apps/web/.env
+    ports:
+      - "5173:3000"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - saasdnd-network
+    restart: unless-stopped
+    command: npm run dev
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: saasdnd-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/nginx/sites-available/saasdnd-subdirs.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infrastructure/nginx/proxy_params:/etc/nginx/proxy_params:ro
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl:ro
+      - /var/www/saasdnd:/var/www/saasdnd:ro
+    depends_on:
+      - api
+      - web
+    networks:
+      - saasdnd-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Vanilla Demo (servidor estático simple)
+  vanilla-demo:
+    image: nginx:alpine
+    container_name: saasdnd-vanilla
+    ports:
+      - "8080:80"
+    volumes:
+      - ${VANILLA_PATH:-/home/admin/DragNDrop/versions/v1-vanilla-standalone}:/usr/share/nginx/html:ro
+    networks:
+      - saasdnd-network
+    restart: unless-stopped
+
+  # Landing Demo (servidor estático simple)
+  landing-demo:
+    image: nginx:alpine
+    container_name: saasdnd-landing
+    ports:
+      - "8081:80"
+    volumes:
+      - ${LANDING_PATH:-/home/admin/DragNDrop/versions/v2-landing-page}:/usr/share/nginx/html:ro
+    networks:
+      - saasdnd-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  saasdnd-network:
+    driver: bridge

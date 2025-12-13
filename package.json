@@ -1,57 +1,74 @@
 {
-  "name": "dragndrop-commercial",
+  "name": "saas-dnd",
   "version": "1.0.0",
-  "description": "DragNDrop Commercial System - Full SaaS Platform",
+  "description": "DragNDrop SaaS - Sistema comercial completo con autenticación, team management, pagos y editor visual",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend",
-    "shared"
-  ],
-  "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
-    "build:shared": "cd shared && npm run build",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build",
-    "test": "npm run test:backend && npm run test:frontend",
-    "test:backend": "cd backend && npm test",
-    "test:frontend": "cd frontend && npm test",
-    "test:e2e": "playwright test",
-    "lint": "npm run lint:backend && npm run lint:frontend",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:frontend": "cd frontend && npm run lint",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "db:studio": "cd backend && npm run db:studio",
-    "db:push": "cd backend && npm run db:push",
-    "db:migrate": "cd backend && npm run db:migrate",
-    "clean": "rm -rf node_modules frontend/node_modules backend/node_modules shared/node_modules",
-    "setup": "npm install && npm run setup:backend && npm run setup:frontend",
-    "setup:backend": "cd backend && npm install && cp .env.example .env",
-    "setup:frontend": "cd frontend && npm install"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "concurrently": "^8.2.2",
-    "prettier": "^3.1.1"
-  },
+  "packageManager": "pnpm@8.15.0",
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:api": "turbo run dev --filter=@saas-dnd/api",
+    "dev:web": "turbo run dev --filter=@saas-dnd/web",
+    "build": "turbo run build",
+    "build:api": "turbo run build --filter=@saas-dnd/api",
+    "build:web": "turbo run build --filter=@saas-dnd/web",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint --fix",
+    "type-check": "turbo run type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "clean:all": "pnpm clean && find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "db:studio": "cd apps/api && pnpm db:studio",
+    "db:push": "cd apps/api && pnpm db:push",
+    "db:migrate": "cd apps/api && pnpm db:migrate",
+    "db:seed": "cd apps/api && pnpm db:seed",
+    "docker:up": "docker-compose -f infrastructure/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f infrastructure/docker-compose.yml down",
+    "docker:logs": "docker-compose -f infrastructure/docker-compose.yml logs -f",
+    "nginx:setup": "sudo ./scripts/deploy/setup-nginx.sh",
+    "nginx:deploy": "sudo ./scripts/deploy/deploy-subdirs.sh",
+    "prepare": "husky install",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "turbo run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.3"
   },
   "keywords": [
     "saas",
     "html-editor",
-    "drag-and-drop",
     "visual-editor",
-    "react",
+    "drag-and-drop",
     "typescript",
+    "react",
     "nodejs",
     "express",
     "postgresql"
   ],
-  "author": "Sebastian Vernis",
-  "license": "PROPRIETARY"
+  "author": "Sebastian Vernis <sebastianvernis@example.com>",
+  "license": "PROPRIETARY",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SebastianVernis/SAAS-DND.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SebastianVernis/SAAS-DND/issues"
+  },
+  "homepage": "https://github.com/SebastianVernis/SAAS-DND#readme"
 }
