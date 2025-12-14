@@ -164,7 +164,7 @@
         <!-- Contenido principal con 3 paneles -->
         <div class="main-content">
             <!-- Panel izquierdo - Componentes -->
-            <div class="components-panel">
+            <div class="components-panel hidden" id="components-panel" style="display:none !important; width:0 !important; visibility:hidden !important;">
                 <h2 class="panel-title">Componentes</h2>
                 <input type="text" id="componentSearch" placeholder="Buscar componentes..." style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 13px;">
 
@@ -271,7 +271,7 @@
             </div>
 
             <!-- Panel derecho - Propiedades -->
-            <div class="properties-panel" id="propertiesPanel">
+            <div class="properties-panel hidden" id="properties-panel" style="display:none !important; width:0 !important; visibility:hidden !important;">
                 <h2 class="panel-title">Propiedades</h2>
                 <div class="properties-empty">
                     ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
