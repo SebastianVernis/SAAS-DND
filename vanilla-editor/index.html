@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#667eea">
+    <title>Editor HTML Drag &amp; Drop</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Mobile Styles -->
+    <link rel="stylesheet" href="src/styles/mobile.css">
+    <!-- Workflow 4: Deploy & Tutorial -->
+    <link rel="stylesheet" href="./src/styles/deploy.css">
+    <link rel="stylesheet" href="./src/styles/tutorial.css">
+    <!-- Workflow 2: AI Features -->
+    <link rel="stylesheet" href="src/styles/ai-features.css">
+    <script type="module" src="./script.js"></script>
+    <!-- Workflow 4: Deploy & Integrations -->
+    <script type="module" src="./src/init-workflow4.js"></script>
+    <!-- Main Initialization Module -->
+    <script type="module" src="./src/init.js"></script>
+    <!-- Workflow 2: AI Features -->
+    <script type="module" src="./src/ai/tokenTracker.js"></script>
+    <script type="module" src="./src/ai/promptBuilder.js"></script>
+    <script type="module" src="./src/ai/responseParser.js"></script>
+    <script type="module" src="./src/ai/componentGenerator.js"></script>
+    <script type="module" src="./src/ai/wcagRules.js"></script>
+    <script type="module" src="./src/ai/accessibilityFixes.js"></script>
+    <script type="module" src="./src/ai/accessibilityChecker.js"></script>
+    <script type="module" src="./src/ai/seoRules.js"></script>
+    <script type="module" src="./src/ai/seoOptimizer.js"></script>
+    <script type="module" src="./src/components/aiGenerator/GeneratorModal.js"></script>
+    <script type="module" src="./src/components/A11yPanel.js"></script>
+    <script type="module" src="./src/components/SEOPanel.js"></script>
+    <script type="module" src="./src/ai/index.js"></script>
+    <!-- Toolbar Dropdown Manager -->
+    <script src="./src/components/toolbarDropdown.js"></script>
+    
+    <!-- Mobile-First Modules -->
+    <script type="module" src="./src/utils/deviceDetector.js"></script>
+    <script type="module" src="./src/core/unifiedEventManager.js"></script>
+    <script type="module" src="./src/core/touchDragDrop.js"></script>
+    <script type="module" src="./src/core/gestureManager.js"></script>
+    <script type="module" src="./src/components/mobileUI.js"></script>
+    <script type="module" src="./src/utils/performanceOptimizer.js"></script>
+    
+    <!-- Advanced Editor Features -->
+    <script type="module" src="./src/editor/resizeHandles.js"></script>
+    <script type="module" src="./src/editor/formattingToolbar.js"></script>
+    <script type="module" src="./src/editor/canvasTypes.js"></script>
+    <script type="module" src="./src/ui/panelToggle.js"></script>
+    <script type="module" src="./src/integrations/gitAutoSave.js"></script>
+    <script type="module" src="./src/legal/legalModal.js"></script>
+    <script type="module" src="./src/editor/advancedFeatures.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barra de herramientas superior -->
+        <div class="toolbar">
+            <!-- File Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">📁 Archivo <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="newProject()">🗎 Nuevo Proyecto</button>
+                    <button class="dropdown-item" onclick="saveProject()">💾 Guardar Proyecto</button>
+                    <button class="dropdown-item" onclick="document.getElementById('loadProjectInput').click()">📂 Cargar Proyecto</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="document.getElementById('importHTMLInput').click()">📄 Importar HTML</button>
+                    <button class="dropdown-item" onclick="document.getElementById('loadDirectoryInput').click()">📁 Analizar Directorio</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="showGallery()">🎨 Plantillas</button>
+                    <button class="dropdown-item" onclick="showProjectsPanel()">📁 Mis Proyectos</button>
+                    <button class="dropdown-item" onclick="showComponentsLibrary()">🧩 Biblioteca de Componentes</button>
+                </div>
+            </div>
+            
+            <input type="file" id="loadProjectInput" accept=".json,.html,.htm" onchange="loadProject(event)" style="display: none;">
+            <input type="file" id="loadDirectoryInput" webkitdirectory multiple onchange="analyzeDirectory(event)" style="display: none;">
+            <input type="file" id="importHTMLInput" accept=".html,.htm" onchange="importHTMLFile(event)" style="display: none;">
+            
+            <!-- Edit Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">✏️ Editar <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" id="undoBtn" onclick="window.undoRedoManager && window.undoRedoManager.undo()" disabled>↶ Deshacer <span class="shortcut">Ctrl+Z</span></button>
+                    <button class="dropdown-item" id="redoBtn" onclick="window.undoRedoManager && window.undoRedoManager.redo()" disabled>↷ Rehacer <span class="shortcut">Ctrl+Y</span></button>
+                </div>
+            </div>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Layout Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">📐 Layout <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="toggleLayoutMode()" id="layoutModeBtn">📐 Modo Libre</button>
+                    <button class="dropdown-item" onclick="autoLayoutVertical()">↕️ Organizar Vertical</button>
+                    <button class="dropdown-item" onclick="autoLayoutGrid()">⊞ Organizar Grid</button>
+                </div>
+            </div>
+            
+            <!-- View Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">👁️ Vista <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item active" id="btnDesktop" onclick="setCanvasSize('desktop')">🖥️ Escritorio</button>
+                    <button class="dropdown-item" id="btnTablet" onclick="setCanvasSize('tablet')">📱 Tablet</button>
+                    <button class="dropdown-item" id="btnMobile" onclick="setCanvasSize('mobile')">📱 Móvil</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="openResponsiveTester()">🔍 Tester Responsive</button>
+                    <button class="dropdown-item" id="livePreviewBtn" onclick="toggleLivePreview()">👁️ Vista Previa en Vivo</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" id="themeToggle" onclick="window.themeManager && window.themeManager.toggle()">🌙 Tema Oscuro <span class="shortcut">Ctrl+Shift+D</span></button>
+                </div>
+            </div>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- AI Tools Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">🤖 AI Tools <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="showAIGenerator()">🤖 Generar Componente</button>
+                    <button class="dropdown-item" onclick="showA11yPanel()">♿ Verificar Accesibilidad</button>
+                    <button class="dropdown-item" onclick="showSEOPanel()">🔍 Optimizar SEO</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="showTokenDashboard()">📊 Dashboard de Tokens</button>
+                    <button class="dropdown-item" onclick="configureGeminiAPI()">⚙️ Configurar API</button>
+                </div>
+            </div>
+            
+            <!-- Export Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger primary">📥 Exportar <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="exportHTML()">📥 Exportar HTML</button>
+                    <button class="dropdown-item" onclick="exportZip()">📦 Exportar Todo (ZIP)</button>
+                </div>
+            </div>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Deploy & Integration Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">🚀 Deploy <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="showDeployModal()">🚀 Deploy a Vercel</button>
+                    <button class="dropdown-item" onclick="showGitHubModal()">🐙 Integración GitHub</button>
+                    <button class="dropdown-item" onclick="showDeploymentHistory()">📊 Historial de Deploys</button>
+                </div>
+            </div>
+            
+            <!-- Help Menu -->
+            <div class="toolbar-dropdown">
+                <button class="toolbar-btn dropdown-trigger">❓ Ayuda <span class="dropdown-arrow">▼</span></button>
+                <div class="toolbar-dropdown-menu">
+                    <button class="dropdown-item" onclick="startTutorial()">📚 Tutorial Interactivo</button>
+                    <button class="dropdown-item" onclick="showHelp()">❓ Centro de Ayuda</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal con 3 paneles -->
+        <div class="main-content">
+            <!-- Panel izquierdo - Componentes -->
+            <div class="components-panel">
+                <h2 class="panel-title">Componentes</h2>
+                <input type="text" id="componentSearch" placeholder="Buscar componentes..." style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 13px;">
+
+                <!-- Categoría: Layout -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        Layout
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="contenedor">Contenedor</div>
+                        <div class="component-item" draggable="true" data-type="seccion">Sección</div>
+                        <div class="component-item" draggable="true" data-type="fila">Fila</div>
+                        <div class="component-item" draggable="true" data-type="columna">Columna</div>
+                        <div class="component-item" draggable="true" data-type="grid2">Grid 2 Columnas</div>
+                        <div class="component-item" draggable="true" data-type="grid3">Grid 3 Columnas</div>
+                    </div>
+                </div>
+
+                <!-- Categoría: Texto -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        Texto
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="h1">Título H1</div>
+                        <div class="component-item" draggable="true" data-type="h2">Título H2</div>
+                        <div class="component-item" draggable="true" data-type="h3">Título H3</div>
+                        <div class="component-item" draggable="true" data-type="p">Párrafo</div>
+                        <div class="component-item" draggable="true" data-type="span">Texto en línea</div>
+                        <div class="component-item" draggable="true" data-type="ul">Lista desordenada</div>
+                        <div class="component-item" draggable="true" data-type="ol">Lista ordenada</div>
+                    </div>
+                </div>
+
+                <!-- Categoría: Medios -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        Medios
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="img">Imagen</div>
+                        <div class="component-item" draggable="true" data-type="video">Video</div>
+                        <div class="component-item" draggable="true" data-type="iframe">Iframe</div>
+                    </div>
+                </div>
+
+                <!-- Categoría: Formularios -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        Formularios
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="input">Campo de texto</div>
+                        <div class="component-item" draggable="true" data-type="textarea">Textarea</div>
+                        <div class="component-item" draggable="true" data-type="button">Botón</div>
+                        <div class="component-item" draggable="true" data-type="checkbox">Checkbox</div>
+                        <div class="component-item" draggable="true" data-type="radio">Radio</div>
+                        <div class="component-item" draggable="true" data-type="select">Select</div>
+                    </div>
+                </div>
+
+                <!-- Categoría: Componentes -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        Componentes
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="btn-primary">Botón Primario</div>
+                        <div class="component-item" draggable="true" data-type="btn-secondary">Botón Secundario</div>
+                        <div class="component-item" draggable="true" data-type="card">Card</div>
+                        <div class="component-item" draggable="true" data-type="navbar">Navbar</div>
+                        <div class="component-item" draggable="true" data-type="footer">Footer</div>
+                        <div class="component-item" draggable="true" data-type="hero">Hero Section</div>
+                    </div>
+                </div>
+
+                <!-- Categoría: UI Avanzado -->
+                <div class="component-category">
+                    <div class="category-title" onclick="toggleCategory(this)">
+                        UI Avanzado
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-type="tabs">Pestañas (Tabs)</div>
+                        <div class="component-item" draggable="true" data-type="accordion">Acordeón</div>
+                        <div class="component-item" draggable="true" data-type="modal">Modal</div>
+                        <div class="component-item" draggable="true" data-type="carousel">Carrusel</div>
+                        <div class="component-item" draggable="true" data-type="alert">Alerta</div>
+                        <div class="component-item" draggable="true" data-type="badge">Badge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel central - Canvas -->
+            <div class="canvas-panel">
+                <div class="canvas-wrapper" id="canvasWrapper">
+                    <div id="canvas"></div>
+                </div>
+            </div>
+
+            <!-- Panel derecho - Propiedades -->
+            <div class="properties-panel" id="propertiesPanel">
+                <h2 class="panel-title">Propiedades</h2>
+                <div class="properties-empty">
+                    ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-Select Toolbar -->
+    <div class="multiselect-toolbar hidden" id="multiselectToolbar">
+        <span class="multiselect-count" id="multiselectCount">0 seleccionados</span>
+        
+        <div class="alignment-group">
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('left')" title="Alinear izquierda">⬅️</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('center')" title="Alinear centro">↔️</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('right')" title="Alinear derecha">➡️</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('top')" title="Alinear arriba">⬆️</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('middle')" title="Alinear medio">↕️</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.align('bottom')" title="Alinear abajo">⬇️</button>
+        </div>
+        
+        <div class="alignment-group">
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.distribute('horizontal')" title="Distribuir horizontal">↔️📏</button>
+            <button class="alignment-btn" onclick="window.batchOperations && window.batchOperations.distribute('vertical')" title="Distribuir vertical">↕️📏</button>
+        </div>
+        
+        <button class="multiselect-btn" onclick="window.batchOperations && window.batchOperations.group()">📦 Agrupar</button>
+        <button class="multiselect-btn" onclick="window.batchOperations && window.batchOperations.ungroup()">📂 Desagrupar</button>
+        <button class="multiselect-btn" onclick="window.batchOperations && window.batchOperations.duplicateSelected()">📋 Duplicar</button>
+        <button class="multiselect-btn danger" onclick="window.batchOperations && window.batchOperations.deleteSelected()">🗑️ Eliminar</button>
+    </div>
+
+    <!-- Selection Info Badge -->
+    <div class="selection-info hidden" id="selectionInfo">
+        <div class="selection-info-title">Selección</div>
+        <div class="selection-info-count" id="selectionInfoCount">0</div>
+        <div class="selection-info-label">elementos</div>
+    </div>
+
+    <!-- Documentación -->
+    <div class="gallery-screen hidden" id="helpScreen">
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h1>Ayuda del Editor HTML</h1>
+                <p>Guía completa de todas las funcionalidades</p>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="document.getElementById('helpScreen').classList.add('hidden'); document.getElementById('galleryScreen').classList.remove('hidden');"> ← Volver a Plantillas</button>
+                <button class="quick-action-btn primary" onclick="document.getElementById('helpScreen').classList.add('hidden');">Cerrar Ayuda</button>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="color: #1e293b; margin: 0 0 20px 0; font-size: 24px;">Funcionalidades del Editor</h2>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Panel Superior</h3>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>Plantillas:</strong> Accede a plantillas predefinidas para diferentes tipos de sitios web</li>
+                        <li><strong>Nuevo:</strong> Comienza un nuevo proyecto en blanco</li>
+                        <li><strong>Escritorio/Tablet/Móvil:</strong> Cambia el tamaño del canvas para ver cómo se adapta tu diseño</li>
+                        <li><strong>Exportar HTML:</strong> Exporta tu diseño como un archivo HTML completo</li>
+                        <li><strong>Exportar Todo:</strong> Exporta HTML, CSS y JS en archivos separados</li>
+                        <li><strong>Guardar/Cargar:</strong> Guarda tu proyecto para trabajar en él más tarde</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Panel de Componentes</h3>
+                    <p>Todos los componentes se pueden arrastrar al canvas:</p>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>Layout:</strong> Contenedores, secciones, filas, columnas y layouts en cuadrícula</li>
+                        <li><strong>Texto:</strong> Títulos, párrafos, listas y elementos de texto</li>
+                        <li><strong>Medios:</strong> Imágenes, videos e iframes</li>
+                        <li><strong>Formularios:</strong> Inputs, textareas, botones, checkboxes, radios y selects</li>
+                        <li><strong>Componentes:</strong> Botones, cards, navbars, footers y hero sections</li>
+                        <li><strong>UI Avanzado:</strong> Pestañas, acordeones, modales, carruseles, alertas y badges</li>
+                    </ul>
+                    <p><strong>Búsqueda:</strong> Usa la barra de búsqueda para encontrar componentes rápidamente</p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Canvas</h3>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>Seleccionar:</strong> Haz clic en cualquier elemento para seleccionarlo</li>
+                        <li><strong>Editar texto:</strong> Haz doble clic en elementos de texto para editarlos</li>
+                        <li><strong>Eliminar:</strong> Usa el botón de cruz roja en las esquinas de los elementos seleccionados</li>
+                        <li><strong>Previsualización:</strong> Ve cómo se verá tu diseño en diferentes tamaños de pantalla</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Panel de Propiedades</h3>
+                    <p>Cuando seleccionas un elemento, puedes cambiar sus propiedades:</p>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>General:</strong> ID, clases CSS y tag HTML</li>
+                        <li><strong>Dimensiones:</strong> Ancho, alto, y valores máximos</li>
+                        <li><strong>Espaciado:</strong> Padding y margin para cada lado</li>
+                        <li><strong>Posicionamiento:</strong> Valores de display y position</li>
+                        <li><strong>Tipografía:</strong> Tamaño, peso, color y alineación de texto</li>
+                        <li><strong>Fondo y Bordes:</strong> Colores, anchos, estilos y radios</li>
+                        <li><strong>Sombra y Efectos:</strong> Sombra, opacidad y transiciones</li>
+                        <li><strong>Flexbox:</strong> Control avanzado para layouts flexibles</li>
+                        <li><strong>Grid:</strong> Control para layouts basados en cuadrícula</li>
+                        <li><strong>Atributos:</strong> Atributos específicos según el tipo de elemento</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Atajos de Teclado</h3>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>Supr o Delete:</strong> Eliminar elemento seleccionado</li>
+                        <li><strong>Ctrl+S:</strong> Guardar proyecto</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Componentes Avanzados</h3>
+                    <p>Los componentes de UI Avanzado incluyen:</p>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li><strong>Pestañas:</strong> Muestra contenido en pestañas interactivas</li>
+                        <li><strong>Acordeón:</strong> Contenido colapsable en secciones</li>
+                        <li><strong>Modal:</strong> Ventanas emergentes con contenido</li>
+                        <li><strong>Carrusel:</strong> Galería de contenido deslizable</li>
+                        <li><strong>Alertas:</strong> Mensajes de notificación con diferentes estilos</li>
+                        <li><strong>Badges:</strong> Elementos pequeños para resaltar información</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galería de Plantillas -->
+    <div class="gallery-screen" id="galleryScreen">
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h1>Selecciona una plantilla para empezar</h1>
+                <p>Elige entre nuestras plantillas profesionales o comienza desde cero</p>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="startBlankProject()">📄 Nuevo Proyecto Blanco</button>
+                <button class="quick-action-btn" onclick="document.getElementById('loadProjectInput').click()">📂 Cargar Proyecto</button>
+            </div>
+
+            <div class="category-filters">
+                <button class="category-btn active" onclick="filterTemplates('todas')">Todas</button>
+                <button class="category-btn" onclick="filterTemplates('negocios')">Negocios</button>
+                <button class="category-btn" onclick="filterTemplates('personal')">Personal</button>
+                <button class="category-btn" onclick="filterTemplates('blog')">Blog</button>
+                <button class="category-btn" onclick="filterTemplates('servicios')">Servicios</button>
+                <button class="category-btn" onclick="filterTemplates('tienda')">Tienda</button>
+            </div>
+
+            <div class="templates-grid" id="templatesGrid">
+                <!-- Las plantillas se cargan dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Proyectos -->
+    <div class="projects-panel hidden" id="projectsPanel">
+        <div class="panel-overlay" onclick="hideProjectsPanel()"></div>
+        <div class="panel-content">
+            <div class="panel-header">
+                <h2>Gestión de Proyectos</h2>
+                <button class="close-panel-btn" onclick="hideProjectsPanel()">&times;</button>
+            </div>
+            <div class="panel-body">
+                <div class="project-actions">
+                    <button class="action-btn primary" onclick="createNewProjectDialog()">+ Nuevo Proyecto</button>
+                    <button class="action-btn" onclick="document.getElementById('importProjectInput').click()">📂 Importar</button>
+                    <input type="file" id="importProjectInput" accept=".json" onchange="importProjectFile(event)" style="display: none;">
+                </div>
+                <div class="projects-list" id="projectsList">
+                    <!-- Los proyectos se cargan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Biblioteca de Componentes -->
+    <div class="components-library-panel hidden" id="componentsLibraryPanel">
+        <div class="panel-overlay" onclick="hideComponentsLibrary()"></div>
+        <div class="panel-content">
+            <div class="panel-header">
+                <h2>Biblioteca de Componentes</h2>
+                <button class="close-panel-btn" onclick="hideComponentsLibrary()">&times;</button>
+            </div>
+            <div class="panel-body">
+                <div class="component-search-bar">
+                    <input type="text" id="componentLibrarySearch" placeholder="Buscar componentes..." onkeyup="searchLibraryComponents()">
+                </div>
+                <div class="library-components-list" id="libraryComponentsList">
+                    <!-- Los componentes se cargan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Nuevo Proyecto -->
+    <div class="modal hidden" id="newProjectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Crear Nuevo Proyecto</h3>
+                <button class="modal-close" onclick="hideNewProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="projectName">Nombre del proyecto:</label>
+                    <input type="text" id="projectName" placeholder="Mi Proyecto Increíble">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn primary" onclick="createNewProjectFromDialog()">Crear</button>
+                    <button class="btn" onclick="hideNewProjectModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Módulos del sistema -->
+    <script type="module" src="src/components/fileLoader.js"></script>
+    <script type="module" src="src/components/htmlParser.js"></script>
+    <script type="module" src="src/storage/projectManager.js"></script>
+    <script type="module" src="src/utils/componentExtractor.js"></script>
+    
+    <!-- Módulos core -->
+    <script type="module" src="src/core/undoRedo.js"></script>
+    <script type="module" src="src/core/keyboardShortcuts.js"></script>
+    <script type="module" src="src/core/responsiveTester.js"></script>
+    <script type="module" src="src/core/livePreview.js"></script>
+    <script type="module" src="src/core/themeManager.js"></script>
+    <script type="module" src="src/core/aiCodeGenerator.js"></script>
+    
+    <!-- Nuevos módulos mejorados -->
+    <script type="module" src="src/core/geminiValidator.js"></script>
+    <script type="module" src="src/core/resizeManager.js"></script>
+    <script type="module" src="src/core/enhancedDragDrop.js"></script>
+    <script type="module" src="src/core/freePositionDragDrop.js"></script>
+    <script type="module" src="src/core/projectAnalyzer.js"></script>
+    
+    <!-- Workflow 1: UI/UX Core - Layers, Multi-Select & Inspector -->
+    <script type="module" src="src/core/layersManager.js"></script>
+    <script type="module" src="src/core/multiSelect.js"></script>
+    <script type="module" src="src/core/marqueeSelector.js"></script>
+    <script type="module" src="src/core/alignmentEngine.js"></script>
+    <script type="module" src="src/core/batchOperations.js"></script>
+    <script type="module" src="src/core/groupManager.js"></script>
+    <script type="module" src="src/core/smartGuides.js"></script>
+    <script type="module" src="src/components/layers/LayersPanel.js"></script>
+    <script type="module" src="src/components/AdvancedPropertiesPanel.js"></script>
+    
+    <!-- Styles for new features -->
+    <link rel="stylesheet" href="src/styles/layers.css">
+    <link rel="stylesheet" href="src/styles/multiSelect.css">
+    <link rel="stylesheet" href="src/styles/inspector.css">
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('🔄 Service Worker update found');
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available
+                                    if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+    
+    <!-- Global utility functions -->
+    <script>
+        // Función global para toggle de preview
+        function toggleLivePreview() {
+            if (window.livePreview) {
+                window.livePreview.toggle();
+                
+                const btn = document.getElementById('livePreviewBtn');
+                if (btn) {
+                    btn.classList.toggle('active', window.livePreview.isActive());
+                }
+            }
+        }
+        
+        // Función global para configurar Gemini
+        function openGeminiConfig() {
+            if (window.geminiValidator) {
+                window.geminiValidator.showConfigModal();
+            }
+        }
+        
+        // Funciones globales para control de layout
+        let layoutMode = 'free'; // 'free' o 'flow'
+        
+        function toggleLayoutMode() {
+            const btn = document.getElementById('layoutModeBtn');
+            const canvas = document.getElementById('canvas');
+            
+            if (layoutMode === 'free') {
+                // Cambiar a modo flujo
+                layoutMode = 'flow';
+                btn.textContent = '📄 Flujo';
+                btn.title = 'Modo flujo normal - click para cambiar a libre';
+                
+                // Remover posicionamiento absoluto
+                canvas.querySelectorAll('.canvas-element').forEach(el => {
+                    el.style.position = 'static';
+                    el.style.left = '';
+                    el.style.top = '';
+                    el.style.width = '';
+                });
+                
+                canvas.style.background = 'white';
+                canvas.style.minHeight = '';
+                
+                if (window.showToast) {
+                    window.showToast('📄 Modo flujo activado');
+                }
+            } else {
+                // Cambiar a modo libre
+                layoutMode = 'free';
+                btn.textContent = '📐 Libre';
+                btn.title = 'Modo posicionamiento libre - click para cambiar a flujo';
+                
+                if (window.freePositionDragDrop) {
+                    window.freePositionDragDrop.convertToAbsolutePositioning();
+                }
+                
+                if (window.showToast) {
+                    window.showToast('📐 Modo libre activado');
+                }
+            }
+        }
+        
+        function autoLayoutVertical() {
+            if (window.freePositionDragDrop) {
+                window.freePositionDragDrop.autoLayout('vertical');
+            }
+        }
+        
+        function autoLayoutGrid() {
+            if (window.freePositionDragDrop) {
+                window.freePositionDragDrop.autoLayout('grid');
+            }
+        }
+    </script>
+</body>
+</html>

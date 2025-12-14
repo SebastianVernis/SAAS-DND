@@ -1,0 +1,360 @@
+/**
+ * Advanced Inspector Styles
+ * Styles for computed styles view, box model, and color picker
+ */
+
+/* ===== Properties Toggle Button ===== */
+.properties-toggle-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.properties-toggle-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+}
+
+.properties-toggle-btn.active {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* ===== Computed Styles Container ===== */
+.computed-styles-container {
+    padding: 16px;
+}
+
+.computed-styles-header {
+    margin-bottom: 16px;
+}
+
+.computed-styles-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+}
+
+.computed-styles-info {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+/* ===== Tabs ===== */
+.computed-styles-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-primary);
+    padding-bottom: 8px;
+}
+
+.computed-tab {
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+}
+
+.computed-tab:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.computed-tab.active {
+    background: var(--accent-primary);
+    color: white;
+}
+
+/* ===== Tab Content ===== */
+.computed-tab-content {
+    display: none;
+}
+
+.computed-tab-content.active {
+    display: block;
+}
+
+/* ===== Computed Properties ===== */
+.computed-property {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.computed-property:hover {
+    background: var(--bg-tertiary);
+}
+
+.computed-property.inline {
+    border-left-color: var(--accent-primary);
+}
+
+.computed-property-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+}
+
+.computed-property-value {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.computed-property-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.computed-property-small {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+}
+
+.computed-property-small .computed-property-name {
+    font-size: 11px;
+}
+
+.computed-property-small .computed-property-value {
+    font-size: 11px;
+}
+
+/* ===== Search ===== */
+.computed-search {
+    margin-bottom: 12px;
+}
+
+.computed-search input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.computed-search input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 10%);
+}
+
+/* ===== All Properties List ===== */
+.computed-all-properties {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.computed-all-properties::-webkit-scrollbar {
+    width: 6px;
+}
+
+.computed-all-properties::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.computed-all-properties::-webkit-scrollbar-thumb {
+    background: var(--border-secondary);
+    border-radius: 3px;
+}
+
+/* ===== Box Model Visualizer ===== */
+.box-model-visualizer {
+    padding: 20px;
+}
+
+.box-model-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.box-model-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-model-layer {
+    position: relative;
+    border: 2px solid;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-model-margin {
+    border-color: #f59e0b;
+    background: rgb(245 158 11 / 10%);
+}
+
+.box-model-border {
+    border-color: #10b981;
+    background: rgb(16 185 129 / 10%);
+}
+
+.box-model-padding {
+    border-color: #3b82f6;
+    background: rgb(59 130 246 / 10%);
+}
+
+.box-model-content {
+    border-color: #8b5cf6;
+    background: rgb(139 92 246 / 10%);
+    min-width: 120px;
+    min-height: 80px;
+}
+
+.box-model-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.box-model-values {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.box-model-value-top,
+.box-model-value-right,
+.box-model-value-bottom,
+.box-model-value-left {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.box-model-value-top {
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.box-model-value-right {
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.box-model-value-bottom {
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.box-model-value-left {
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.box-model-dimensions {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* ===== Color Picker ===== */
+.color-picker-input {
+    width: 40px;
+    height: 30px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.color-picker-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 3px;
+}
+
+/* ===== Responsive ===== */
+@media (width <= 768px) {
+    .computed-styles-container {
+        padding: 12px;
+    }
+
+    .computed-property {
+        padding: 8px 10px;
+    }
+
+    .box-model-visualizer {
+        padding: 12px;
+    }
+
+    .box-model-layer {
+        padding: 12px;
+    }
+
+    .box-model-content {
+        min-width: 80px;
+        min-height: 60px;
+    }
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .box-model-margin {
+    background: rgb(245 158 11 / 15%);
+}
+
+[data-theme="dark"] .box-model-border {
+    background: rgb(16 185 129 / 15%);
+}
+
+[data-theme="dark"] .box-model-padding {
+    background: rgb(59 130 246 / 15%);
+}
+
+[data-theme="dark"] .box-model-content {
+    background: rgb(139 92 246 / 15%);
+}

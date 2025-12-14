@@ -1,0 +1,342 @@
+/**
+ * Problems Panel Styles
+ * Displays errors, warnings, and info messages
+ */
+
+/* Panel Container */
+.problems-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--panel-background, #1e1e1e);
+  color: var(--panel-foreground, #cccccc);
+  border-top: 1px solid var(--border-color, #3e3e3e);
+}
+
+/* Header */
+.problems-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--header-background, #252526);
+  border-bottom: 1px solid var(--border-color, #3e3e3e);
+}
+
+.problems-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--title-foreground, #cccccc);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Counters */
+.problems-panel-counters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+/* Filter Buttons */
+.problems-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--filter-foreground, #858585);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.problems-filter:hover {
+  background: var(--filter-hover-background, #2a2d2e);
+  opacity: 1;
+}
+
+.problems-filter.active {
+  opacity: 1;
+  border-color: var(--filter-active-border, #454545);
+}
+
+/* Filter Icons */
+.problems-filter-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.problems-filter-error .problems-filter-icon {
+  background: var(--error-color, #f48771);
+}
+
+.problems-filter-warning .problems-filter-icon {
+  background: var(--warning-color, #cca700);
+}
+
+.problems-filter-info .problems-filter-icon {
+  background: var(--info-color, #75beff);
+}
+
+.problems-filter-count {
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Clear Button */
+.problems-panel-clear {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--button-border, #454545);
+  border-radius: 4px;
+  color: var(--button-foreground, #cccccc);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.problems-panel-clear:hover {
+  background: var(--button-hover-background, #2a2d2e);
+  border-color: var(--button-hover-border, #5e5e5e);
+}
+
+/* Content Area */
+.problems-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.problems-panel-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.problems-panel-content::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #1e1e1e);
+}
+
+.problems-panel-content::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #424242);
+  border-radius: 5px;
+}
+
+.problems-panel-content::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, #4e4e4e);
+}
+
+/* Empty State */
+.problems-panel-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--empty-foreground, #6c6c6c);
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* File Header */
+.problems-file-header {
+  padding: 8px 12px;
+  background: var(--file-header-background, #2d2d2d);
+  color: var(--file-header-foreground, #cccccc);
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color, #3e3e3e);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Problem Item */
+.problems-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--item-border, #2d2d2d);
+  transition: background 0.1s ease;
+}
+
+.problems-item:hover {
+  background: var(--item-hover-background, #2a2d2e);
+}
+
+.problems-item:last-child {
+  border-bottom: none;
+}
+
+/* Problem Icon */
+.problems-item-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.problems-item-error .problems-item-icon {
+  background: var(--error-color, #f48771);
+}
+
+.problems-item-warning .problems-item-icon {
+  background: var(--warning-color, #cca700);
+}
+
+.problems-item-info .problems-item-icon {
+  background: var(--info-color, #75beff);
+}
+
+/* Problem Content */
+.problems-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.problems-item-message {
+  font-size: 13px;
+  color: var(--message-foreground, #cccccc);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  word-wrap: break-word;
+}
+
+.problems-item-location {
+  font-size: 11px;
+  color: var(--location-foreground, #858585);
+  margin-bottom: 2px;
+}
+
+.problems-item-source {
+  font-size: 11px;
+  color: var(--source-foreground, #6c6c6c);
+  font-style: italic;
+}
+
+/* Severity Colors */
+.problems-item-error .problems-item-message {
+  color: var(--error-text, #f48771);
+}
+
+.problems-item-warning .problems-item-message {
+  color: var(--warning-text, #cca700);
+}
+
+.problems-item-info .problems-item-message {
+  color: var(--info-text, #75beff);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .problems-panel-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px 8px;
+  }
+
+  .problems-panel-title {
+    font-size: 12px;
+  }
+
+  .problems-filter {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .problems-filter-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .problems-panel-clear {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .problems-item {
+    padding: 6px 8px;
+  }
+
+  .problems-item-message {
+    font-size: 12px;
+  }
+
+  .problems-item-location,
+  .problems-item-source {
+    font-size: 10px;
+  }
+}
+
+/* Dark Theme Variables */
+:root {
+  --panel-background: #1e1e1e;
+  --panel-foreground: #cccccc;
+  --header-background: #252526;
+  --border-color: #3e3e3e;
+  --title-foreground: #cccccc;
+  --filter-foreground: #858585;
+  --filter-hover-background: #2a2d2e;
+  --filter-active-border: #454545;
+  --button-border: #454545;
+  --button-foreground: #cccccc;
+  --button-hover-background: #2a2d2e;
+  --button-hover-border: #5e5e5e;
+  --scrollbar-track: #1e1e1e;
+  --scrollbar-thumb: #424242;
+  --scrollbar-thumb-hover: #4e4e4e;
+  --empty-foreground: #6c6c6c;
+  --file-header-background: #2d2d2d;
+  --file-header-foreground: #cccccc;
+  --item-border: #2d2d2d;
+  --item-hover-background: #2a2d2e;
+  --message-foreground: #cccccc;
+  --location-foreground: #858585;
+  --source-foreground: #6c6c6c;
+  --error-color: #f48771;
+  --warning-color: #cca700;
+  --info-color: #75beff;
+  --error-text: #f48771;
+  --warning-text: #cca700;
+  --info-text: #75beff;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --panel-background: #ffffff;
+  --panel-foreground: #333333;
+  --header-background: #f3f3f3;
+  --border-color: #d4d4d4;
+  --title-foreground: #333333;
+  --filter-foreground: #666666;
+  --filter-hover-background: #e8e8e8;
+  --filter-active-border: #c1c1c1;
+  --button-border: #c1c1c1;
+  --button-foreground: #333333;
+  --button-hover-background: #e8e8e8;
+  --button-hover-border: #a8a8a8;
+  --scrollbar-track: #f3f3f3;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a8a8a8;
+  --empty-foreground: #999999;
+  --file-header-background: #e8e8e8;
+  --file-header-foreground: #333333;
+  --item-border: #e8e8e8;
+  --item-hover-background: #f3f3f3;
+  --message-foreground: #333333;
+  --location-foreground: #666666;
+  --source-foreground: #999999;
+  --error-color: #e51400;
+  --warning-color: #bf8803;
+  --info-color: #1a85ff;
+  --error-text: #e51400;
+  --warning-text: #bf8803;
+  --info-text: #1a85ff;
+}
