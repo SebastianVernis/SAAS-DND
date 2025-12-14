@@ -1,6 +1,38 @@
-import EditorIframe from '../components/EditorIframe';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Landing() {
+  const navigate = useNavigate();
+  const [demoTimeLeft, setDemoTimeLeft] = useState(300); // 5 minutos en segundos
+  const [demoStarted, setDemoStarted] = useState(false);
+
+  useEffect(() => {
+    if (!demoStarted) return;
+    
+    if (demoTimeLeft <= 0) {
+      // Timeout: redirigir a registro
+      alert('⏰ Tiempo de demo terminado. ¡Regístrate para continuar usando el editor!');
+      navigate('/register');
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setDemoTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [demoStarted, demoTimeLeft, navigate]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleDemoStart = () => {
+    setDemoStarted(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700">
       {/* Hero Section */}
@@ -37,27 +69,57 @@ export default function Landing() {
                 <h2 className="text-2xl font-bold text-gray-800">
                   🎨 Demo Interactivo del Editor
                 </h2>
-                <a
-                  href="/vanilla"
-                  target="_blank"
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
-                >
-                  🔗 Abrir Editor Completo
-                </a>
+                {demoStarted && (
+                  <div className="flex items-center gap-3">
+                    <div className={`px-4 py-2 rounded-lg font-mono text-sm font-bold ${
+                      demoTimeLeft < 60 ? 'bg-red-100 text-red-700' : 'bg-purple-100 text-purple-700'
+                    }`}>
+                      ⏱️ {formatTime(demoTimeLeft)}
+                    </div>
+                    <button
+                      onClick={() => navigate('/register')}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                    >
+                      🚀 Registrarme Ahora
+                    </button>
+                  </div>
+                )}
               </div>
               
-              {/* Iframe full screen */}
-              <div className="relative border-4 border-gray-200 rounded-lg overflow-hidden">
-                <iframe
-                  src="/vanilla"
-                  className="w-full border-0"
-                  style={{ height: '700px' }}
-                  title="Editor DragNDrop Vanilla"
-                />
-              </div>
+              {!demoStarted ? (
+                <div className="relative border-4 border-purple-300 rounded-lg overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-50 flex items-center justify-center" style={{ height: '700px' }}>
+                  <div className="text-center p-12">
+                    <div className="text-6xl mb-6">🎨</div>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                      Prueba el Editor Gratis
+                    </h3>
+                    <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+                      Explora todas las funcionalidades durante <strong>5 minutos</strong>. Sin tarjeta de crédito.
+                    </p>
+                    <button
+                      onClick={handleDemoStart}
+                      className="btn-primary text-lg px-8 py-4 inline-block"
+                    >
+                      ▶️ Iniciar Demo (5 minutos)
+                    </button>
+                    <p className="text-sm text-gray-500 mt-4">
+                      Después puedes registrarte para acceso ilimitado
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative border-4 border-gray-200 rounded-lg overflow-hidden">
+                  <iframe
+                    src="/vanilla"
+                    className="w-full border-0"
+                    style={{ height: '700px' }}
+                    title="Editor DragNDrop Vanilla"
+                  />
+                </div>
+              )}
               
               <p className="text-center text-gray-600 mt-4 text-sm">
-                💡 El editor tiene panel de propiedades completo integrado. Selecciona cualquier elemento para editar tamaño, colores y estilos.
+                💡 Panel de propiedades: <strong>Ctrl+P</strong> · Panel de componentes: <strong>Ctrl+B</strong> · Modo Zen: <strong>F11</strong>
               </p>
             </div>
           </div>
@@ -100,7 +162,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, idx) => (
               <div
                 key={idx}
@@ -233,19 +295,6 @@ const features = [
 ];
 
 const pricingPlans = [
-  {
-    name: 'Free',
-    price: 0,
-    description: 'Perfecto para aprender',
-    features: [
-      '5 proyectos',
-      'Componentes básicos',
-      'Export HTML/CSS',
-      'AI limitado 10/día',
-    ],
-    cta: 'Empezar Gratis',
-    featured: false,
-  },
   {
     name: 'Pro',
     price: 9,
