@@ -389,6 +389,16 @@
 
             hideGallery();
             showToast('Plantilla "' + template.nombre + '" cargada');
+            
+            // Auto-ajustar canvas al contenido de la plantilla
+            setTimeout(() => {
+                const canvas = document.getElementById('canvas');
+                if (canvas && canvas.children.length > 0) {
+                    canvas.style.minHeight = 'auto';
+                    canvas.style.height = 'auto';
+                    canvas.style.overflow = 'visible';
+                }
+            }, 200);
         }
 
         // Mostrar galería
