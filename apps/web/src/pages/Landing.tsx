@@ -33,13 +33,32 @@ export default function Landing() {
           {/* Interactive Demo Section */}
           <div className="max-w-7xl mx-auto">
             <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                🎨 Demo Interactivo del Editor
-              </h2>
-              <EditorIframe
-                src="http://18.223.32.141/vanilla"
-                title="Editor DragNDrop Vanilla"
-              />
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  🎨 Demo Interactivo del Editor
+                </h2>
+                <a
+                  href="/vanilla"
+                  target="_blank"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                >
+                  🔗 Abrir Editor Completo
+                </a>
+              </div>
+              
+              {/* Iframe full screen */}
+              <div className="relative border-4 border-gray-200 rounded-lg overflow-hidden">
+                <iframe
+                  src="/vanilla"
+                  className="w-full border-0"
+                  style={{ height: '700px' }}
+                  title="Editor DragNDrop Vanilla"
+                />
+              </div>
+              
+              <p className="text-center text-gray-600 mt-4 text-sm">
+                💡 El editor tiene panel de propiedades completo integrado. Selecciona cualquier elemento para editar tamaño, colores y estilos.
+              </p>
             </div>
           </div>
         </div>
