@@ -350,3 +350,18 @@ document.head.appendChild(styles);
 // Exportar instancia global
 export const canvasTypes = new CanvasTypes();
 window.canvasTypes = canvasTypes;
+
+// Auto-actualizar reglas cuando canvas cambia de tamaño
+if (typeof ResizeObserver !== 'undefined') {
+    const canvasObserver = new ResizeObserver(() => {
+        if (window.canvasTypes && window.canvasTypes.updateRulers) {
+            window.canvasTypes.updateRulers();
+        }
+    });
+    
+    const canvas = document.getElementById('canvas');
+    const canvasWrapper = document.getElementById('canvasWrapper');
+    
+    if (canvas) canvasObserver.observe(canvas);
+    if (canvasWrapper) canvasObserver.observe(canvasWrapper);
+}
