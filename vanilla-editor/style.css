@@ -1716,3 +1716,30 @@
     width: 100% !important;
     margin: 0 !important;
 }
+
+/* Fix pseudo-elementos de paneles ocultos */
+.components-panel.hidden::before,
+.components-panel.hidden::after,
+#components-panel[style*="display: none"]::before,
+#components-panel[style*="display: none"]::after {
+    display: none !important;
+    content: none !important;
+}
+
+.properties-panel.hidden::before,
+.properties-panel.hidden::after,
+#properties-panel[style*="display: none"]::before,
+#properties-panel[style*="display: none"]::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Forzar display flex en main-content para que canvas ocupe todo */
+.main-content {
+    display: flex !important;
+}
+
+/* Canvas ocupa 100% cuando paneles ocultos */
+.main-content .canvas-container {
+    flex: 1 !important;
+}
