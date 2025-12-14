@@ -779,10 +779,17 @@
             // Re-aplicar eventos a los elementos cargados
             const elements = canvas.querySelectorAll('*');
             elements.forEach((element, index) => {
-                // Evitar agregar eventos al canvas mismo
-                if (element.id === 'canvas') return;
+                // Evitar agregar eventos al canvas mismo y elementos script/style
+                if (element.id === 'canvas' || element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+                
+                // Evitar elementos muy pequeños o invisibles
+                if (element.offsetWidth === 0 && element.offsetHeight === 0) return;
 
-                element.id = 'element-' + (elementIdCounter++);
+                // Asignar ID único si no tiene
+                if (!element.id || element.id === '') {
+                    element.id = 'element-' + (elementIdCounter++);
+                }
+                
                 element.classList.add('canvas-element');
 
                 // Agregar botón de eliminar
@@ -795,7 +802,7 @@
                 };
                 element.appendChild(deleteBtn);
 
-                // Eventos
+                // Eventos de selección
                 element.addEventListener('click', function(e) {
                     e.stopPropagation();
                     selectElement(element);
@@ -807,8 +814,12 @@
                 });
 
                 // Configurar drag & drop para movimiento de elementos
-                setupElementDragAndDrop(element);
+                if (typeof setupElementDragAndDrop === 'function') {
+                    setupElementDragAndDrop(element);
+                }
             });
+            
+            console.log(`✅ Template loaded: ${elements.length} elements processed`);
 
             hideGallery();
             showToast('Plantilla "' + template.nombre + '" cargada');
@@ -851,7 +862,7 @@
             console.log('startBlankProject called');
             document.getElementById('canvas').innerHTML = '';
             selectedElement = null;
-            document.getElementById('propertiesPanel').innerHTML = `
+            document.getElementById('properties-panel').innerHTML = `
                 <h2 class="panel-title">Propiedades</h2>
                 <div class="properties-empty">
                     ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
@@ -1687,7 +1698,7 @@
 
         // Cargar propiedades en el panel
         function loadProperties(element) {
-            const panel = document.getElementById('propertiesPanel');
+            const panel = document.getElementById('properties-panel');
             const tagName = element.tagName.toLowerCase();
             const computedStyle = window.getComputedStyle(element);
 
@@ -2073,7 +2084,7 @@
         function deleteElement(element) {
             if (selectedElement === element) {
                 selectedElement = null;
-                document.getElementById('propertiesPanel').innerHTML = `
+                document.getElementById('properties-panel').innerHTML = `
                     <h2 class="panel-title">Propiedades</h2>
                     <div class="properties-empty">
                         ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
@@ -2131,7 +2142,7 @@
             if (confirm('¿Estás seguro de que quieres crear un nuevo proyecto? Se perderán los cambios no guardados.')) {
                 document.getElementById('canvas').innerHTML = '';
                 selectedElement = null;
-                document.getElementById('propertiesPanel').innerHTML = `
+                document.getElementById('properties-panel').innerHTML = `
                     <h2 class="panel-title">Propiedades</h2>
                     <div class="properties-empty">
                         ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
@@ -2642,7 +2653,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedElement.classList.remove('selected');
                         selectedElement = null;
                     }
-                    document.getElementById('propertiesPanel').innerHTML = `
+                    document.getElementById('properties-panel').innerHTML = `
                         <h2 class="panel-title">Propiedades</h2>
                         <div class="properties-empty">
                             ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
@@ -2818,7 +2829,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Limpiar canvas
                 document.getElementById('canvas').innerHTML = '';
                 selectedElement = null;
-                document.getElementById('propertiesPanel').innerHTML = `
+                document.getElementById('properties-panel').innerHTML = `
                     <h2 class="panel-title">Propiedades</h2>
                     <div class="properties-empty">
                         ← Arrastra componentes al canvas o selecciona un elemento para editar sus propiedades
