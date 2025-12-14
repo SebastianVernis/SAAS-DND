@@ -3799,6 +3799,9 @@ import('./src/ui/panelToggle.js').then(module => {
                     zenMode: false
                 }));
                 
+                // Marcar body como inicializado para que CSS tome control
+                document.body.classList.add('panels-initialized');
+                
                 console.log('✅ Editor iniciado: Tema oscuro, paneles ocultos, canvas fullscreen');
             }, 100);
         });

@@ -1743,3 +1743,34 @@
 .main-content .canvas-container {
     flex: 1 !important;
 }
+
+/* SUPER FIX: Ocultar paneles por defecto al cargar */
+body:not(.panels-initialized) .components-panel,
+body:not(.panels-initialized) .properties-panel {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+}
+
+/* Prevenir cualquier pseudo-elemento */
+.components-panel::before,
+.components-panel::after,
+.properties-panel::before,
+.properties-panel::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Cuando se inicializa, permitir control manual */
+body.panels-initialized .components-panel.hidden,
+body.panels-initialized .properties-panel.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+}
+
+body.panels-initialized .components-panel:not(.hidden),
+body.panels-initialized .properties-panel:not(.hidden) {
+    display: block !important;
+    visibility: visible !important;
+}
