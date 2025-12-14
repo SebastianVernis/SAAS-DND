@@ -3771,14 +3771,12 @@ import('./src/ui/panelToggle.js').then(module => {
                 const rightPanel = document.getElementById('properties-panel');
                 
                 if (leftPanel) {
-                    leftPanel.style.display = 'none';
-                    leftPanel.style.visibility = 'hidden';
-                    leftPanel.style.width = '0';
+                    leftPanel.classList.add('hidden');
+                    leftPanel.style.cssText = 'display: none !important; visibility: hidden !important; width: 0 !important;';
                 }
                 if (rightPanel) {
-                    rightPanel.style.display = 'none';
-                    rightPanel.style.visibility = 'hidden';
-                    rightPanel.style.width = '0';
+                    rightPanel.classList.add('hidden');
+                    rightPanel.style.cssText = 'display: none !important; visibility: hidden !important; width: 0 !important;';
                 }
                 
                 // Ajustar canvas a full width
