@@ -1701,6 +1701,26 @@
             const panel = document.getElementById('properties-panel');
             const tagName = element.tagName.toLowerCase();
             const computedStyle = window.getComputedStyle(element);
+            
+            // Helper: obtener valor desde inline style o computed style
+            const getStyleValue = (property, unit = '') => {
+                let value = element.style[property];
+                if (!value || value === '') {
+                    value = computedStyle[property];
+                }
+                if (unit && value && value.includes(unit)) {
+                    value = value.replace(unit, '');
+                }
+                return value || '';
+            };
+            
+            // Debug log para verificar lectura de propiedades
+            console.log('📋 Loading properties for:', tagName, {
+                fontSize: getStyleValue('fontSize'),
+                padding: getStyleValue('padding'),
+                backgroundColor: getStyleValue('backgroundColor'),
+                display: getStyleValue('display')
+            });
 
             let html = '<h2 class="panel-title">Propiedades</h2>';
 
@@ -1724,24 +1744,28 @@
             // Sección Dimensiones
             html += '<div class="property-section">';
             html += '<div class="section-title">Dimensiones</div>';
+            const width = getStyleValue('width');
+            const height = getStyleValue('height');
+            const maxWidth = getStyleValue('maxWidth');
+            const maxHeight = getStyleValue('maxHeight');
             html += `<div class="property-grid">
                         <div class="property-group">
                             <label class="property-label">Ancho</label>
-                            <input class="property-input" value="${element.style.width || 'auto'}" onchange="updateStyle('width', this.value)">
+                            <input class="property-input" value="${width || 'auto'}" onchange="updateStyle('width', this.value)">
                         </div>
                         <div class="property-group">
                             <label class="property-label">Alto</label>
-                            <input class="property-input" value="${element.style.height || 'auto'}" onchange="updateStyle('height', this.value)">
+                            <input class="property-input" value="${height || 'auto'}" onchange="updateStyle('height', this.value)">
                         </div>
                      </div>`;
             html += `<div class="property-grid">
                         <div class="property-group">
                             <label class="property-label">Ancho Máximo</label>
-                            <input class="property-input" value="${element.style.maxWidth || ''}" onchange="updateStyle('maxWidth', this.value)">
+                            <input class="property-input" value="${maxWidth}" onchange="updateStyle('maxWidth', this.value)">
                         </div>
                         <div class="property-group">
                             <label class="property-label">Alto Máximo</label>
-                            <input class="property-input" value="${element.style.maxHeight || ''}" onchange="updateStyle('maxHeight', this.value)">
+                            <input class="property-input" value="${maxHeight}" onchange="updateStyle('maxHeight', this.value)">
                         </div>
                      </div>`;
             html += '</div>';
@@ -1752,41 +1776,43 @@
             html += '<div class="property-group">';
             html += '<label class="property-label">Padding (px)</label>';
             html += '<div class="property-grid-4">';
-            html += `<input class="property-input" placeholder="Top" value="${element.style.paddingTop.replace('px', '')}" onchange="updateStyle('paddingTop', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Right" value="${element.style.paddingRight.replace('px', '')}" onchange="updateStyle('paddingRight', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Bottom" value="${element.style.paddingBottom.replace('px', '')}" onchange="updateStyle('paddingBottom', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Left" value="${element.style.paddingLeft.replace('px', '')}" onchange="updateStyle('paddingLeft', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Top" value="${getStyleValue('paddingTop', 'px')}" onchange="updateStyle('paddingTop', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Right" value="${getStyleValue('paddingRight', 'px')}" onchange="updateStyle('paddingRight', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Bottom" value="${getStyleValue('paddingBottom', 'px')}" onchange="updateStyle('paddingBottom', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Left" value="${getStyleValue('paddingLeft', 'px')}" onchange="updateStyle('paddingLeft', this.value + 'px')">`;
             html += '</div></div>';
             html += '<div class="property-group">';
             html += '<label class="property-label">Margin (px)</label>';
             html += '<div class="property-grid-4">';
-            html += `<input class="property-input" placeholder="Top" value="${element.style.marginTop.replace('px', '')}" onchange="updateStyle('marginTop', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Right" value="${element.style.marginRight.replace('px', '')}" onchange="updateStyle('marginRight', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Bottom" value="${element.style.marginBottom.replace('px', '')}" onchange="updateStyle('marginBottom', this.value + 'px')">`;
-            html += `<input class="property-input" placeholder="Left" value="${element.style.marginLeft.replace('px', '')}" onchange="updateStyle('marginLeft', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Top" value="${getStyleValue('marginTop', 'px')}" onchange="updateStyle('marginTop', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Right" value="${getStyleValue('marginRight', 'px')}" onchange="updateStyle('marginRight', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Bottom" value="${getStyleValue('marginBottom', 'px')}" onchange="updateStyle('marginBottom', this.value + 'px')">`;
+            html += `<input class="property-input" placeholder="Left" value="${getStyleValue('marginLeft', 'px')}" onchange="updateStyle('marginLeft', this.value + 'px')">`;
             html += '</div></div>';
             html += '</div>';
 
             // Sección Posicionamiento
             html += '<div class="property-section">';
             html += '<div class="section-title">Posicionamiento</div>';
+            const display = getStyleValue('display');
+            const position = getStyleValue('position');
             html += `<div class="property-group">
                         <label class="property-label">Display</label>
                         <select class="property-input" onchange="updateStyle('display', this.value)">
-                            <option value="block" ${element.style.display === 'block' ? 'selected' : ''}>Block</option>
-                            <option value="inline-block" ${element.style.display === 'inline-block' ? 'selected' : ''}>Inline-block</option>
-                            <option value="flex" ${element.style.display === 'flex' ? 'selected' : ''}>Flex</option>
-                            <option value="grid" ${element.style.display === 'grid' ? 'selected' : ''}>Grid</option>
-                            <option value="none" ${element.style.display === 'none' ? 'selected' : ''}>None</option>
+                            <option value="block" ${display === 'block' ? 'selected' : ''}>Block</option>
+                            <option value="inline-block" ${display === 'inline-block' ? 'selected' : ''}>Inline-block</option>
+                            <option value="flex" ${display === 'flex' ? 'selected' : ''}>Flex</option>
+                            <option value="grid" ${display === 'grid' ? 'selected' : ''}>Grid</option>
+                            <option value="none" ${display === 'none' ? 'selected' : ''}>None</option>
                         </select>
                      </div>`;
             html += `<div class="property-group">
                         <label class="property-label">Position</label>
                         <select class="property-input" onchange="updateStyle('position', this.value)">
-                            <option value="static" ${element.style.position === 'static' || !element.style.position ? 'selected' : ''}>Static</option>
-                            <option value="relative" ${element.style.position === 'relative' ? 'selected' : ''}>Relative</option>
-                            <option value="absolute" ${element.style.position === 'absolute' ? 'selected' : ''}>Absolute</option>
-                            <option value="fixed" ${element.style.position === 'fixed' ? 'selected' : ''}>Fixed</option>
+                            <option value="static" ${position === 'static' || !position ? 'selected' : ''}>Static</option>
+                            <option value="relative" ${position === 'relative' ? 'selected' : ''}>Relative</option>
+                            <option value="absolute" ${position === 'absolute' ? 'selected' : ''}>Absolute</option>
+                            <option value="fixed" ${position === 'fixed' ? 'selected' : ''}>Fixed</option>
                         </select>
                      </div>`;
             html += '</div>';
@@ -1795,30 +1821,34 @@
             if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'button', 'label'].includes(tagName)) {
                 html += '<div class="property-section">';
                 html += '<div class="section-title">Tipografía</div>';
+                const fontSize = getStyleValue('fontSize');
+                const fontWeight = getStyleValue('fontWeight');
+                const color = getStyleValue('color');
+                const textAlign = getStyleValue('textAlign');
                 html += `<div class="property-group">
                             <label class="property-label">Font Size</label>
-                            <input class="property-input" value="${element.style.fontSize || ''}" onchange="updateStyle('fontSize', this.value)">
+                            <input class="property-input" value="${fontSize}" onchange="updateStyle('fontSize', this.value)">
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Font Weight</label>
                             <select class="property-input" onchange="updateStyle('fontWeight', this.value)">
-                                <option value="normal" ${element.style.fontWeight === 'normal' || element.style.fontWeight === '400' ? 'selected' : ''}>Normal</option>
-                                <option value="500" ${element.style.fontWeight === '500' ? 'selected' : ''}>Medium</option>
-                                <option value="600" ${element.style.fontWeight === '600' ? 'selected' : ''}>Semibold</option>
-                                <option value="bold" ${element.style.fontWeight === 'bold' || element.style.fontWeight === '700' ? 'selected' : ''}>Bold</option>
+                                <option value="normal" ${fontWeight === 'normal' || fontWeight === '400' ? 'selected' : ''}>Normal</option>
+                                <option value="500" ${fontWeight === '500' ? 'selected' : ''}>Medium</option>
+                                <option value="600" ${fontWeight === '600' ? 'selected' : ''}>Semibold</option>
+                                <option value="bold" ${fontWeight === 'bold' || fontWeight === '700' ? 'selected' : ''}>Bold</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Color</label>
-                            <input type="color" class="property-input" value="${rgbToHex(element.style.color || '#000000')}" onchange="updateStyle('color', this.value)">
+                            <input type="color" class="property-input" value="${rgbToHex(color || '#000000')}" onchange="updateStyle('color', this.value)">
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Text Align</label>
                             <div class="text-align-buttons">
-                                <button class="text-align-btn ${element.style.textAlign === 'left' ? 'active' : ''}" onclick="updateStyle('textAlign', 'left')">L</button>
-                                <button class="text-align-btn ${element.style.textAlign === 'center' ? 'active' : ''}" onclick="updateStyle('textAlign', 'center')">C</button>
-                                <button class="text-align-btn ${element.style.textAlign === 'right' ? 'active' : ''}" onclick="updateStyle('textAlign', 'right')">R</button>
-                                <button class="text-align-btn ${element.style.textAlign === 'justify' ? 'active' : ''}" onclick="updateStyle('textAlign', 'justify')">J</button>
+                                <button class="text-align-btn ${textAlign === 'left' ? 'active' : ''}" onclick="updateStyle('textAlign', 'left')">L</button>
+                                <button class="text-align-btn ${textAlign === 'center' ? 'active' : ''}" onclick="updateStyle('textAlign', 'center')">C</button>
+                                <button class="text-align-btn ${textAlign === 'right' ? 'active' : ''}" onclick="updateStyle('textAlign', 'right')">R</button>
+                                <button class="text-align-btn ${textAlign === 'justify' ? 'active' : ''}" onclick="updateStyle('textAlign', 'justify')">J</button>
                             </div>
                          </div>`;
                 html += '</div>';
@@ -1827,136 +1857,154 @@
             // Sección Fondo y Bordes
             html += '<div class="property-section">';
             html += '<div class="section-title">Fondo y Bordes</div>';
+            const bgColor = getStyleValue('backgroundColor');
+            const borderWidth = getStyleValue('borderWidth', 'px');
+            const borderStyle = getStyleValue('borderStyle');
+            const borderColor = getStyleValue('borderColor');
+            const borderRadius = getStyleValue('borderRadius', 'px');
             html += `<div class="property-group">
                         <label class="property-label">Background Color</label>
-                        <input type="color" class="property-input" value="${rgbToHex(element.style.backgroundColor || '#ffffff')}" onchange="updateStyle('backgroundColor', this.value)">
+                        <input type="color" class="property-input" value="${rgbToHex(bgColor || '#ffffff')}" onchange="updateStyle('backgroundColor', this.value)">
                      </div>`;
             html += `<div class="property-group">
                         <label class="property-label">Border Width (px)</label>
-                        <input class="property-input" value="${element.style.borderWidth.replace('px', '')}" onchange="updateStyle('borderWidth', this.value + 'px')">
+                        <input class="property-input" value="${borderWidth}" onchange="updateStyle('borderWidth', this.value + 'px')">
                      </div>`;
             html += `<div class="property-group">
                         <label class="property-label">Border Style</label>
                         <select class="property-input" onchange="updateStyle('borderStyle', this.value)">
-                            <option value="none" ${element.style.borderStyle === 'none' ? 'selected' : ''}>None</option>
-                            <option value="solid" ${element.style.borderStyle === 'solid' ? 'selected' : ''}>Solid</option>
-                            <option value="dashed" ${element.style.borderStyle === 'dashed' ? 'selected' : ''}>Dashed</option>
-                            <option value="dotted" ${element.style.borderStyle === 'dotted' ? 'selected' : ''}>Dotted</option>
+                            <option value="none" ${borderStyle === 'none' ? 'selected' : ''}>None</option>
+                            <option value="solid" ${borderStyle === 'solid' ? 'selected' : ''}>Solid</option>
+                            <option value="dashed" ${borderStyle === 'dashed' ? 'selected' : ''}>Dashed</option>
+                            <option value="dotted" ${borderStyle === 'dotted' ? 'selected' : ''}>Dotted</option>
                         </select>
                      </div>`;
             html += `<div class="property-group">
                         <label class="property-label">Border Color</label>
-                        <input type="color" class="property-input" value="${rgbToHex(element.style.borderColor || '#000000')}" onchange="updateStyle('borderColor', this.value)">
+                        <input type="color" class="property-input" value="${rgbToHex(borderColor || '#000000')}" onchange="updateStyle('borderColor', this.value)">
                      </div>`;
             html += `<div class="property-group">
                         <label class="property-label">Border Radius (px)</label>
-                        <input class="property-input" value="${element.style.borderRadius.replace('px', '')}" onchange="updateStyle('borderRadius', this.value + 'px')">
+                        <input class="property-input" value="${borderRadius}" onchange="updateStyle('borderRadius', this.value + 'px')">
                      </div>`;
             html += '</div>';
 
             // Sección Sombra y Efectos
             html += '<div class="property-section">';
             html += '<div class="section-title">Sombra y Efectos</div>';
+            const boxShadow = getStyleValue('boxShadow');
+            const opacity = getStyleValue('opacity');
             html += `<div class="property-group">
                         <label class="property-label">Box Shadow</label>
                         <select class="property-input" onchange="updateStyle('boxShadow', this.value)">
-                            <option value="none" ${element.style.boxShadow === 'none' ? 'selected' : ''}>Ninguna</option>
-                            <option value="0 1px 3px rgba(0,0,0,0.1)" ${(element.style.boxShadow === '0 1px 3px rgba(0,0,0,0.1)' || element.style.boxShadow.includes('0 1px 3px')) ? 'selected' : ''}>Sutil</option>
-                            <option value="0 2px 6px rgba(0,0,0,0.15)" ${(element.style.boxShadow === '0 2px 6px rgba(0,0,0,0.15)' || element.style.boxShadow.includes('0 2px 6px')) ? 'selected' : ''}>Media</option>
-                            <option value="0 4px 12px rgba(0,0,0,0.15)" ${(element.style.boxShadow === '0 4px 12px rgba(0,0,0,0.15)' || element.style.boxShadow.includes('0 4px 12px')) ? 'selected' : ''}>Fuerte</option>
+                            <option value="none" ${boxShadow === 'none' ? 'selected' : ''}>Ninguna</option>
+                            <option value="0 1px 3px rgba(0,0,0,0.1)" ${boxShadow && boxShadow.includes('0px 1px 3px') || boxShadow && boxShadow.includes('0 1px 3px') ? 'selected' : ''}>Sutil</option>
+                            <option value="0 2px 6px rgba(0,0,0,0.15)" ${boxShadow && boxShadow.includes('0px 2px 6px') || boxShadow && boxShadow.includes('0 2px 6px') ? 'selected' : ''}>Media</option>
+                            <option value="0 4px 12px rgba(0,0,0,0.15)" ${boxShadow && boxShadow.includes('0px 4px 12px') || boxShadow && boxShadow.includes('0 4px 12px') ? 'selected' : ''}>Fuerte</option>
                         </select>
                      </div>`;
+            const opacityPercent = opacity ? Math.round(parseFloat(opacity) * 100) : 100;
             html += `<div class="property-group">
                         <label class="property-label">Opacity</label>
-                        <input type="range" min="0" max="100" value="${element.style.opacity ? parseFloat(element.style.opacity) * 100 : '100'}" class="property-input" onchange="updateStyle('opacity', this.value / 100)">
-                        <div style="font-size: 12px; color: #64748b; text-align: right;">${element.style.opacity ? Math.round(parseFloat(element.style.opacity) * 100) : '100'}%</div>
+                        <input type="range" min="0" max="100" value="${opacityPercent}" class="property-input" onchange="updateStyle('opacity', this.value / 100)">
+                        <div style="font-size: 12px; color: #64748b; text-align: right;">${opacityPercent}%</div>
                      </div>`;
             html += '</div>';
 
             // Sección Flexbox (si display es flex)
-            if (element.style.display === 'flex') {
+            if (display === 'flex') {
                 html += '<div class="property-section">';
                 html += '<div class="section-title">Flexbox</div>';
+                const flexDirection = getStyleValue('flexDirection');
+                const justifyContent = getStyleValue('justifyContent');
+                const alignItems = getStyleValue('alignItems');
+                const gap = getStyleValue('gap', 'px');
                 html += `<div class="property-group">
                             <label class="property-label">Flex Direction</label>
                             <select class="property-input" onchange="updateStyle('flexDirection', this.value)">
-                                <option value="row" ${element.style.flexDirection === 'row' ? 'selected' : ''}>Row</option>
-                                <option value="column" ${element.style.flexDirection === 'column' ? 'selected' : ''}>Column</option>
-                                <option value="row-reverse" ${element.style.flexDirection === 'row-reverse' ? 'selected' : ''}>Row Reverse</option>
-                                <option value="column-reverse" ${element.style.flexDirection === 'column-reverse' ? 'selected' : ''}>Column Reverse</option>
+                                <option value="row" ${flexDirection === 'row' ? 'selected' : ''}>Row</option>
+                                <option value="column" ${flexDirection === 'column' ? 'selected' : ''}>Column</option>
+                                <option value="row-reverse" ${flexDirection === 'row-reverse' ? 'selected' : ''}>Row Reverse</option>
+                                <option value="column-reverse" ${flexDirection === 'column-reverse' ? 'selected' : ''}>Column Reverse</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Justify Content</label>
                             <select class="property-input" onchange="updateStyle('justifyContent', this.value)">
-                                <option value="flex-start" ${element.style.justifyContent === 'flex-start' ? 'selected' : ''}>Flex Start</option>
-                                <option value="center" ${element.style.justifyContent === 'center' ? 'selected' : ''}>Center</option>
-                                <option value="flex-end" ${element.style.justifyContent === 'flex-end' ? 'selected' : ''}>Flex End</option>
-                                <option value="space-between" ${element.style.justifyContent === 'space-between' ? 'selected' : ''}>Space Between</option>
-                                <option value="space-around" ${element.style.justifyContent === 'space-around' ? 'selected' : ''}>Space Around</option>
-                                <option value="space-evenly" ${element.style.justifyContent === 'space-evenly' ? 'selected' : ''}>Space Evenly</option>
+                                <option value="flex-start" ${justifyContent === 'flex-start' ? 'selected' : ''}>Flex Start</option>
+                                <option value="center" ${justifyContent === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="flex-end" ${justifyContent === 'flex-end' ? 'selected' : ''}>Flex End</option>
+                                <option value="space-between" ${justifyContent === 'space-between' ? 'selected' : ''}>Space Between</option>
+                                <option value="space-around" ${justifyContent === 'space-around' ? 'selected' : ''}>Space Around</option>
+                                <option value="space-evenly" ${justifyContent === 'space-evenly' ? 'selected' : ''}>Space Evenly</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Align Items</label>
                             <select class="property-input" onchange="updateStyle('alignItems', this.value)">
-                                <option value="flex-start" ${element.style.alignItems === 'flex-start' ? 'selected' : ''}>Flex Start</option>
-                                <option value="center" ${element.style.alignItems === 'center' ? 'selected' : ''}>Center</option>
-                                <option value="flex-end" ${element.style.alignItems === 'flex-end' ? 'selected' : ''}>Flex End</option>
-                                <option value="stretch" ${element.style.alignItems === 'stretch' ? 'selected' : ''}>Stretch</option>
-                                <option value="baseline" ${element.style.alignItems === 'baseline' ? 'selected' : ''}>Baseline</option>
+                                <option value="flex-start" ${alignItems === 'flex-start' ? 'selected' : ''}>Flex Start</option>
+                                <option value="center" ${alignItems === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="flex-end" ${alignItems === 'flex-end' ? 'selected' : ''}>Flex End</option>
+                                <option value="stretch" ${alignItems === 'stretch' ? 'selected' : ''}>Stretch</option>
+                                <option value="baseline" ${alignItems === 'baseline' ? 'selected' : ''}>Baseline</option>
                             </select>
                          </div>`;
+                const alignContent = getStyleValue('alignContent');
                 html += `<div class="property-group">
                             <label class="property-label">Align Content</label>
                             <select class="property-input" onchange="updateStyle('alignContent', this.value)">
-                                <option value="flex-start" ${element.style.alignContent === 'flex-start' ? 'selected' : ''}>Flex Start</option>
-                                <option value="center" ${element.style.alignContent === 'center' ? 'selected' : ''}>Center</option>
-                                <option value="flex-end" ${element.style.alignContent === 'flex-end' ? 'selected' : ''}>Flex End</option>
-                                <option value="space-between" ${element.style.alignContent === 'space-between' ? 'selected' : ''}>Space Between</option>
-                                <option value="space-around" ${element.style.alignContent === 'space-around' ? 'selected' : ''}>Space Around</option>
-                                <option value="stretch" ${element.style.alignContent === 'stretch' ? 'selected' : ''}>Stretch</option>
+                                <option value="flex-start" ${alignContent === 'flex-start' ? 'selected' : ''}>Flex Start</option>
+                                <option value="center" ${alignContent === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="flex-end" ${alignContent === 'flex-end' ? 'selected' : ''}>Flex End</option>
+                                <option value="space-between" ${alignContent === 'space-between' ? 'selected' : ''}>Space Between</option>
+                                <option value="space-around" ${alignContent === 'space-around' ? 'selected' : ''}>Space Around</option>
+                                <option value="stretch" ${alignContent === 'stretch' ? 'selected' : ''}>Stretch</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Gap (px)</label>
-                            <input class="property-input" value="${element.style.gap.replace('px', '')}" onchange="updateStyle('gap', this.value + 'px')">
+                            <input class="property-input" value="${gap}" onchange="updateStyle('gap', this.value + 'px')">
                          </div>`;
                 html += '</div>';
             }
 
             // Sección Grid (si display es grid)
-            if (element.style.display === 'grid') {
+            if (display === 'grid') {
                 html += '<div class="property-section">';
                 html += '<div class="section-title">Grid</div>';
+                const gridTemplateColumns = getStyleValue('gridTemplateColumns');
+                const gridTemplateRows = getStyleValue('gridTemplateRows');
+                const gridGap = getStyleValue('gridGap', 'px') || getStyleValue('gap', 'px');
+                const justifyItems = getStyleValue('justifyItems');
+                const gridAlignItems = getStyleValue('alignItems');
                 html += `<div class="property-group">
                             <label class="property-label">Grid Template Columns</label>
-                            <input class="property-input" value="${element.style.gridTemplateColumns || ''}" placeholder="1fr 1fr" onchange="updateStyle('gridTemplateColumns', this.value)">
+                            <input class="property-input" value="${gridTemplateColumns}" placeholder="1fr 1fr" onchange="updateStyle('gridTemplateColumns', this.value)">
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Grid Template Rows</label>
-                            <input class="property-input" value="${element.style.gridTemplateRows || ''}" placeholder="auto auto" onchange="updateStyle('gridTemplateRows', this.value)">
+                            <input class="property-input" value="${gridTemplateRows}" placeholder="auto auto" onchange="updateStyle('gridTemplateRows', this.value)">
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Grid Gap (px)</label>
-                            <input class="property-input" value="${element.style.gridGap.replace('px', '') || '0'}" onchange="updateStyle('gridGap', this.value + 'px')">
+                            <input class="property-input" value="${gridGap || '0'}" onchange="updateStyle('gridGap', this.value + 'px')">
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Justify Items</label>
                             <select class="property-input" onchange="updateStyle('justifyItems', this.value)">
-                                <option value="stretch" ${element.style.justifyItems === 'stretch' ? 'selected' : ''}>Stretch</option>
-                                <option value="center" ${element.style.justifyItems === 'center' ? 'selected' : ''}>Center</option>
-                                <option value="start" ${element.style.justifyItems === 'start' ? 'selected' : ''}>Start</option>
-                                <option value="end" ${element.style.justifyItems === 'end' ? 'selected' : ''}>End</option>
+                                <option value="stretch" ${justifyItems === 'stretch' ? 'selected' : ''}>Stretch</option>
+                                <option value="center" ${justifyItems === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="start" ${justifyItems === 'start' ? 'selected' : ''}>Start</option>
+                                <option value="end" ${justifyItems === 'end' ? 'selected' : ''}>End</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Align Items</label>
                             <select class="property-input" onchange="updateStyle('alignItems', this.value)">
-                                <option value="stretch" ${element.style.alignItems === 'stretch' ? 'selected' : ''}>Stretch</option>
-                                <option value="center" ${element.style.alignItems === 'center' ? 'selected' : ''}>Center</option>
-                                <option value="start" ${element.style.alignItems === 'start' ? 'selected' : ''}>Start</option>
-                                <option value="end" ${element.style.alignItems === 'end' ? 'selected' : ''}>End</option>
+                                <option value="stretch" ${gridAlignItems === 'stretch' ? 'selected' : ''}>Stretch</option>
+                                <option value="center" ${gridAlignItems === 'center' ? 'selected' : ''}>Center</option>
+                                <option value="start" ${gridAlignItems === 'start' ? 'selected' : ''}>Start</option>
+                                <option value="end" ${gridAlignItems === 'end' ? 'selected' : ''}>End</option>
                             </select>
                          </div>`;
                 html += '</div>';
@@ -1965,12 +2013,13 @@
             // Sección Transiciones y Animaciones
             html += '<div class="property-section">';
             html += '<div class="section-title">Transiciones</div>';
+            const transition = getStyleValue('transition');
             html += `<div class="property-group">
                         <label class="property-label">Transition</label>
                         <select class="property-input" onchange="updateStyle('transition', this.value)">
-                            <option value="" ${!element.style.transition ? 'selected' : ''}>Ninguna</option>
-                            <option value="all 0.3s ease" ${element.style.transition === 'all 0.3s ease' ? 'selected' : ''}>Suave (0.3s)</option>
-                            <option value="all 0.5s ease" ${element.style.transition === 'all 0.5s ease' ? 'selected' : ''}>Lenta (0.5s)</option>
+                            <option value="" ${!transition ? 'selected' : ''}>Ninguna</option>
+                            <option value="all 0.3s ease" ${transition && transition.includes('0.3s') ? 'selected' : ''}>Suave (0.3s)</option>
+                            <option value="all 0.5s ease" ${transition && transition.includes('0.5s') ? 'selected' : ''}>Lenta (0.5s)</option>
                         </select>
                      </div>`;
             html += '</div>';
