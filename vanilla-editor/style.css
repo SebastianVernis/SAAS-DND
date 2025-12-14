@@ -1674,3 +1674,45 @@
             border-color: #2563eb !important;
             color: #2563eb !important;
         }
+
+/* FIXES CRÍTICOS */
+
+/* 1. Canvas con fondo oscuro por defecto */
+#canvas {
+    background: #1e293b !important;
+}
+
+[data-theme="light"] #canvas {
+    background: white !important;
+}
+
+/* 2. Forzar paneles ocultos con !important */
+.components-panel.hidden,
+#components-panel[style*="display: none"] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+}
+
+.properties-panel.hidden,
+#properties-panel[style*="display: none"] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+}
+
+/* 3. Canvas fullscreen cuando paneles ocultos */
+.main-content:has(.components-panel.hidden):has(.properties-panel.hidden) .canvas-container {
+    width: 100% !important;
+    margin: 0 !important;
+}
