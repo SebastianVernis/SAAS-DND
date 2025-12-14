@@ -3332,25 +3332,43 @@ import('./src/ui/panelToggle.js').then(module => {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem('dragndrop_theme', 'dark');
             
-            // Ocultar paneles al inicio para canvas full screen
+            // FORZAR paneles ocultos al inicio
             setTimeout(() => {
                 const leftPanel = document.getElementById('components-panel');
                 const rightPanel = document.getElementById('properties-panel');
                 
                 if (leftPanel) {
                     leftPanel.style.display = 'none';
+                    leftPanel.style.visibility = 'hidden';
+                    leftPanel.style.width = '0';
                 }
                 if (rightPanel) {
                     rightPanel.style.display = 'none';
+                    rightPanel.style.visibility = 'hidden';
+                    rightPanel.style.width = '0';
                 }
                 
                 // Ajustar canvas a full width
                 const canvasContainer = document.querySelector('.canvas-container');
+                const mainContent = document.querySelector('.main-content');
                 if (canvasContainer) {
                     canvasContainer.style.width = '100%';
+                    canvasContainer.style.marginLeft = '0';
+                    canvasContainer.style.marginRight = '0';
+                }
+                if (mainContent) {
+                    mainContent.style.paddingLeft = '0';
+                    mainContent.style.paddingRight = '0';
                 }
                 
-                console.log('✅ Editor iniciado: Tema oscuro, canvas fullscreen');
+                // Guardar estado de paneles ocultos
+                localStorage.setItem('panelStates', JSON.stringify({
+                    leftPanelVisible: false,
+                    rightPanelVisible: false,
+                    zenMode: false
+                }));
+                
+                console.log('✅ Editor iniciado: Tema oscuro, paneles ocultos, canvas fullscreen');
             }, 100);
         });
 
