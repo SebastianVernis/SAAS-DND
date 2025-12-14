@@ -27,7 +27,6 @@ export default function Team() {
   const { user, subscription } = useAuthStore();
   const [members, setMembers] = useState<Member[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
-  const [loading, setLoading] = useState(true);
   
   // Invite modal
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -54,8 +53,6 @@ export default function Team() {
       setInvitations(invitationsRes.data.invitations);
     } catch (error) {
       console.error('Error loading team:', error);
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -21,7 +21,7 @@ export default function Login() {
 
     try {
       const response = await authApi.login(formData);
-      const { token, user } = response.data;
+      const { token } = response.data;
 
       // Get full session data
       const sessionResponse = await authApi.getSession();

@@ -178,7 +178,7 @@ export default function Landing() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="mb-4">
                   <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
-                  {plan.price > 0 && <span className="text-gray-600">/mes</span>}
+                  {Number(plan.price) > 0 && <span className="text-gray-600">/mes</span>}
                 </div>
                 <p className="text-gray-600 mb-6">{plan.description}</p>
                 <ul className="space-y-3 mb-8">
