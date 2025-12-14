@@ -14,7 +14,7 @@ interface Project {
 }
 
 export default function DashboardHome() {
-  const { user, organization, subscription } = useAuthStore();
+  const { user, subscription } = useAuthStore();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
