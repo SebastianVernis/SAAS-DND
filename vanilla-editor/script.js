@@ -3320,3 +3320,8 @@ document.addEventListener('DOMContentLoaded', function() {
         window.toggleCategory = toggleCategory;
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = { createComponent }; }
+
+// Inicializar panel toggle
+import('./src/ui/panelToggle.js').then(module => {
+    window.panelToggle = module.panelToggle;
+}).catch(err => console.log('Panel toggle not loaded'));

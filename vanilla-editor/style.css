@@ -291,12 +291,15 @@
             cursor: grab;
             transition: all 0.3s ease;
             font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .component-item:hover {
             border-color: var(--accent-primary);
             background: var(--bg-tertiary);
             transform: translateX(2px);
+            color: var(--accent-primary);
         }
 
         .component-item:active {
