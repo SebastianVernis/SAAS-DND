@@ -233,6 +233,429 @@
       <footer style="background: #1e293b; color: white; padding: 40px 20px; text-align: center;">
         <p style="margin: 0; color: #94a3b8;">&copy; 2025 TiendaXpress. Todos los derechos reservados.</p>
       </footer>`
+            },
+            {
+                id: 'app-mobile',
+                nombre: 'App Mobile',
+                descripcion: 'Showcase de app móvil con screenshots',
+                categoria: 'landing',
+                emoji: '📱',
+                contenido_html: `
+                <section style="padding: 80px 20px; text-align: center;">
+                    <h2 style="font-size: 40px; margin-bottom: 20px;">Muestra tu App</h2>
+                    <p style="font-size: 18px; color: #555; margin-bottom: 40px;">Una sección para mostrar las capturas de pantalla de tu aplicación móvil.</p>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                    <img src="https://via.placeholder.com/200x400" alt="App Screenshot 1" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <img src="https://via.placeholder.com/200x400" alt="App Screenshot 2" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <img src="https://via.placeholder.com/200x400" alt="App Screenshot 3" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'startup',
+                nombre: 'Startup',
+                descripcion: 'Landing para startups con investors, timeline',
+                categoria: 'landing',
+                emoji: '💡',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Nuestra Trayectoria</h2>
+                    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 50px; height: 50px; background-color: #333; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%;">2020</div>
+                        <p>Creación de la idea y formación del equipo.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 50px; height: 50px; background-color: #333; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%;">2021</div>
+                        <p>Lanzamiento de la primera versión del producto.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 50px; height: 50px; background-color: #333; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%;">2022</div>
+                        <p>Ronda de inversión y expansión del equipo.</p>
+                    </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'agency',
+                nombre: 'Agency',
+                descripcion: 'Agencia creativa con portfolio grid',
+                categoria: 'landing',
+                emoji: '🎨',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Nuestro Trabajo</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <img src="https://via.placeholder.com/300x200" alt="Portfolio Item 1" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                        <h3 style="font-size: 24px;">Proyecto 1</h3>
+                        <p>Descripción del proyecto.</p>
+                    </div>
+                    <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <img src="https://via.placeholder.com/300x200" alt="Portfolio Item 2" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                        <h3 style="font-size: 24px;">Proyecto 2</h3>
+                        <p>Descripción del proyecto.</p>
+                    </div>
+                    <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <img src="https://via.placeholder.com/300x200" alt="Portfolio Item 3" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                        <h3 style="font-size: 24px;">Proyecto 3</h3>
+                        <p>Descripción del proyecto.</p>
+                    </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'event',
+                nombre: 'Event',
+                descripcion: 'Página de evento con countdown, speakers',
+                categoria: 'landing',
+                emoji: '🎉',
+                contenido_html: `
+                <section style="padding: 80px 20px; text-align: center;">
+                    <h2 style="font-size: 40px; margin-bottom: 20px;">Próximo Evento</h2>
+                    <div style="font-size: 30px; margin-bottom: 40px;" id="countdown">10d 5h 30m 15s</div>
+                    <h3 style="font-size: 30px; margin-bottom: 20px;">Ponentes</h3>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                    <div style="text-align: center;">
+                        <img src="https://via.placeholder.com/150" alt="Speaker 1" style="border-radius: 50%; margin-bottom: 10px;">
+                        <h4>Nombre Ponente 1</h4>
+                        <p>Título del Ponente 1</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <img src="https://via.placeholder.com/150" alt="Speaker 2" style="border-radius: 50%; margin-bottom: 10px;">
+                        <h4>Nombre Ponente 2</h4>
+                        <p>Título del Ponente 2</p>
+                    </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'portfolio-personal',
+                nombre: 'Portfolio Personal',
+                descripcion: 'Diseñador/Developer personal',
+                categoria: 'portfolio',
+                emoji: '🧑‍💻',
+                contenido_html: `
+                <section style="padding: 80px 20px; text-align: center;">
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" style="border-radius: 50%; margin-bottom: 20px;">
+                    <h2 style="font-size: 40px; margin-bottom: 10px;">Mi Nombre</h2>
+                    <p style="font-size: 18px; color: #555; margin-bottom: 40px;">Desarrollador Web y Diseñador Gráfico</p>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                    <a href="#" style="padding: 10px 20px; background-color: #333; color: white; text-decoration: none; border-radius: 5px;">Ver Proyectos</a>
+                    <a href="#" style="padding: 10px 20px; background-color: #555; color: white; text-decoration: none; border-radius: 5px;">Contactar</a>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'portfolio-fotografo',
+                nombre: 'Portfolio Fotógrafo',
+                descripcion: 'Grid de fotos con lightbox',
+                categoria: 'portfolio',
+                emoji: '📷',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Galería</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                    <img src="https://via.placeholder.com/300x300" alt="Photo 1" style="width: 100%; cursor: pointer;">
+                    <img src="https://via.placeholder.com/300x300" alt="Photo 2" style="width: 100%; cursor: pointer;">
+                    <img src="https://via.placeholder.com/300x300" alt="Photo 3" style="width: 100%; cursor: pointer;">
+                    <img src="https://via.placeholder.com/300x300" alt="Photo 4" style="width: 100%; cursor: pointer;">
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'portfolio-arquitectura',
+                nombre: 'Portfolio Arquitectura',
+                descripcion: 'Proyectos con antes/después',
+                categoria: 'portfolio',
+                emoji: '🏛️',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Proyectos</h2>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="text-align: center;">Antes</h3>
+                        <img src="https://via.placeholder.com/400x300" alt="Before">
+                    </div>
+                    <div>
+                        <h3 style="text-align: center;">Después</h3>
+                        <img src="https://via.placeholder.com/400x300" alt="After">
+                    </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'tienda-online',
+                nombre: 'Tienda Online',
+                descripcion: 'Product grid, cart, checkout',
+                categoria: 'ecommerce',
+                emoji: '🛍️',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Productos</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                        <img src="https://via.placeholder.com/250x250" alt="Product 1">
+                        <h3>Producto 1</h3>
+                        <p>$19.99</p>
+                        <button>Añadir al Carrito</button>
+                    </div>
+                    <div style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                        <img src="https://via.placeholder.com/250x250" alt="Product 2">
+                        <h3>Producto 2</h3>
+                        <p>$29.99</p>
+                        <button>Añadir al Carrito</button>
+                    </div>
+                    <div style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                        <img src="https://via.placeholder.com/250x250" alt="Product 3">
+                        <h3>Producto 3</h3>
+                        <p>$39.99</p>
+                        <button>Añadir al Carrito</button>
+                    </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'producto-unico',
+                nombre: 'Producto Único',
+                descripcion: 'Single product showcase',
+                categoria: 'ecommerce',
+                emoji: '🎁',
+                contenido_html: `
+                <section style="padding: 80px 20px; display: flex; justify-content: center; align-items: center; gap: 40px;">
+                    <div style="flex: 1;">
+                        <img src="https://via.placeholder.com/500x500" alt="Product Image" style="width: 100%; border-radius: 10px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <h2 style="font-size: 40px; margin-bottom: 20px;">Nombre del Producto</h2>
+                        <p style="font-size: 18px; color: #555; margin-bottom: 20px;">Descripción detallada del producto, sus características y beneficios.</p>
+                        <p style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">$99.99</p>
+                        <button style="padding: 15px 30px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Añadir al Carrito</button>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'fashion-store',
+                nombre: 'Fashion Store',
+                descripcion: 'Lookbook style',
+                categoria: 'ecommerce',
+                emoji: '👗',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Lookbook de Temporada</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: center;">
+                        <div style="text-align: center;">
+                            <img src="https://via.placeholder.com/400x600" alt="Look 1" style="width: 100%;">
+                            <h3 style="margin-top: 10px;">Look 1</h3>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://via.placeholder.com/400x600" alt="Look 2" style="width: 100%;">
+                            <h3 style="margin-top: 10px;">Look 2</h3>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://via.placeholder.com/400x600" alt="Look 3" style="width: 100%;">
+                            <h3 style="margin-top: 10px;">Look 3</h3>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://via.placeholder.com/400x600" alt="Look 4" style="width: 100%;">
+                            <h3 style="margin-top: 10px;">Look 4</h3>
+                        </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'blog-personal',
+                nombre: 'Blog Personal',
+                descripcion: 'Posts grid, sidebar',
+                categoria: 'blog',
+                emoji: '✍️',
+                contenido_html: `
+                <section style="padding: 80px 20px; display: flex; gap: 40px;">
+                    <main style="flex: 3;">
+                        <article style="margin-bottom: 40px;">
+                            <h2 style="font-size: 32px; margin-bottom: 10px;">Título del Post</h2>
+                            <p style="color: #555; margin-bottom: 20px;">Publicado el 1 de Enero, 2023</p>
+                            <p>Contenido del post...</p>
+                        </article>
+                    </main>
+                    <aside style="flex: 1;">
+                        <h3 style="font-size: 24px; margin-bottom: 20px;">Sobre Mí</h3>
+                        <p>Biografía corta...</p>
+                        <h3 style="font-size: 24px; margin-top: 40px; margin-bottom: 20px;">Categorías</h3>
+                        <ul>
+                            <li>Categoría 1</li>
+                            <li>Categoría 2</li>
+                        </ul>
+                    </aside>
+                </section>
+                `
+            },
+            {
+                id: 'magazine',
+                nombre: 'Magazine',
+                descripcion: 'Multi-column layout',
+                categoria: 'blog',
+                emoji: '📰',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Noticias Destacadas</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <article>
+                            <img src="https://via.placeholder.com/300x200" style="width: 100%;">
+                            <h3>Título de Noticia 1</h3>
+                            <p>Resumen de la noticia...</p>
+                        </article>
+                        <article>
+                            <img src="https://via.placeholder.com/300x200" style="width: 100%;">
+                            <h3>Título de Noticia 2</h3>
+                            <p>Resumen de la noticia...</p>
+                        </article>
+                        <article>
+                            <img src="https://via.placeholder.com/300x200" style="width: 100%;">
+                            <h3>Título de Noticia 3</h3>
+                            <p>Resumen de la noticia...</p>
+                        </article>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'newsletter',
+                nombre: 'Newsletter',
+                descripcion: 'Subscription focused',
+                categoria: 'blog',
+                emoji: '✉️',
+                contenido_html: `
+                <section style="padding: 80px 20px; text-align: center;">
+                    <h2 style="font-size: 40px; margin-bottom: 20px;">Suscríbete a Nuestro Newsletter</h2>
+                    <p style="font-size: 18px; color: #555; margin-bottom: 40px;">Recibe las últimas noticias y ofertas directamente en tu correo.</p>
+                    <form style="display: flex; justify-content: center; gap: 10px;">
+                        <input type="email" placeholder="Tu correo electrónico" style="padding: 10px; width: 300px;">
+                        <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none;">Suscribirse</button>
+                    </form>
+                </section>
+                `
+            },
+            {
+                id: 'corporate',
+                nombre: 'Corporate',
+                descripcion: 'Empresa tradicional',
+                categoria: 'business',
+                emoji: '🏢',
+                contenido_html: `
+                <header style="padding: 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Nombre de la Empresa</h1>
+                    <nav>
+                        <a href="#">Inicio</a> | <a href="#">Sobre Nosotros</a> | <a href="#">Servicios</a> | <a href="#">Contacto</a>
+                    </nav>
+                </header>
+                <section style="padding: 80px 20px; text-align: center;">
+                    <h2>Comprometidos con la Excelencia</h2>
+                    <p>Descripción de la empresa y su misión.</p>
+                </section>
+                `
+            },
+            {
+                id: 'consultoria',
+                nombre: 'Consultoría',
+                descripcion: 'Servicios profesionales',
+                categoria: 'business',
+                emoji: '💼',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Nuestros Servicios</h2>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                        <div>
+                            <h3>Consultoría Estratégica</h3>
+                            <p>Análisis y planificación para el crecimiento de tu negocio.</p>
+                        </div>
+                        <div>
+                            <h3>Consultoría Financiera</h3>
+                            <p>Asesoramiento para optimizar tus finanzas.</p>
+                        </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'real-estate',
+                nombre: 'Real Estate',
+                descripcion: 'Propiedades con filtros',
+                categoria: 'business',
+                emoji: '🏠',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Propiedades Disponibles</h2>
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <label>Tipo:</label>
+                        <select>
+                            <option>Casa</option>
+                            <option>Apartamento</option>
+                        </select>
+                        <label>Precio:</label>
+                        <input type="range" min="100000" max="1000000">
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="border: 1px solid #ddd; padding: 10px;">
+                            <img src="https://via.placeholder.com/300x200" style="width: 100%;">
+                            <h3>Casa Moderna</h3>
+                            <p>Precio: $500,000</p>
+                        </div>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'restaurante',
+                nombre: 'Restaurante',
+                descripcion: 'Menú, reservas, galería',
+                categoria: 'other',
+                emoji: '🍔',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Nuestro Menú</h2>
+                    <div>
+                        <h3>Plato Principal</h3>
+                        <p>Descripción del plato - $15</p>
+                    </div>
+                </section>
+                `
+            },
+            {
+                id: 'gym-fitness',
+                nombre: 'Gym/Fitness',
+                descripcion: 'Clases, entrenadores, precios',
+                categoria: 'other',
+                emoji: '💪',
+                contenido_html: `
+                <section style="padding: 80px 20px; text-align: center;">
+                    <h2 style="font-size: 40px; margin-bottom: 40px;">Nuestras Clases</h2>
+                    <p>Clases de Yoga, Pilates, y más.</p>
+                </section>
+                `
+            },
+            {
+                id: 'educacion',
+                nombre: 'Educación',
+                descripcion: 'Cursos online, instructores',
+                categoria: 'other',
+                emoji: '📚',
+                contenido_html: `
+                <section style="padding: 80px 20px;">
+                    <h2 style="text-align: center; font-size: 40px; margin-bottom: 40px;">Cursos Disponibles</h2>
+                    <p>Curso de Desarrollo Web - 10 lecciones.</p>
+                </section>
+                `
             }
         ];
 
