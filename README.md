@@ -1,260 +1,107 @@
-# DragNDrop - Sistema Comercial Completo
+# 🎨 SAAS-DND - Sistema Comercial DragNDrop
 
-## 🎯 Descripción
+**Sistema SaaS completo para editor visual HTML con autenticación, gestión de equipos, pagos y colaboración.**
 
-Sistema SaaS profesional que transforma DragNDrop en una plataforma comercial completa con:
-
-- ✅ Landing page con pricing
-- ✅ Registro con verificación OTP vía SMTP
-- ✅ Checkout con pagos (mockup → Stripe)
-- ✅ Onboarding guiado
-- ✅ Dashboard para gestión
-- ✅ Team management con invitaciones
-- ✅ Editor integrado completo
-
-## 📁 Estructura del Proyecto
-
-```
-commercial-system/
-├── frontend/          # React + TypeScript + Vite
-├── backend/           # Node.js + Express + PostgreSQL
-├── shared/            # Tipos y constantes compartidos
-├── docs/              # Documentación
-├── scripts/           # Scripts de utilidad
-└── README.md
-```
-
-## 🚀 Quick Start
-
-### Requisitos
-- Node.js 18+
-- PostgreSQL 14+
-- npm/pnpm
-
-### Instalación
-
-```bash
-# Clonar el repo
-cd /home/admin/DragNDrop/commercial-system
-
-# Instalar dependencias del backend
-cd backend
-npm install
-cp .env.example .env
-# Editar .env con tus credenciales
-
-# Configurar base de datos
-npm run db:push
-
-# Iniciar backend
-npm run dev
-
-# En otra terminal, iniciar frontend
-cd ../frontend
-npm install
-npm run dev
-```
-
-### Acceso
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:3001
-- Documentación: http://localhost:3001/docs
-
-## 📚 Documentación
-
-- [Arquitectura Completa](./ARCHITECTURE.md) - Diseño detallado del sistema
-- [API Reference](./docs/API.md) - Documentación de endpoints
-- [User Flows](./docs/USER_FLOWS.md) - Flujos de usuario
-- [Deployment](./docs/DEPLOYMENT.md) - Guía de deploy
-
-## 🔑 Flujo Principal
-
-```
-Landing → Register → OTP Verification → Checkout → Onboarding → Dashboard → Editor
-```
-
-## 📦 Tecnologías
-
-### Frontend
-- React 18 + TypeScript
-- Vite
-- TailwindCSS
-- Zustand
-- React Router
-
-### Backend
-- Node.js + Express
-- PostgreSQL + Drizzle ORM
-- Better Auth
-- Socket.io (colaboración)
-- Nodemailer (emails)
-- Stripe (pagos)
-
-## 🎨 Características Principales
-
-### Landing Page
-- Hero section con CTAs
-- Features showcase
-- Pricing con 4 planes (Free, Pro, Teams, Enterprise)
-- Comparación de features
-- FAQ y testimonials
-
-### Autenticación
-- Registro con email/password
-- OAuth con Google y GitHub
-- Verificación OTP de 6 dígitos
-- Expiración a 10 minutos
-- Rate limiting
-
-### Checkout
-- Selección de plan
-- Mockup de pagos (fase 1)
-- Integración real con Stripe (fase 2)
-- Invoices automáticos
-
-### Onboarding
-- Wizard de 4 pasos
-- Setup de organización
-- Configuración de preferencias
-- Proyecto inicial de bienvenida
-
-### Dashboard
-- Stats de uso y límites
-- Proyectos recientes
-- Team activity
-- Quick actions
-
-### Team Management
-- Invitaciones vía email
-- Roles: Admin, Editor, Viewer
-- Permisos granulares
-- Límites según plan
-
-### Editor
-- Drag & Drop visual
-- Componentes reutilizables
-- AI integration
-- Colaboración en tiempo real
-- Export/Deploy
-
-## 🔐 Seguridad
-
-- JWT tokens con expiración
-- Rate limiting en todos los endpoints
-- Validación con Zod
-- Helmet headers
-- CORS configurado
-- Bcrypt para passwords
-- OTP con expiración
-
-## 📊 Planes y Pricing
-
-| Feature | Free | Pro ($9/mes) | Teams ($29/mes) | Enterprise |
-|---------|------|--------------|-----------------|------------|
-| Proyectos | 5 | Ilimitados | Ilimitados | Ilimitados |
-| AI Calls | 10/día | Ilimitados | Ilimitados | Ilimitados |
-| Storage | 100MB | 10GB | 100GB | Ilimitado |
-| Miembros | 1 | 1 | 10 | Ilimitados |
-| Colaboración | ❌ | ❌ | ✅ | ✅ |
-| Deploy automático | ❌ | ✅ | ✅ | ✅ |
-| SSO | ❌ | ❌ | ✅ | ✅ |
-| White-label | ❌ | ❌ | ❌ | ✅ |
-
-## 🧪 Testing
-
-```bash
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
-
-# E2E tests
-npm run test:e2e
-```
-
-## 🚀 Deployment
-
-### Frontend (Vercel)
-```bash
-cd frontend
-vercel deploy --prod
-```
-
-### Backend (Railway)
-```bash
-cd backend
-railway up
-```
-
-Ver [DEPLOYMENT.md](./docs/DEPLOYMENT.md) para más detalles.
-
-## 📈 Roadmap
-
-### Fase 1: MVP (30 días) ✅ Actual
-- Landing + Pricing
-- Auth + OTP
-- Checkout mockup
-- Onboarding
-- Dashboard básico
-- Team management
-- Editor integrado
-
-### Fase 2: Mejoras (2 meses)
-- Pagos reales con Stripe
-- Colaboración en tiempo real
-- Templates premium
-- Mobile app
-- API pública
-- Webhooks
-
-### Fase 3: Enterprise (3+ meses)
-- Self-hosted option
-- White-label
-- Advanced analytics
-- Custom integrations
-- SLA guarantees
-- Dedicated support
-
-## 🤝 Contribuir
-
-```bash
-# Fork y clone
-git clone https://github.com/tu-usuario/DragNDrop.git
-cd DragNDrop/commercial-system
-
-# Crear branch
-git checkout -b feature/nueva-feature
-
-# Desarrollar y commit
-git commit -m "feat: nueva feature"
-
-# Push y crear PR
-git push origin feature/nueva-feature
-```
-
-## 📄 Licencia
-
-Código propietario. Ver LICENSE para más información.
-
-## 📞 Soporte
-
-- Email: support@dragndrop.com
-- Docs: https://docs.dragndrop.com
-- Discord: https://discord.gg/dragndrop
-
-## 🙏 Agradecimientos
-
-- Comunidad de React
-- Better Auth team
-- Drizzle ORM
-- Vercel & Railway
+[![Deploy](https://img.shields.io/badge/Deploy-Live-success)](http://18.223.32.141)
+[![Tests](https://img.shields.io/badge/Tests-100%20passing-success)](./backend/QA_TEST_REPORT.md)
+[![License](https://img.shields.io/badge/License-Proprietary-blue)](./LICENSE)
 
 ---
 
-**Última actualización:** 2024-01-20
-**Versión:** 1.0.0
-**Estado:** 🚧 En desarrollo activo
+## 🚀 Demo en Vivo
+
+**URL:** http://18.223.32.141
+
+**Características del Sistema:**
+- 🎨 Editor visual con 25 plantillas profesionales
+- 🔐 Auth completo (Register → OTP → Onboarding → Dashboard)
+- 📊 Dashboard con stats en tiempo real
+- 📁 Gestión de proyectos (CRUD completo)
+- 👥 Team management con invitaciones
+- ⏱️ Demo gratuito de 5 minutos
+
+---
+
+## ✨ Características Principales
+
+### Editor Visual Avanzado
+- **25 plantillas profesionales** (Landing, Portfolio, E-commerce, Blog, Business)
+- **34 componentes drag & drop**
+- **Panel de propiedades** funcionando (width, height, colors, styles)
+- **Tema oscuro** por defecto, canvas fullscreen
+- **Shortcuts:** Ctrl+P (propiedades), Ctrl+B (componentes), F11 (Zen mode)
+- **Export** HTML/CSS/JS completo
+
+### Autenticación
+- Registro con validación completa
+- OTP por email (6 dígitos, 10 min)
+- Login JWT
+- Session management
+
+### Onboarding (4 Pasos)
+1. Tipo cuenta (Personal/Agencia/Empresa)
+2. Datos organización
+3. Rol usuario
+4. Preferencias
+
+### Dashboard
+- Sidebar navigation
+- Stats cards (proyectos, AI calls, storage, miembros)
+- Recent projects
+- Quick actions
+
+### Gestión
+- **Projects:** Grid/List, Search, Create, Duplicate, Delete
+- **Team:** Invite, Roles (Admin/Editor/Viewer), Remove
+
+---
+
+## 📊 Estado: 100% Completo
+
+**Commits:** 34  
+**Tests:** 100 automatizados (93 backend + 7 frontend)  
+**Páginas:** 11 completas  
+**Plantillas:** 25 profesionales  
+**Documentos:** 18 archivos MD  
+
+---
+
+## 🛠️ Stack
+
+**Frontend:** React 19, TypeScript, Vite, TailwindCSS  
+**Backend:** Node.js, Express, PostgreSQL, Drizzle ORM  
+**Editor:** Vanilla JS (25 templates, 34 components)  
+**DevOps:** Turborepo, pnpm, Docker, Nginx, GitHub Actions  
+
+---
+
+## 🚀 Quick Start
+
+\`\`\`bash
+git clone https://github.com/SebastianVernis/SAAS-DND.git
+cd SAAS-DND
+pnpm install
+cd backend && cp .env.example .env
+pnpm db:push
+pnpm dev
+\`\`\`
+
+Ver [QUICK_START.md](./QUICK_START.md) para guía completa.
+
+---
+
+## 📚 Documentación
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Diseño completo
+- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Deploy
+- [PENDING_TASKS.md](./PENDING_TASKS.md) - Roadmap
+
+---
+
+## 📄 Licencia
+
+Propietario © 2024 SAAS-DND
+
+---
+
+**Hecho con 💜 por Sebastian Vernis**
