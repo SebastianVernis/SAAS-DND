@@ -134,12 +134,14 @@ export class PanelToggle {
         
         if (panel) {
             if (this.leftPanelVisible) {
-                panel.style.display = 'flex';
+                panel.classList.remove('hidden');
+                panel.style.cssText = 'display: block !important; visibility: visible !important; width: 250px !important;';
                 panel.style.animation = 'slideInLeft 0.3s ease';
             } else {
                 panel.style.animation = 'slideOutLeft 0.3s ease';
                 setTimeout(() => {
-                    panel.style.display = 'none';
+                    panel.classList.add('hidden');
+                    panel.style.cssText = 'display: none !important; visibility: hidden !important; width: 0 !important;';
                 }, 300);
             }
         }
@@ -155,12 +157,14 @@ export class PanelToggle {
         
         if (panel) {
             if (this.rightPanelVisible) {
-                panel.style.display = 'flex';
+                panel.classList.remove('hidden');
+                panel.style.cssText = 'display: block !important; visibility: visible !important; width: 300px !important;';
                 panel.style.animation = 'slideInRight 0.3s ease';
             } else {
                 panel.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => {
-                    panel.style.display = 'none';
+                    panel.classList.add('hidden');
+                    panel.style.cssText = 'display: none !important; visibility: hidden !important; width: 0 !important;';
                 }, 300);
             }
         }
