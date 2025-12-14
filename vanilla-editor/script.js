@@ -3325,3 +3325,42 @@ if (typeof module !== 'undefined' && module.exports) { module.exports = { create
 import('./src/ui/panelToggle.js').then(module => {
     window.panelToggle = module.panelToggle;
 }).catch(err => console.log('Panel toggle not loaded'));
+
+        // Inicializar tema oscuro por defecto y paneles ocultos
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configurar tema oscuro
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('dragndrop_theme', 'dark');
+            
+            // Ocultar paneles al inicio para canvas full screen
+            setTimeout(() => {
+                const leftPanel = document.getElementById('components-panel');
+                const rightPanel = document.getElementById('properties-panel');
+                
+                if (leftPanel) {
+                    leftPanel.style.display = 'none';
+                }
+                if (rightPanel) {
+                    rightPanel.style.display = 'none';
+                }
+                
+                // Ajustar canvas a full width
+                const canvasContainer = document.querySelector('.canvas-container');
+                if (canvasContainer) {
+                    canvasContainer.style.width = '100%';
+                }
+                
+                console.log('✅ Editor iniciado: Tema oscuro, canvas fullscreen');
+            }, 100);
+        });
+
+        // Exportar función toggle de tema al global
+        window.toggleTheme = function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('dragndrop_theme', newTheme);
+            if (window.showToast) {
+                window.showToast(`Tema ${newTheme === 'dark' ? 'oscuro' : 'claro'} activado`);
+            }
+        };
