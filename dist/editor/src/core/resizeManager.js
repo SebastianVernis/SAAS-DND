@@ -76,8 +76,11 @@ class ResizeManager {
       handle.style.cursor = handleConfig.cursor;
 
       handle.addEventListener('mousedown', e => {
+        console.log('🖱️ Handle mousedown detected:', handleConfig.name);
+        e.preventDefault();
+        e.stopPropagation();
         this.startResize(e, element, handleConfig.name);
-      });
+      }, { capture: true });
 
       handlesContainer.appendChild(handle);
     });
@@ -108,6 +111,7 @@ class ResizeManager {
    * Inicia el proceso de resize
    */
   startResize(e, element, handleName) {
+    console.log('🎬 Starting resize:', handleName, 'on', element.tagName);
     e.preventDefault();
     e.stopPropagation();
 
@@ -149,6 +153,7 @@ class ResizeManager {
     }
 
     e.preventDefault();
+    e.stopPropagation();
 
     const deltaX = e.clientX - this.startX;
     const deltaY = e.clientY - this.startY;
