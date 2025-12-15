@@ -22,7 +22,7 @@ test.describe('Test Suite 1: Preloaded Templates', () => {
     await page.click('text=Landing Page SaaS');
     await page.waitForSelector('#canvas h2', { timeout: 60000 });
     await page.click('h2:has-text("La solución perfecta para tu negocio")');
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
     await expect(page.locator('#property-panel')).toBeVisible();
 
     const typographySection = page.locator('#property-panel #typography-section');
@@ -45,7 +45,7 @@ test.describe('Test Suite 1: Preloaded Templates', () => {
     await page.click('text=Portafolio Profesional');
     await page.waitForSelector('nav', { timeout: 60000 });
     await page.click('nav');
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     const backgroundSection = page.locator('#property-panel #background-section');
     await expect(backgroundSection.locator('input[label="Background Color"]')).toHaveValue('#ffffff');
@@ -71,7 +71,7 @@ test.describe('Test Suite 1: Preloaded Templates', () => {
     await page.click('text=Portafolio Profesional');
     await page.waitForSelector('nav', { timeout: 60000 });
     await page.click('nav');
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel #flexbox-section')).toBeVisible();
 
@@ -88,7 +88,7 @@ test.describe('Test Suite 1: Preloaded Templates', () => {
     await page.click('text=Features Section');
     await page.waitForSelector('.grid-container', { timeout: 60000 }); // replace with actual selector
     await page.click('.grid-container');
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel #grid-section')).toBeVisible();
 

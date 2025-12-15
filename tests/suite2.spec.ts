@@ -23,7 +23,7 @@ test.describe('Test Suite 2: Drag & Drop Elements', () => {
     await buttonComponent.dragTo(canvas);
 
     await canvas.locator('button').click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel')).toBeVisible();
 
@@ -49,7 +49,7 @@ test.describe('Test Suite 2: Drag & Drop Elements', () => {
     await cardComponent.dragTo(canvas);
 
     await canvas.locator('.card').click(); // Assuming card has a class 'card'
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel')).toBeVisible();
 

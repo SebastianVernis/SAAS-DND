@@ -26,7 +26,7 @@ test.describe('Test Suite 4: Edge Cases', () => {
 
     const testDiv = page.locator('#test-div');
     await testDiv.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel')).toBeVisible();
 
@@ -48,7 +48,7 @@ test.describe('Test Suite 4: Edge Cases', () => {
 
     // Select A -> Panel loads properties A
     await h2.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
     const h2FontSize = await page.locator('#property-panel #typography-section input[label="Font Size"]').inputValue();
     expect(h2FontSize).toBe('56px');
 
@@ -78,7 +78,7 @@ test.describe('Test Suite 4: Edge Cases', () => {
 
     const complexDiv = page.locator('#complex-div');
     await complexDiv.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(page.locator('#property-panel')).toBeVisible();
 

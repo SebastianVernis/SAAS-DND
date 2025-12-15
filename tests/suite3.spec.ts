@@ -24,7 +24,7 @@ test.describe('Test Suite 3: Property Editing', () => {
   test('Test 3.1: Change Font Size', async ({ page }) => {
     const h2 = page.locator('h2:has-text("La solución perfecta para tu negocio")');
     await h2.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     const fontSizeInput = page.locator('#property-panel #typography-section input[label="Font Size"]');
     await fontSizeInput.fill('64px');
@@ -32,7 +32,7 @@ test.describe('Test Suite 3: Property Editing', () => {
     // Deselect and reselect
     await page.locator('body').click();
     await h2.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     await expect(fontSizeInput).toHaveValue('64px');
     await expect(h2).toHaveCSS('font-size', '64px');
@@ -43,7 +43,7 @@ test.describe('Test Suite 3: Property Editing', () => {
   test('Test 3.2: Change Display to Flex', async ({ page }) => {
     const div = page.locator('div').first(); // Select a generic div
     await div.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     const displaySelect = page.locator('#property-panel #positioning-section select[label="Display"]');
     await displaySelect.selectOption('flex');
@@ -58,7 +58,7 @@ test.describe('Test Suite 3: Property Editing', () => {
     // Assuming there's a button in the SaaS template
     const button = page.locator('button').first();
     await button.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     const bgColorInput = page.locator('#property-panel #background-section input[label="Background Color"]');
     await bgColorInput.fill('#ff0000');
@@ -75,7 +75,7 @@ test.describe('Test Suite 3: Property Editing', () => {
   test('Test 3.4: Adjust Spacing', async ({ page }) => {
     const section = page.locator('section').first();
     await section.click();
-    await page.keyboard.press('Control+P');
+    await page.evaluate(() => window.panelToggle.toggleRightPanel());
 
     const paddingTopInput = page.locator('#property-panel #spacing-section input[label="Padding Top"]');
     await paddingTopInput.fill('120px');
