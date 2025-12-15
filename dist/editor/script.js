@@ -1379,6 +1379,14 @@
             
             // Eventos de drag para el elemento
             element.addEventListener('dragstart', function(e) {
+                // Prevenir drag si estamos sobre resize handles
+                if (e.target.classList.contains('resize-handle') || 
+                    e.target.closest('.resize-handles')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                
                 // Solo permitir arrastre si el elemento está seleccionado
                 if (!element.classList.contains('selected')) {
                     e.preventDefault();
@@ -1711,6 +1719,10 @@
         
         // Validar sintaxis de elemento con Gemini
         async function validateElementSyntax(element) {
+            if (!window.geminiValidator || !window.geminiValidator.isEnabled()) {
+                return; // Skip si no está habilitado
+            }
+            
             try {
                 const result = await window.geminiValidator.validateElement(element, {
                     parent: element.parentElement?.tagName || 'body'
@@ -1720,7 +1732,8 @@
                     window.geminiValidator.showCorrectionSuggestion(element, result);
                 }
             } catch (error) {
-                console.error('Error validando sintaxis:', error);
+                console.error('Error validando sintaxis con Gemini:', error);
+                // No mostrar error al usuario, solo loggear
             }
         }
 

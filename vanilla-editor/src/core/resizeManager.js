@@ -388,12 +388,16 @@ class ResizeManager {
                 width: 100%;
                 height: 100%;
                 pointer-events: none;
-                z-index: 999;
+                z-index: 10001;
                 display: none;
             }
 
             .canvas-element.selected .resize-handles {
-                display: block;
+                display: block !important;
+            }
+            
+            .canvas-element.resize-enabled {
+                position: relative;
             }
 
             /* Handles individuales */
