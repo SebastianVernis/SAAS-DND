@@ -339,6 +339,10 @@ class AlignmentEngine {
 }
 
 // Export
+// Export para ES6 modules
+export default AlignmentEngine;
+
+// Compatibilidad CommonJS
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = AlignmentEngine;
 }

@@ -560,4 +560,6 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 // Make available globally
+export default LayersManager;
+
 window.LayersManager = LayersManager;

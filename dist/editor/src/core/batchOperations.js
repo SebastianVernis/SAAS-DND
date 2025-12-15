@@ -362,4 +362,6 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = BatchOperations;
 }
 
+export default BatchOperations;
+
 window.BatchOperations = BatchOperations;

@@ -386,4 +386,6 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = KeyboardShortcutsManager;
 }
 
+export default KeyboardShortcutsManager;
+
 window.KeyboardShortcutsManager = KeyboardShortcutsManager;

@@ -371,4 +371,6 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = MultiSelectManager;
 }
 
+export default MultiSelectManager;
+
 window.MultiSelectManager = MultiSelectManager;

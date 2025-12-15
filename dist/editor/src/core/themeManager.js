@@ -152,4 +152,6 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 // Exportar globalmente
+export default ThemeManager;
+
 window.ThemeManager = ThemeManager;

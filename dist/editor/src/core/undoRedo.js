@@ -257,4 +257,6 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = UndoRedoManager;
 }
 
+export default UndoRedoManager;
+
 window.UndoRedoManager = UndoRedoManager;
