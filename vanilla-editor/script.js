@@ -851,6 +851,24 @@
             document.getElementById('helpScreen').classList.remove('hidden');
             document.getElementById('galleryScreen').classList.add('hidden');
         }
+        
+        // Abrir configuración de Gemini AI
+        function openGeminiConfig() {
+            console.log('🤖 Opening Gemini config...', !!window.geminiValidator);
+            if (window.geminiValidator) {
+                window.geminiValidator.showConfigModal();
+            } else {
+                console.error('❌ GeminiValidator not initialized yet');
+                setTimeout(() => {
+                    if (window.geminiValidator) {
+                        window.geminiValidator.showConfigModal();
+                    } else {
+                        alert('⚠️ Gemini AI aún no está inicializado. Recarga la página e intenta de nuevo.');
+                    }
+                }, 1000);
+            }
+        }
+        window.openGeminiConfig = openGeminiConfig;
 
         // Ocultar galería
         function hideGallery() {
