@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "total_families": 120,
+  "categories": {
+    "sans-serif": {
+      "modern": [
+        "Inter",
+        "Poppins",
+        "Montserrat",
+        "Raleway",
+        "Work Sans",
+        "DM Sans",
+        "Plus Jakarta Sans",
+        "Manrope",
+        "Space Grotesk",
+        "Sora",
+        "Outfit",
+        "Urbanist",
+        "Lexend"
+      ],
+      "classic": [
+        "Roboto",
+        "Open Sans",
+        "Lato",
+        "Source Sans Pro",
+        "Nunito",
+        "Ubuntu",
+        "Rubik",
+        "Barlow",
+        "Karla",
+        "Mulish",
+        "Heebo",
+        "Hind"
+      ],
+      "geometric": [
+        "Quicksand",
+        "Comfortaa",
+        "Jost",
+        "Exo 2",
+        "Prompt",
+        "Varela Round",
+        "Questrial",
+        "Catamaran"
+      ]
+    },
+    "serif": {
+      "display": [
+        "Playfair Display",
+        "Libre Baskerville",
+        "Cormorant Garamond",
+        "Crimson Text",
+        "Lora",
+        "Merriweather",
+        "EB Garamond",
+        "Spectral",
+        "Bitter",
+        "Cardo"
+      ],
+      "editorial": [
+        "Source Serif Pro",
+        "PT Serif",
+        "Domine",
+        "Arvo",
+        "Rokkitt",
+        "Noticia Text"
+      ]
+    },
+    "monospace": [
+      "Fira Code",
+      "JetBrains Mono",
+      "Source Code Pro",
+      "Roboto Mono",
+      "IBM Plex Mono",
+      "Space Mono",
+      "Inconsolata",
+      "Ubuntu Mono",
+      "Courier Prime",
+      "Anonymous Pro"
+    ],
+    "display": {
+      "elegant": [
+        "Cinzel",
+        "Cormorant",
+        "Bodoni Moda",
+        "DM Serif Display",
+        "Yeseva One",
+        "Libre Caslon Display"
+      ],
+      "modern": [
+        "Bebas Neue",
+        "Oswald",
+        "Archivo Black",
+        "Anton",
+        "Righteous",
+        "Audiowide"
+      ],
+      "playful": [
+        "Fredoka",
+        "Pacifico",
+        "Lobster",
+        "Caveat",
+        "Satisfy",
+        "Dancing Script"
+      ]
+    },
+    "handwriting": [
+      "Caveat",
+      "Dancing Script",
+      "Pacifico",
+      "Satisfy",
+      "Kalam",
+      "Indie Flower",
+      "Shadows Into Light",
+      "Permanent Marker"
+    ]
+  },
+  "weights": {
+    "available": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    "most_used": [400, 500, 600, 700],
+    "recommended": [400, 700]
+  },
+  "formats": {
+    "modern": ["woff2"],
+    "compatible": ["woff2", "woff"],
+    "legacy": ["woff2", "woff", "ttf"]
+  },
+  "usage_notes": {
+    "sans-serif": "Para UI, body text, interfaces modernas",
+    "serif": "Para headers elegantes, contenido editorial",
+    "monospace": "Para código, data, aplicaciones técnicas",
+    "display": "Solo para títulos grandes, logos, headers",
+    "handwriting": "Para acentos, firmas, diseños casuales"
+  },
+  "loading_strategy": "lazy_load_on_demand"
+}

@@ -1644,6 +1644,8 @@
 
         // Seleccionar elemento
         function selectElement(element) {
+            console.log('🎯 Selecting element:', element.tagName, element.id);
+            
             // Deseleccionar anterior
             if (selectedElement) {
                 selectedElement.classList.remove('selected');
@@ -1658,8 +1660,16 @@
             element.classList.add('selected');
 
             // Habilitar resize
+            console.log('🔧 ResizeManager available:', !!window.resizeManager);
             if (window.resizeManager) {
                 window.resizeManager.enableResize(element);
+                console.log('✅ Resize enabled, checking for handles...');
+                setTimeout(() => {
+                    const handles = element.querySelectorAll('.resize-handle');
+                    console.log('🔍 Resize handles found:', handles.length);
+                }, 100);
+            } else {
+                console.warn('⚠️ ResizeManager not initialized');
             }
 
             // Habilitar drag mejorado
@@ -1823,8 +1833,57 @@
                 html += '<div class="section-title">Tipografía</div>';
                 const fontSize = getStyleValue('fontSize');
                 const fontWeight = getStyleValue('fontWeight');
+                const fontFamily = getStyleValue('fontFamily');
                 const color = getStyleValue('color');
                 const textAlign = getStyleValue('textAlign');
+                html += `<div class="property-group">
+                            <label class="property-label">Font Family</label>
+                            <select class="property-input" onchange="updateStyle('fontFamily', this.value)">
+                                <option value="">-- Default --</option>
+                                <optgroup label="Sans-Serif (Modern)">
+                                    <option value="Inter" ${fontFamily.includes('Inter') ? 'selected' : ''}>Inter</option>
+                                    <option value="Poppins" ${fontFamily.includes('Poppins') ? 'selected' : ''}>Poppins</option>
+                                    <option value="Montserrat" ${fontFamily.includes('Montserrat') ? 'selected' : ''}>Montserrat</option>
+                                    <option value="Raleway" ${fontFamily.includes('Raleway') ? 'selected' : ''}>Raleway</option>
+                                    <option value="Work Sans" ${fontFamily.includes('Work Sans') ? 'selected' : ''}>Work Sans</option>
+                                    <option value="DM Sans" ${fontFamily.includes('DM Sans') ? 'selected' : ''}>DM Sans</option>
+                                    <option value="Plus Jakarta Sans" ${fontFamily.includes('Plus Jakarta') ? 'selected' : ''}>Plus Jakarta Sans</option>
+                                    <option value="Manrope" ${fontFamily.includes('Manrope') ? 'selected' : ''}>Manrope</option>
+                                    <option value="Space Grotesk" ${fontFamily.includes('Space Grotesk') ? 'selected' : ''}>Space Grotesk</option>
+                                </optgroup>
+                                <optgroup label="Sans-Serif (Classic)">
+                                    <option value="Roboto" ${fontFamily.includes('Roboto') && !fontFamily.includes('Mono') ? 'selected' : ''}>Roboto</option>
+                                    <option value="Open Sans" ${fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
+                                    <option value="Lato" ${fontFamily.includes('Lato') ? 'selected' : ''}>Lato</option>
+                                    <option value="Source Sans Pro" ${fontFamily.includes('Source Sans') ? 'selected' : ''}>Source Sans Pro</option>
+                                    <option value="Nunito" ${fontFamily.includes('Nunito') ? 'selected' : ''}>Nunito</option>
+                                    <option value="Ubuntu" ${fontFamily.includes('Ubuntu') && !fontFamily.includes('Mono') ? 'selected' : ''}>Ubuntu</option>
+                                </optgroup>
+                                <optgroup label="Serif">
+                                    <option value="Playfair Display" ${fontFamily.includes('Playfair') ? 'selected' : ''}>Playfair Display</option>
+                                    <option value="Merriweather" ${fontFamily.includes('Merriweather') ? 'selected' : ''}>Merriweather</option>
+                                    <option value="Lora" ${fontFamily.includes('Lora') ? 'selected' : ''}>Lora</option>
+                                    <option value="Source Serif Pro" ${fontFamily.includes('Source Serif') ? 'selected' : ''}>Source Serif Pro</option>
+                                    <option value="PT Serif" ${fontFamily.includes('PT Serif') ? 'selected' : ''}>PT Serif</option>
+                                </optgroup>
+                                <optgroup label="Monospace">
+                                    <option value="Fira Code" ${fontFamily.includes('Fira Code') ? 'selected' : ''}>Fira Code</option>
+                                    <option value="JetBrains Mono" ${fontFamily.includes('JetBrains') ? 'selected' : ''}>JetBrains Mono</option>
+                                    <option value="Source Code Pro" ${fontFamily.includes('Source Code') ? 'selected' : ''}>Source Code Pro</option>
+                                    <option value="Roboto Mono" ${fontFamily.includes('Roboto Mono') ? 'selected' : ''}>Roboto Mono</option>
+                                </optgroup>
+                                <optgroup label="Display">
+                                    <option value="Bebas Neue" ${fontFamily.includes('Bebas') ? 'selected' : ''}>Bebas Neue</option>
+                                    <option value="Oswald" ${fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
+                                    <option value="Anton" ${fontFamily.includes('Anton') ? 'selected' : ''}>Anton</option>
+                                </optgroup>
+                                <optgroup label="Script">
+                                    <option value="Caveat" ${fontFamily.includes('Caveat') ? 'selected' : ''}>Caveat</option>
+                                    <option value="Dancing Script" ${fontFamily.includes('Dancing') ? 'selected' : ''}>Dancing Script</option>
+                                    <option value="Pacifico" ${fontFamily.includes('Pacifico') ? 'selected' : ''}>Pacifico</option>
+                                </optgroup>
+                            </select>
+                         </div>`;
                 html += `<div class="property-group">
                             <label class="property-label">Font Size</label>
                             <input class="property-input" value="${fontSize}" onchange="updateStyle('fontSize', this.value)">
@@ -1832,10 +1891,13 @@
                 html += `<div class="property-group">
                             <label class="property-label">Font Weight</label>
                             <select class="property-input" onchange="updateStyle('fontWeight', this.value)">
+                                <option value="300" ${fontWeight === '300' ? 'selected' : ''}>Light</option>
                                 <option value="normal" ${fontWeight === 'normal' || fontWeight === '400' ? 'selected' : ''}>Normal</option>
                                 <option value="500" ${fontWeight === '500' ? 'selected' : ''}>Medium</option>
                                 <option value="600" ${fontWeight === '600' ? 'selected' : ''}>Semibold</option>
                                 <option value="bold" ${fontWeight === 'bold' || fontWeight === '700' ? 'selected' : ''}>Bold</option>
+                                <option value="800" ${fontWeight === '800' ? 'selected' : ''}>Extra Bold</option>
+                                <option value="900" ${fontWeight === '900' ? 'selected' : ''}>Black</option>
                             </select>
                          </div>`;
                 html += `<div class="property-group">

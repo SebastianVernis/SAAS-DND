@@ -57,6 +57,12 @@ class ResizeManager {
     }
 
     element.classList.add('resize-enabled');
+    
+    // Asegurar que el elemento tiene position para que los handles absolutos funcionen
+    const currentPosition = window.getComputedStyle(element).position;
+    if (currentPosition === 'static') {
+      element.style.position = 'relative';
+    }
 
     // Crear contenedor de handles
     const handlesContainer = document.createElement('div');
@@ -77,6 +83,12 @@ class ResizeManager {
     });
 
     element.appendChild(handlesContainer);
+    
+    console.log('🔧 Resize enabled for:', element.tagName, {
+      id: element.id,
+      position: element.style.position,
+      handles: this.handles.length
+    });
   }
 
   /**
@@ -387,31 +399,32 @@ class ResizeManager {
             /* Handles individuales */
             .resize-handle {
                 position: absolute;
-                width: 10px;
-                height: 10px;
-                background: white;
-                border: 2px solid #2563eb;
+                width: 12px;
+                height: 12px;
+                background: #2563eb;
+                border: 2px solid white;
                 border-radius: 50%;
                 pointer-events: auto;
-                z-index: 1000;
+                z-index: 10000;
                 transition: all 0.2s;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             }
 
             .resize-handle:hover {
-                transform: scale(1.3);
-                background: #2563eb;
-                box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+                transform: scale(1.4);
+                background: #1d4ed8;
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.6);
             }
 
             /* Posiciones de handles */
-            .resize-handle-nw { top: -5px; left: -5px; }
-            .resize-handle-n { top: -5px; left: 50%; transform: translateX(-50%); }
-            .resize-handle-ne { top: -5px; right: -5px; }
-            .resize-handle-e { top: 50%; right: -5px; transform: translateY(-50%); }
-            .resize-handle-se { bottom: -5px; right: -5px; }
-            .resize-handle-s { bottom: -5px; left: 50%; transform: translateX(-50%); }
-            .resize-handle-sw { bottom: -5px; left: -5px; }
-            .resize-handle-w { top: 50%; left: -5px; transform: translateY(-50%); }
+            .resize-handle-nw { top: -6px; left: -6px; cursor: nw-resize; }
+            .resize-handle-n { top: -6px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+            .resize-handle-ne { top: -6px; right: -6px; cursor: ne-resize; }
+            .resize-handle-e { top: 50%; right: -6px; transform: translateY(-50%); cursor: e-resize; }
+            .resize-handle-se { bottom: -6px; right: -6px; cursor: se-resize; }
+            .resize-handle-s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+            .resize-handle-sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+            .resize-handle-w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
 
             /* Estado resizing */
             .canvas-element.resizing {
