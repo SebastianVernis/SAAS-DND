@@ -187,6 +187,12 @@ class ResizeManager {
 
     const deltaX = e.clientX - this.startX;
     const deltaY = e.clientY - this.startY;
+    
+    // Debug logging cada 100ms
+    if (!this._lastLogTime || Date.now() - this._lastLogTime > 100) {
+      console.log('📐 Resizing:', this.currentHandle, 'deltaX:', deltaX, 'deltaY:', deltaY);
+      this._lastLogTime = Date.now();
+    }
 
     let newWidth = this.startWidth;
     let newHeight = this.startHeight;
@@ -239,6 +245,12 @@ class ResizeManager {
     // Aplicar dimensiones
     this.activeElement.style.width = newWidth + 'px';
     this.activeElement.style.height = newHeight + 'px';
+    
+    console.log('✏️ Applied:', {
+      width: newWidth + 'px',
+      height: newHeight + 'px',
+      element: this.activeElement.tagName
+    });
 
     // Actualizar info tooltip
     this.showDimensionsTooltip(newWidth, newHeight);

@@ -1379,11 +1379,14 @@
             
             // Eventos de drag para el elemento
             element.addEventListener('dragstart', function(e) {
-                // Prevenir drag si estamos sobre resize handles
-                if (e.target.classList.contains('resize-handle') || 
-                    e.target.closest('.resize-handles')) {
+                // CRITICAL: Prevenir drag si estamos sobre resize handles
+                if (e.target.classList.contains('resize-handle') ||
+                    e.target.closest('.resize-handles') ||
+                    e.target.getAttribute('data-resize-handle') === 'true') {
+                    console.log('🚫 Drag prevented on resize handle');
                     e.preventDefault();
                     e.stopPropagation();
+                    e.stopImmediatePropagation();
                     return false;
                 }
                 
@@ -1693,6 +1696,19 @@
                 setTimeout(() => {
                     const handles = element.querySelectorAll('.resize-handle');
                     console.log('🔍 Resize handles found:', handles.length);
+
+                    // DEBUG: Verificar que cada handle tenga event listeners
+                    handles.forEach(handle => {
+                        const handleName = handle.dataset.handle;
+                        console.log(`🔧 Handle ${handleName}:`, {
+                            class: handle.className,
+                            draggable: handle.draggable,
+                            hasDataAttr: handle.getAttribute('data-resize-handle') === 'true',
+                            pointerEvents: getComputedStyle(handle).pointerEvents,
+                            cursor: getComputedStyle(handle).cursor,
+                            zIndex: getComputedStyle(handle).zIndex
+                        });
+                    });
                 }, 100);
             } else {
                 console.warn('⚠️ ResizeManager not initialized');
