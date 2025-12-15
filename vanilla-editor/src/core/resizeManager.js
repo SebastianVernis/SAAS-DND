@@ -68,6 +68,10 @@ class ResizeManager {
     const handlesContainer = document.createElement('div');
     handlesContainer.className = 'resize-handles';
 
+    // CRITICAL: Hacer el contenedor NO draggable
+    handlesContainer.draggable = false;
+    handlesContainer.setAttribute('data-resize-handles-container', 'true');
+
     // Crear handles
     this.handles.forEach(handleConfig => {
       const handle = document.createElement('div');
@@ -75,11 +79,37 @@ class ResizeManager {
       handle.dataset.handle = handleConfig.name;
       handle.style.cursor = handleConfig.cursor;
 
+      // CRITICAL: Hacer el handle NO draggable
+      handle.draggable = false;
+
+      // CRITICAL: Agregar atributo para identificación
+      handle.setAttribute('data-resize-handle', 'true');
+
+      // CRITICAL FIX: Usar capture y stopImmediatePropagation para asegurar que el handle reciba el evento
       handle.addEventListener('mousedown', e => {
         console.log('🖱️ Handle mousedown detected:', handleConfig.name);
+        console.log('📍 MouseDown Event Details:', {
+          target: e.target.className,
+          handle: handleConfig.name,
+          clientX: e.clientX,
+          clientY: e.clientY,
+          bubbles: e.bubbles,
+          eventPhase: e.eventPhase
+        });
+        e.stopImmediatePropagation(); // Detener TODOS los demás listeners
         e.preventDefault();
         e.stopPropagation();
         this.startResize(e, element, handleConfig.name);
+        return false; // Prevenir cualquier comportamiento por defecto
+      }, { capture: true, passive: false }); // capture: true para recibir el evento primero
+
+      // CRITICAL: Prevenir cualquier intento de drag en el handle
+      handle.addEventListener('dragstart', e => {
+        console.log('🚫 Handle drag prevented');
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
       }, { capture: true });
 
       handlesContainer.appendChild(handle);
@@ -413,10 +443,11 @@ class ResizeManager {
                 background: #2563eb;
                 border: 2px solid white;
                 border-radius: 50%;
-                pointer-events: auto;
+                pointer-events: auto !important; /* CRITICAL: Asegurar que siempre reciba eventos */
                 z-index: 10000;
                 transition: all 0.2s;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                user-select: none; /* Prevenir selección de texto */
             }
 
             .resize-handle:hover {
