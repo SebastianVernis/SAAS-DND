@@ -1,0 +1,514 @@
+/**
+ * Mobile-First Styles
+ * Responsive design, touch-optimized UI, safe areas
+ */
+
+/* ===== CSS Variables for Mobile ===== */
+:root {
+  --mobile-header-height: 56px;
+  --mobile-fab-size: 56px;
+  --mobile-touch-target: 44px;
+  --mobile-bottom-sheet-height: 60vh;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+}
+
+/* ===== Touch Optimizations ===== */
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+}
+
+button, a, .component-item, .canvas-element {
+  touch-action: manipulation;
+}
+
+.touch-target {
+  min-width: var(--mobile-touch-target);
+  min-height: var(--mobile-touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Drag & Drop Visual Feedback ===== */
+.drag-clone {
+  cursor: grabbing !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.drop-target-highlight {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border: 2px dashed #3b82f6 !important;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ===== Mobile Responsive Breakpoints ===== */
+
+/* Extra Small Devices (phones, <576px) */
+@media (max-width: 575.98px) {
+  .app-container {
+    flex-direction: column;
+  }
+  
+  .toolbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px var(--safe-area-left) 8px var(--safe-area-right);
+    height: auto;
+    min-height: var(--mobile-header-height);
+  }
+  
+  .toolbar-btn {
+    white-space: nowrap;
+    min-width: var(--mobile-touch-target);
+    min-height: var(--mobile-touch-target);
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .toolbar-divider {
+    display: none;
+  }
+  
+  .main-content {
+    flex-direction: column;
+    height: calc(100vh - var(--mobile-header-height) - var(--safe-area-top) - var(--safe-area-bottom));
+  }
+  
+  /* Components Panel - Collapsible */
+  .components-panel {
+    position: fixed;
+    left: 0;
+    top: calc(var(--mobile-header-height) + var(--safe-area-top));
+    width: 280px;
+    height: calc(100vh - var(--mobile-header-height) - var(--safe-area-top));
+    z-index: 1000;
+    background: white;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .components-panel.collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .mobile-panel-toggle {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 60px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 1001;
+  }
+  
+  /* Canvas Panel - Full Width */
+  .canvas-panel {
+    flex: 1;
+    width: 100%;
+    padding: 16px;
+    overflow: auto;
+  }
+  
+  /* Properties Panel - Bottom Sheet */
+  .properties-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--mobile-bottom-sheet-height);
+    max-height: 80vh;
+    background: white;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding-bottom: var(--safe-area-bottom);
+  }
+  
+  .properties-panel.open {
+    transform: translateY(0);
+  }
+  
+  .properties-panel.hidden {
+    display: block !important;
+  }
+  
+  .bottom-sheet-handle {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+  
+  .handle-bar {
+    width: 40px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 2px;
+  }
+  
+  .bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1099;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* Small Devices (landscape phones, 576px - 767.98px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .components-panel {
+    width: 240px;
+  }
+  
+  .properties-panel {
+    width: 280px;
+  }
+  
+  .canvas-panel {
+    flex: 1;
+  }
+}
+
+/* Medium Devices (tablets, 768px - 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .components-panel {
+    width: 260px;
+  }
+  
+  .properties-panel {
+    width: 300px;
+  }
+  
+  .toolbar-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* ===== Floating Action Button (FAB) ===== */
+.mobile-fab {
+  position: fixed;
+  bottom: calc(20px + var(--safe-area-bottom));
+  right: calc(20px + var(--safe-area-right));
+  z-index: 1200;
+}
+
+.fab-main {
+  width: var(--mobile-fab-size);
+  height: var(--mobile-fab-size);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+.fab-main:active {
+  transform: scale(0.95);
+}
+
+.fab-icon {
+  transition: transform 0.3s ease;
+}
+
+.fab-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.fab-menu.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.fab-action {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.2s ease;
+  animation: slideIn 0.3s ease;
+}
+
+.fab-action:active {
+  transform: scale(0.95);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Mobile Toolbar ===== */
+.mobile-hamburger {
+  display: none;
+  width: var(--mobile-touch-target);
+  height: var(--mobile-touch-target);
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767.98px) {
+  .mobile-hamburger {
+    display: flex;
+  }
+  
+  .toolbar.menu-open {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  
+  .toolbar.menu-open .toolbar-dropdown {
+    width: 100%;
+  }
+}
+
+/* ===== Component Search Mobile ===== */
+@media (max-width: 767.98px) {
+  #componentSearch {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 12px;
+  }
+}
+
+/* ===== Canvas Mobile Optimizations ===== */
+@media (max-width: 767.98px) {
+  #canvas {
+    min-height: calc(100vh - var(--mobile-header-height) - 32px);
+    padding: 16px;
+  }
+  
+  .canvas-element {
+    min-width: var(--mobile-touch-target);
+    min-height: var(--mobile-touch-target);
+  }
+  
+  .canvas-element.selected {
+    outline: 3px solid #3b82f6;
+    outline-offset: 2px;
+  }
+  
+  .delete-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+}
+
+/* ===== Gallery Mobile ===== */
+@media (max-width: 767.98px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .template-card {
+    width: 100%;
+  }
+  
+  .category-filters {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 16px;
+  }
+  
+  .category-btn {
+    white-space: nowrap;
+    min-width: var(--mobile-touch-target);
+  }
+}
+
+/* ===== Properties Panel Mobile ===== */
+@media (max-width: 767.98px) {
+  .property-group {
+    padding: 12px;
+  }
+  
+  .property-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .property-row label {
+    width: 100%;
+  }
+  
+  .property-row input,
+  .property-row select {
+    width: 100%;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* ===== Multi-Select Toolbar Mobile ===== */
+@media (max-width: 767.98px) {
+  .multiselect-toolbar {
+    bottom: calc(80px + var(--safe-area-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    flex-wrap: wrap;
+    max-width: 90vw;
+    padding: 8px;
+  }
+  
+  .alignment-group {
+    flex-wrap: wrap;
+  }
+  
+  .alignment-btn,
+  .multiselect-btn {
+    min-width: var(--mobile-touch-target);
+    min-height: var(--mobile-touch-target);
+  }
+}
+
+/* ===== Landscape Orientation ===== */
+@media (max-width: 767.98px) and (orientation: landscape) {
+  .components-panel {
+    width: 240px;
+  }
+  
+  .properties-panel {
+    height: 50vh;
+  }
+  
+  .mobile-fab {
+    bottom: calc(12px + var(--safe-area-bottom));
+    right: calc(12px + var(--safe-area-right));
+  }
+  
+  .fab-main {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ===== High DPI Displays ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .canvas-element {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* ===== Dark Mode Mobile ===== */
+@media (prefers-color-scheme: dark) {
+  .components-panel,
+  .properties-panel,
+  .fab-action {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+  }
+  
+  .bottom-sheet-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .handle-bar {
+    background: #475569;
+  }
+}
+
+/* ===== Accessibility - Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  .toolbar,
+  .components-panel,
+  .properties-panel,
+  .mobile-fab,
+  .multiselect-toolbar {
+    display: none !important;
+  }
+  
+  .canvas-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+}

@@ -41,8 +41,7 @@ test-results/
 .DS_Store
 Thumbs.db
 
-# Build outputs
-dist/
+# Build outputs (keep dist/ for deployment package)
 build/
 out/
 

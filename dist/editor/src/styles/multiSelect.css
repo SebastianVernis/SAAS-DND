@@ -1,0 +1,299 @@
+/**
+ * Multi-Select Styles
+ * Visual feedback for multi-selection and batch operations
+ */
+
+/* ===== Multi-Selected Elements ===== */
+.canvas-element.multi-selected {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgb(37 99 235 / 10%);
+}
+
+.canvas-element.multi-selected::after {
+    content: '✓';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* ===== Marquee Selector ===== */
+.marquee-selector {
+    position: fixed;
+    border: 2px dashed var(--accent-primary);
+    background: rgb(37 99 235 / 10%);
+    pointer-events: none;
+    z-index: 10000;
+    animation: marqueePulse 1s ease-in-out infinite;
+}
+
+@keyframes marqueePulse {
+    0%, 100% {
+        border-color: var(--accent-primary);
+    }
+
+    50% {
+        border-color: var(--accent-secondary);
+    }
+}
+
+/* ===== Multi-Select Toolbar ===== */
+.multiselect-toolbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.multiselect-toolbar.hidden {
+    display: none;
+}
+
+.multiselect-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding: 0 8px;
+    border-right: 1px solid var(--border-primary);
+}
+
+.multiselect-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.multiselect-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+}
+
+.multiselect-btn:active {
+    transform: scale(0.95);
+}
+
+.multiselect-btn.primary {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.multiselect-btn.primary:hover {
+    background: var(--accent-hover);
+}
+
+.multiselect-btn.danger {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+}
+
+.multiselect-btn.danger:hover {
+    background: #dc2626;
+}
+
+/* ===== Alignment Buttons ===== */
+.alignment-group {
+    display: flex;
+    gap: 4px;
+    padding: 0 8px;
+    border-right: 1px solid var(--border-primary);
+}
+
+.alignment-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alignment-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.alignment-btn:active {
+    transform: scale(0.9);
+}
+
+/* ===== Group Indicator ===== */
+.element-group {
+    position: relative;
+    border: 2px dashed var(--accent-primary) !important;
+    background: rgb(37 99 235 / 5%) !important;
+}
+
+.element-group::before {
+    content: '📦';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.element-group.selected {
+    border-color: var(--accent-secondary) !important;
+    background: rgb(37 99 235 / 10%) !important;
+}
+
+/* ===== Smart Guides ===== */
+.smart-guide {
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.smart-guide-vertical {
+    box-shadow: 0 0 4px rgb(37 99 235 / 50%);
+}
+
+.smart-guide-horizontal {
+    box-shadow: 0 0 4px rgb(37 99 235 / 50%);
+}
+
+/* ===== Selection Info Badge ===== */
+.selection-info {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.selection-info.hidden {
+    display: none;
+}
+
+.selection-info-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.selection-info-count {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent-primary);
+}
+
+.selection-info-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+/* ===== Responsive ===== */
+@media (width <= 768px) {
+    .multiselect-toolbar {
+        bottom: 10px;
+        padding: 8px 12px;
+        gap: 6px;
+    }
+
+    .multiselect-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .alignment-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .selection-info {
+        top: 70px;
+        right: 10px;
+        padding: 8px 12px;
+    }
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .multiselect-toolbar {
+    box-shadow: 0 8px 16px rgb(0 0 0 / 40%);
+}
+
+[data-theme="dark"] .element-group {
+    background: rgb(37 99 235 / 10%) !important;
+}
+
+[data-theme="dark"] .element-group.selected {
+    background: rgb(37 99 235 / 15%) !important;
+}

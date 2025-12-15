@@ -1,0 +1,198 @@
+{
+  "name": "HTML Drag & Drop Editor",
+  "short_name": "DnD Editor",
+  "version": "1.1.0",
+  "description": "Editor visual HTML con drag & drop, 25 plantillas y 34 componentes",
+  "build_date": "2024-12-14T20:05:00Z",
+  
+  "package_info": {
+    "total_files": 128,
+    "total_size": "1.8MB",
+    "dependencies": "none",
+    "requires_build": false,
+    "self_contained": true
+  },
+  
+  "core_files": {
+    "entry_point": "index.html",
+    "main_script": "script.js",
+    "main_styles": "style.css",
+    "service_worker": "service-worker.js"
+  },
+  
+  "features": {
+    "templates": 25,
+    "components": 34,
+    "ai_integration": true,
+    "offline_support": true,
+    "export_html": true,
+    "export_css": true,
+    "export_js": true,
+    "localstorage_persistence": true,
+    "undo_redo": true,
+    "layers_panel": true,
+    "properties_panel": true,
+    "drag_drop": true,
+    "resize_handles": true,
+    "text_editing": true,
+    "keyboard_shortcuts": true,
+    "responsive_tester": true,
+    "dark_theme": true
+  },
+  
+  "keyboard_shortcuts": {
+    "Ctrl+B": "Toggle components panel",
+    "Ctrl+P": "Toggle properties panel",
+    "Ctrl+Shift+D": "Toggle theme (dark/light)",
+    "Ctrl+Z": "Undo",
+    "Ctrl+Y": "Redo",
+    "Ctrl+S": "Save project",
+    "Ctrl+E": "Export HTML",
+    "F11": "Zen mode (fullscreen)",
+    "Delete": "Delete selected element"
+  },
+  
+  "deployment": {
+    "min_server": "Static file server (nginx, apache, node http-server)",
+    "recommended_server": "Nginx with caching",
+    "base_path_agnostic": true,
+    "https_recommended": true,
+    "compression_recommended": true
+  },
+  
+  "browser_support": {
+    "chrome": "90+",
+    "firefox": "88+",
+    "safari": "14+",
+    "edge": "90+",
+    "ie11": false
+  },
+  
+  "technical_requirements": {
+    "es6_modules": true,
+    "local_storage": true,
+    "drag_drop_api": true,
+    "contenteditable": true,
+    "getcomputedstyle": true,
+    "css_grid": true,
+    "css_flexbox": true
+  },
+  
+  "optional_integrations": {
+    "gemini_api": {
+      "description": "AI syntax validation and code generation",
+      "required": false,
+      "setup": "Add API key to localStorage: gemini_api_key"
+    }
+  },
+  
+  "modules": {
+    "ai": [
+      "tokenTracker.js",
+      "promptBuilder.js",
+      "responseParser.js",
+      "componentGenerator.js",
+      "wcagRules.js",
+      "accessibilityFixes.js",
+      "accessibilityChecker.js",
+      "seoRules.js",
+      "seoOptimizer.js",
+      "index.js"
+    ],
+    "components": [
+      "aiGenerator/GeneratorModal.js",
+      "A11yPanel.js",
+      "SEOPanel.js",
+      "toolbarDropdown.js",
+      "fileLoader.js",
+      "htmlParser.js",
+      "layers/LayersPanel.js",
+      "mobileUI.js",
+      "AdvancedPropertiesPanel.js"
+    ],
+    "core": [
+      "aiCodeGenerator.js",
+      "alignmentEngine.js",
+      "batchOperations.js",
+      "enhancedDragDrop.js",
+      "freePositionDragDrop.js",
+      "geminiValidator.js",
+      "gestureManager.js",
+      "groupManager.js",
+      "keyboardShortcuts.js",
+      "layersManager.js",
+      "livePreview.js",
+      "multiSelect.js",
+      "projectAnalyzer.js",
+      "resizeManager.js",
+      "responsiveTester.js",
+      "smartGuides.js",
+      "stateManager.js",
+      "themeManager.js",
+      "touchDragDrop.js",
+      "undoRedo.js",
+      "unifiedEventManager.js"
+    ],
+    "editor": [
+      "advancedFeatures.js",
+      "canvasTypes.js",
+      "formattingToolbar.js",
+      "resizeHandles.js"
+    ],
+    "integrations": [
+      "gitAutoSave.js"
+    ],
+    "legal": [
+      "legalModal.js"
+    ],
+    "reader": [
+      "cssParser.js",
+      "directoryProcessor.js",
+      "fileReader.js",
+      "htmlExtractor.js",
+      "integration.js",
+      "jsParser.js"
+    ],
+    "storage": [
+      "projectManager.js"
+    ],
+    "utils": [
+      "deviceDetector.js",
+      "performanceOptimizer.js"
+    ]
+  },
+  
+  "checksums": {
+    "algorithm": "sha256",
+    "files": {
+      "index.html": "calculated_on_build",
+      "script.js": "calculated_on_build",
+      "style.css": "calculated_on_build"
+    }
+  },
+  
+  "license": "PROPRIETARY",
+  "author": "Sebastian Vernis",
+  "repository": "https://github.com/SebastianVernis/SAAS-DND",
+  
+  "deployment_history": [
+    {
+      "version": "1.1.0",
+      "date": "2024-12-14T20:05:00Z",
+      "changes": [
+        "Fix panel de propiedades con getComputedStyle",
+        "Documentación completa agregada",
+        "Paquete autocontenido creado"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2024-12-13T00:00:00Z",
+      "changes": [
+        "Release inicial",
+        "25 plantillas",
+        "34 componentes"
+      ]
+    }
+  ]
+}
