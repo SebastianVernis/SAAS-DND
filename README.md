@@ -78,32 +78,40 @@
 
 ## 🚀 Quick Start
 
-\`\`\`bash
+### Opción 1: Script Automatizado (Recomendado)
+```bash
 git clone https://github.com/SebastianVernis/SAAS-DND.git
 cd SAAS-DND
-pnpm install
-cd backend && cp .env.example .env
-pnpm db:push
-pnpm dev
-\`\`\`
+./tools/scripts/setup-dev.sh
+npm run dev
+```
 
-Ver [QUICK_START.md](./QUICK_START.md) para guía completa.
+### Opción 2: Manual
+```bash
+git clone https://github.com/SebastianVernis/SAAS-DND.git
+cd SAAS-DND
+npm install
+cd backend && cp .env.example .env && npm install && npm run db:push && cd ..
+cd apps/web && npm install && cd ../..
+npm run dev
+```
+
+**Ver:** [DEPLOYMENT.md](./DEPLOYMENT.md) para guía completa de deployment
 
 ---
 
 ## 📚 Documentación
 
 ### 🎯 Esenciales
-- **[START_HERE.md](./START_HERE.md)** - Contexto rápido del proyecto
-- **[STRUCTURE.md](./STRUCTURE.md)** - Mapa completo de la estructura
-- **[docs/INDEX.md](./docs/INDEX.md)** - Índice de toda la documentación
+- **[START_HERE.md](./START_HERE.md)** - Contexto rápido ⚡
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Guía completa de deployment 🚀
+- **[DOCS_INDEX.md](./DOCS_INDEX.md)** - Índice navegable de toda la documentación 📖
 
 ### 📖 Por Categoría
-- **Desarrollo:** [docs/guides/AGENTS.md](./docs/guides/AGENTS.md) - Guía completa
-- **Testing:** [tests/e2e/README.md](./tests/e2e/README.md) - Suite E2E (110 tests)
-- **Deployment:** [docs/deployment/](./docs/deployment/)
+- **Desarrollo:** [docs/guides/AGENTS.md](./docs/guides/AGENTS.md) (1,012 líneas)
+- **Testing:** [tests/e2e/README.md](./tests/e2e/README.md) (110 tests)
 - **Arquitectura:** [docs/architecture/ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md)
-- **Estado:** [docs/STATUS_FINAL.md](./docs/STATUS_FINAL.md)
+- **Estado:** [docs/STATUS_FINAL.md](./docs/STATUS_FINAL.md) (100% completo)
 - **Roadmap:** [docs/PENDING_TASKS.md](./docs/PENDING_TASKS.md)
 
 ---
