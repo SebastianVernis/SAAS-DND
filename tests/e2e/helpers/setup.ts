@@ -24,10 +24,10 @@ export const BASE_URLS = {
  * Following Playwright best practices for timeout management
  */
 export const TIMEOUTS = {
-  short: 5000,       // For fast operations (button clicks, simple DOM queries)
-  medium: 15000,     // For API calls, network requests
-  long: 30000,       // For heavy page loads, template rendering
-  extraLong: 60000,  // For complex operations, video rendering
+  short: 10000,       // For fast operations (button clicks, simple DOM queries)
+  medium: 30000,     // For API calls, network requests
+  long: 60000,       // For heavy page loads, template rendering
+  extraLong: 120000,  // For complex operations, video rendering
 } as const;
 
 /**

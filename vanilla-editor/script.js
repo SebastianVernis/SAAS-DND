@@ -664,9 +664,6 @@
             console.log('DOM Content Loaded - Starting initialization');
             console.log('Templates array length:', plantillas.length);
             
-            // Inicializar módulos nuevos
-            initializeNewModules();
-            
             setupComponentDrag();
             setupCanvasDrop();
             setupCanvasDropForMovement();
@@ -695,6 +692,7 @@
                 console.error('Error inicializando módulos:', error);
             }
         }
+        initializeNewModules();
 
         // Configurar búsqueda de componentes
         function setupComponentSearch() {
