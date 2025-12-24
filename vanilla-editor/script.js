@@ -692,7 +692,7 @@
                 console.error('Error inicializando módulos:', error);
             }
         }
-        initializeNewModules();
+        // initializeNewModules();
 
         // Configurar búsqueda de componentes
         function setupComponentSearch() {
