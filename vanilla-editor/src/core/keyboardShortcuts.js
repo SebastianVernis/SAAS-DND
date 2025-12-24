@@ -172,6 +172,13 @@ class KeyboardShortcutsManager {
         window.showComponentsLibrary();
       }
     });
+
+    // Editor de código
+    this.register('ctrl+k', 'Editor de código', () => {
+      if (window.openCodeEditor) {
+        window.openCodeEditor();
+      }
+    });
   }
 
   /**

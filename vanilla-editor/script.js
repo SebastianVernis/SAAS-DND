@@ -2834,6 +2834,65 @@ document.addEventListener('DOMContentLoaded', function() {
         // Exportar showToast globalmente
         window.showToast = showToast;
 
+        // Reinitialize canvas elements after code editor changes
+        function reinitializeCanvasElements() {
+            const canvas = document.getElementById('canvas');
+            if (!canvas) return;
+
+            const elements = canvas.querySelectorAll('*');
+            elements.forEach((element, index) => {
+                // Skip canvas itself and script/style elements
+                if (element.id === 'canvas' || element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+                
+                // Skip very small or invisible elements
+                if (element.offsetWidth === 0 && element.offsetHeight === 0) return;
+
+                // Assign unique ID if missing
+                if (!element.id || element.id === '') {
+                    element.id = 'element-' + (elementIdCounter++);
+                }
+                
+                element.classList.add('canvas-element');
+
+                // Remove existing delete button if any
+                const existingDeleteBtn = element.querySelector('.delete-btn');
+                if (existingDeleteBtn) {
+                    existingDeleteBtn.remove();
+                }
+
+                // Add delete button
+                const deleteBtn = document.createElement('div');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    deleteElement(element);
+                };
+                element.appendChild(deleteBtn);
+
+                // Add selection events
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectElement(element);
+                });
+
+                element.addEventListener('dblclick', function(e) {
+                    e.stopPropagation();
+                    makeElementEditable(element);
+                });
+
+                // Setup drag & drop
+                if (typeof setupElementDragAndDrop === 'function') {
+                    setupElementDragAndDrop(element);
+                }
+            });
+            
+            console.log(`✅ Canvas elements reinitialized: ${elements.length} elements processed`);
+        }
+        
+        // Export reinitializeCanvasElements globally
+        window.reinitializeCanvasElements = reinitializeCanvasElements;
+
         // Convertir RGB a HEX
         function rgbToHex(rgb) {
             if (!rgb || rgb === 'transparent') return '#ffffff';
