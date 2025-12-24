@@ -72,5 +72,16 @@
   "bugs": {
     "url": "https://github.com/SebastianVernis/SAAS-DND/issues"
   },
-  "homepage": "https://github.com/SebastianVernis/SAAS-DND#readme"
+  "homepage": "https://github.com/SebastianVernis/SAAS-DND#readme",
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.20.0",
+    "@codemirror/commands": "^6.10.1",
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.11",
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@codemirror/language": "^6.12.1",
+    "@codemirror/state": "^6.5.3",
+    "@codemirror/view": "^6.39.6",
+    "codemirror": "^6.0.2"
+  }
 }

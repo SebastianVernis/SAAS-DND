@@ -39,6 +39,9 @@
     <!-- Toolbar Dropdown Manager -->
     <script src="./src/components/toolbarDropdown.js"></script>
     
+    <!-- CodeMirror 6 Code Editor -->
+    <script type="module" src="./src/components/CodeEditorPanel.js"></script>
+    
     <!-- Mobile-First Modules -->
     <script type="module" src="./src/utils/deviceDetector.js"></script>
     <script type="module" src="./src/core/unifiedEventManager.js"></script>
@@ -113,6 +116,8 @@
                     <div class="dropdown-divider"></div>
                     <button class="dropdown-item" onclick="openResponsiveTester()">🔍 Tester Responsive</button>
                     <button class="dropdown-item" id="livePreviewBtn" onclick="toggleLivePreview()">👁️ Vista Previa en Vivo</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="if(window.openCodeEditor) window.openCodeEditor()">📝 Editor de Código <span class="shortcut">Ctrl+K</span></button>
                     <div class="dropdown-divider"></div>
                     <button class="dropdown-item" id="themeToggle" onclick="if(window.toggleTheme) window.toggleTheme()">🌙 Tema Oscuro <span class="shortcut">Ctrl+Shift+D</span></button>
                 </div>
