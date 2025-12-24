@@ -127,7 +127,7 @@ test.describe('Vanilla Editor - E2E Tests', () => {
     test('should drag Button component from sidebar to canvas', async ({ page }) => {
       // Arrange: Clear canvas by starting fresh
       await page.click('text=📁 Archivo');
-      await page.click('text=📄 Nuevo Proyecto Blanco');
+      await page.click('[onclick="newProject()"]');
       await waitForCanvasReady(page);
 
       // Get initial element count
@@ -150,7 +150,7 @@ test.describe('Vanilla Editor - E2E Tests', () => {
     test('should drag multiple components to canvas', async ({ page }) => {
       // Arrange: Start with blank project
       await page.click('text=📁 Archivo');
-      await page.click('text=📄 Nuevo Proyecto Blanco');
+      await page.click('[onclick="newProject()"]');
       await waitForCanvasReady(page);
 
       const components = ['Button', 'Input', 'Heading'];
@@ -469,7 +469,7 @@ test.describe('Vanilla Editor - E2E Tests', () => {
       // Act: Trigger export (implementation depends on editor)
       // This test may need adjustment based on actual export mechanism
       await page.click('text=📁 Archivo');
-      await page.click('text=💾 Guardar');
+      await page.click('[onclick="saveProject()"]');
 
       // Wait for save operation
       await page.waitForTimeout(1000);
@@ -489,17 +489,17 @@ test.describe('Vanilla Editor - E2E Tests', () => {
       // Arrange: Save a project first
       await loadTemplate(page, 'Landing Page SaaS');
       await page.click('text=📁 Archivo');
-      await page.click('text=💾 Guardar');
+      await page.click('[onclick="saveProject()"]');
       await page.waitForTimeout(1000);
 
       // Clear canvas
       await page.click('text=📁 Archivo');
-      await page.click('text=📄 Nuevo Proyecto Blanco');
+      await page.click('[onclick="newProject()"]');
       await waitForCanvasReady(page);
 
       // Act: Load from localStorage
       await page.click('text=📁 Archivo');
-      await page.click('text=📂 Abrir');
+      await page.click('[onclick="document.getElementById(\'loadProjectInput\').click()"]');
 
       // Assert: Canvas should have content again
       await page.waitForTimeout(1000);
@@ -546,7 +546,7 @@ test.describe('Vanilla Editor - E2E Tests', () => {
 
       // Act: Clear canvas
       await page.click('text=📁 Archivo');
-      await page.click('text=🗑️ Limpiar Canvas');
+      await page.click('[onclick="newProject()"]');
 
       // Wait for confirmation (if any)
       await page.waitForTimeout(500);

@@ -44,6 +44,22 @@ export const TEMPLATES = [
 
 export type TemplateName = typeof TEMPLATES[number];
 
+export async function acceptLegalModal(page: Page) {
+  try {
+    await page.waitForLoadState('networkidle');
+    const checkbox = page.locator('#accept-terms-checkbox');
+    const visible = await checkbox.isVisible({ timeout: 3000 }).catch(() => false);
+
+    if (visible) {
+      await checkbox.check();
+      await page.click('#accept-btn');
+      await page.waitForTimeout(1500);  // Esperar animación
+    }
+  } catch (error) {
+    // Modal no presente, continuar
+  }
+}
+
 /**
  * Component categories in the editor
  */
@@ -71,11 +87,15 @@ export const COMPONENT_CATEGORIES = {
  * ```
  */
 export async function loadTemplate(page: Page, templateName: TemplateName): Promise<void> {
-  // Open Archivo (File) menu
-  await page.click('text=📁 Archivo', { timeout: TIMEOUTS.short });
+  await acceptLegalModal(page);
+  const gallery = page.locator('#galleryScreen');
+  if (!await gallery.isVisible()) {
+    // Open Archivo (File) menu
+    await page.click('text=📁 Archivo', { timeout: TIMEOUTS.short });
 
-  // Click Plantillas (Templates)
-  await page.click('text=Plantillas', { timeout: TIMEOUTS.short });
+    // Click Plantillas (Templates)
+    await page.click('text=Plantillas', { timeout: TIMEOUTS.short });
+  }
 
   // Select specific template
   await page.click(`text="${templateName}"`, { timeout: TIMEOUTS.medium });
@@ -132,8 +152,20 @@ export async function openPropertiesPanel(page: Page): Promise<void> {
   await page.keyboard.press('Control+p');
 
   // Verify panel is visible
-  const panel = page.locator('#property-panel');
-  await expect(panel).toBeVisible({ timeout: TIMEOUTS.short });
+  const panelSelectors = [
+    '#properties-panel',
+    '#property-panel',
+    '.properties-panel',
+    '[data-testid="properties-panel"]'
+  ];
+
+  let panel;
+  for (const selector of panelSelectors) {
+    panel = page.locator(selector);
+    if (await panel.count() > 0) break;
+  }
+
+  await panel.waitFor({ state: 'visible', timeout: TIMEOUTS.medium });
 }
 
 /**
@@ -266,7 +298,22 @@ export async function verifyPropertiesPanel(
   sectionId: string,
   expectedValues: Record<string, string>
 ): Promise<void> {
-  const section = page.locator(`#property-panel #${sectionId}`);
+  const panelSelectors = [
+    '#properties-panel',
+    '#property-panel',
+    '.properties-panel',
+    '[data-testid="properties-panel"]'
+  ];
+
+  let panel;
+  for (const selector of panelSelectors) {
+    panel = page.locator(selector);
+    if (await panel.count() > 0) break;
+  }
+
+  await panel.waitFor({ state: 'visible', timeout: TIMEOUTS.medium });
+
+  const section = panel.locator(`#${sectionId}`);
 
   // Ensure section is visible
   await expect(section).toBeVisible({ timeout: TIMEOUTS.short });
