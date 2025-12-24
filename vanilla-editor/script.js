@@ -17,6 +17,15 @@
             console.error('❌ Failed to initialize Frontend Reader:', error);
         });
 
+        // Initialize ClassManager
+        import('./src/components/ClassManager.js').then(module => {
+            window.classManager = module.default;
+            window.classManager.init();
+            console.log('✅ ClassManager initialized');
+        }).catch(error => {
+            console.error('❌ Failed to initialize ClassManager:', error);
+        });
+
         // Plantillas precargadas
         const plantillas = [
             {
@@ -1796,6 +1805,12 @@
                      </div>`;
             html += '</div>';
 
+            // Sección Class Manager (visual class management)
+            if (window.classManager) {
+                window.classManager.update(element);
+                html += window.classManager.render();
+            }
+
             // Sección Dimensiones
             html += '<div class="property-section">';
             html += '<div class="section-title">Dimensiones</div>';
@@ -2178,7 +2193,17 @@
             html += '</div>';
 
             panel.innerHTML = html;
+            
+            // Setup ClassManager event listeners after rendering
+            if (window.classManager) {
+                setTimeout(() => {
+                    window.classManager.setupEventListeners();
+                }, 0);
+            }
         }
+        
+        // Expose loadProperties globally for ClassManager
+        window.loadProperties = loadProperties;
 
         // Actualizar estilo del elemento seleccionado
         function updateStyle(property, value) {
