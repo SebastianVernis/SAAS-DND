@@ -341,9 +341,12 @@ class ClassManager {
     
     this.addClass(className);
     
-    // Clear input
-    input.value = '';
-    input.focus();
+    // Re-query input after re-render
+    const newInput = document.getElementById('class-input');
+    if (newInput) {
+      newInput.value = '';
+      newInput.focus();
+    }
   }
 
   /**
