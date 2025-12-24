@@ -420,6 +420,8 @@ export async function editTextElement(
   // Clear existing text and type new text
   await page.keyboard.press('Control+a'); // Select all
   await page.keyboard.type(newText);
+  // Add a space to the new text to fix a bug in the editor
+  await page.keyboard.press(' ');
 
   // Confirm by pressing Enter
   await page.keyboard.press('Enter');

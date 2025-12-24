@@ -56,9 +56,6 @@ test.describe('Vanilla Editor - E2E Tests', () => {
       timeout: TIMEOUTS.long,
     });
 
-    // Dismiss legal modal if present
-    await dismissLegalModal(page);
-
     // Ensure canvas is ready
     await waitForCanvasReady(page);
 
@@ -179,14 +176,13 @@ test.describe('Vanilla Editor - E2E Tests', () => {
    */
   test.describe('Properties Panel', () => {
     test('should read computed typography styles from template', async ({ page }) => {
+      // Act: Open properties panel
+      await openPropertiesPanel(page);
       // Arrange: Load template with styled h2
       await loadTemplate(page, 'Landing Page SaaS');
 
       // Select h2 element
       await selectElement(page, 'h2:has-text("La solución perfecta")');
-
-      // Act: Open properties panel
-      await openPropertiesPanel(page);
 
       // Assert: Typography section should show correct values
       await verifyPropertiesPanel(page, 'typography-section', {
@@ -199,14 +195,13 @@ test.describe('Vanilla Editor - E2E Tests', () => {
     });
 
     test('should read computed spacing styles from template', async ({ page }) => {
+      // Act: Open properties panel
+      await openPropertiesPanel(page);
       // Arrange: Load portfolio template
       await loadTemplate(page, 'Portafolio Profesional');
 
       // Select nav element
       await selectElement(page, 'nav');
-
-      // Act: Open properties panel
-      await openPropertiesPanel(page);
 
       // Assert: Spacing section should show correct padding
       const spacingSection = page.locator('#property-panel #spacing-section');
@@ -217,14 +212,13 @@ test.describe('Vanilla Editor - E2E Tests', () => {
     });
 
     test('should read flexbox properties from template', async ({ page }) => {
+      // Act: Open properties panel
+      await openPropertiesPanel(page);
       // Arrange: Load portfolio template (has flexbox nav)
       await loadTemplate(page, 'Portafolio Profesional');
 
       // Select nav element (uses flexbox)
       await selectElement(page, 'nav');
-
-      // Act: Open properties panel
-      await openPropertiesPanel(page);
 
       // Assert: Flexbox section should be visible and contain correct values
       const flexboxSection = page.locator('#property-panel #flexbox-section');
@@ -243,9 +237,10 @@ test.describe('Vanilla Editor - E2E Tests', () => {
     test('should update properties panel when selecting different elements', async ({
       page,
     }) => {
+      // Act: Open properties panel
+      await openPropertiesPanel(page);
       // Arrange: Load template with multiple elements
       await loadTemplate(page, 'Landing Page SaaS');
-      await openPropertiesPanel(page);
 
       // Act & Assert: Select h1 and verify
       await selectElement(page, 'h1');
