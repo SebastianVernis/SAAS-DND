@@ -43,24 +43,21 @@ export class CodeEditorPanel {
   createModal() {
     const modalHTML = `
       <div id="codeEditorModal" class="code-editor-modal hidden">
-        <div class="code-editor-overlay"></div>
+        <div class="code-editor-overlay" onclick="window.codeEditorPanel.close()"></div>
         <div class="code-editor-container">
           <div class="code-editor-header">
             <h2>📝 Editor de Código</h2>
-            <button class="code-editor-close" id="closeCodeEditor">&times;</button>
+            <button class="code-editor-close" onclick="window.codeEditorPanel.close()">&times;</button>
           </div>
           
           <div class="code-editor-tabs">
-            <button class="code-tab active" data-tab="html">
-              <span class="tab-icon">🌐</span>
+            <button class="code-tab active" data-tab="html" onclick="window.codeEditorPanel.switchTab('html')">
               HTML
             </button>
-            <button class="code-tab" data-tab="css">
-              <span class="tab-icon">🎨</span>
+            <button class="code-tab" data-tab="css" onclick="window.codeEditorPanel.switchTab('css')">
               CSS
             </button>
-            <button class="code-tab" data-tab="js">
-              <span class="tab-icon">⚡</span>
+            <button class="code-tab" data-tab="js" onclick="window.codeEditorPanel.switchTab('js')">
               JavaScript
             </button>
           </div>
@@ -141,7 +138,7 @@ export class CodeEditorPanel {
           position: relative;
           width: 90%;
           max-width: 1200px;
-          height: 85vh;
+          height: 80vh;
           background: #1e1e1e;
           border-radius: 12px;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -202,7 +199,7 @@ export class CodeEditorPanel {
         .code-editor-tabs {
           display: flex;
           gap: 4px;
-          padding: 0 24px;
+          padding: 8px 24px 0;
           background: #252526;
           border-bottom: 1px solid #3e3e42;
         }
@@ -700,6 +697,9 @@ export class CodeEditorPanel {
           insert: this.originalCode.html
         }
       });
+    }
+    
+    if (this.editors.css) {
       this.editors.css.dispatch({
         changes: {
           from: 0,
@@ -707,6 +707,9 @@ export class CodeEditorPanel {
           insert: this.originalCode.css
         }
       });
+    }
+    
+    if (this.editors.js) {
       this.editors.js.dispatch({
         changes: {
           from: 0,
@@ -724,7 +727,7 @@ export class CodeEditorPanel {
   }
 
   /**
-   * Close the code editor
+   * Close the code editor modal
    */
   close() {
     this.modal.classList.add('hidden');
@@ -732,24 +735,104 @@ export class CodeEditorPanel {
   }
 
   /**
-   * Check if editor is open
+   * Switch between tabs
    */
-  isOpen() {
-    return !this.modal.classList.contains('hidden');
+  switchTab(tab) {
+    this.currentTab = tab;
+
+    // Update tab buttons
+    document.querySelectorAll('.code-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+
+    // Update editor panes
+    document.querySelectorAll('.editor-pane').forEach(pane => {
+      pane.classList.remove('active');
+    });
+    document.getElementById(`${tab}Editor`).classList.add('active');
+
+    console.log(`📝 Switched to ${tab.toUpperCase()} tab`);
   }
 
   /**
-   * Destroy the editor
+   * Apply code changes to canvas
+   */
+  apply() {
+    const canvas = document.getElementById('canvas');
+    if (!canvas) return;
+
+    // Get current code from editors
+    const htmlCode = this.editors.html ? this.editors.html.state.doc.toString() : '';
+    const cssCode = this.editors.css ? this.editors.css.state.doc.toString() : '';
+    const jsCode = this.editors.js ? this.editors.js.state.doc.toString() : '';
+
+    // Save to undo/redo history
+    if (window.undoRedoManager) {
+      window.undoRedoManager.saveState();
+    }
+
+    // Apply HTML
+    canvas.innerHTML = htmlCode;
+
+    // Apply CSS (create or update style tag)
+    let styleTag = document.getElementById('canvas-custom-styles');
+    if (!styleTag) {
+      styleTag = document.createElement('style');
+      styleTag.id = 'canvas-custom-styles';
+      document.head.appendChild(styleTag);
+    }
+    styleTag.textContent = cssCode;
+
+    // Apply JavaScript (create or update script tag)
+    let scriptTag = document.getElementById('canvas-custom-script');
+    if (scriptTag) {
+      scriptTag.remove();
+    }
+    if (jsCode.trim()) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = 'canvas-custom-script';
+      scriptTag.textContent = jsCode;
+      document.body.appendChild(scriptTag);
+    }
+
+    // Re-setup canvas elements
+    if (window.setupCanvasElements) {
+      window.setupCanvasElements();
+    }
+
+    this.close();
+    
+    if (window.showToast) {
+      window.showToast('✅ Cambios aplicados correctamente');
+    }
+
+    console.log('✅ Code changes applied to canvas');
+  }
+
+  /**
+   * Cancel and discard changes
+   */
+  cancel() {
+    if (confirm('¿Descartar los cambios realizados?')) {
+      this.close();
+    }
+  }
+
+  /**
+   * Destroy the code editor panel
    */
   destroy() {
-    if (this.editors.html) this.editors.html.destroy();
-    if (this.editors.css) this.editors.css.destroy();
-    if (this.editors.js) this.editors.js.destroy();
-    
+    // Destroy editors
+    Object.values(this.editors).forEach(editor => {
+      if (editor) editor.destroy();
+    });
+
+    // Remove modal
     if (this.modal) {
       this.modal.remove();
     }
 
+    // Remove styles
     const styles = document.getElementById('codeEditorStyles');
     if (styles) {
       styles.remove();

@@ -1,268 +1,306 @@
-# CodeMirror 6 Code Editor Guide
+# 📝 Code Editor Guide
 
 ## Overview
 
-The CodeMirror 6 Code Editor integration provides a professional code editing experience within the DragNDrop editor. It allows users to view and edit the HTML, CSS, and JavaScript code of their canvas directly.
+The Code Editor Panel provides a professional code editing experience using CodeMirror 6, allowing you to directly edit the HTML, CSS, and JavaScript of your canvas content.
 
 ## Features
 
-### ✅ Implemented Features
+### ✨ Core Features
 
-1. **Multi-Tab Interface**
-   - HTML tab for editing canvas HTML
-   - CSS tab for editing styles
-   - JavaScript tab for editing scripts
-   - Easy tab switching with visual indicators
+- **Syntax Highlighting**: Full syntax highlighting for HTML, CSS, and JavaScript
+- **Line Numbers**: Easy navigation with line numbers
+- **Auto-Indentation**: Automatic code indentation for better readability
+- **Bracket Matching**: Visual bracket matching for easier code navigation
+- **Tab Interface**: Switch between HTML, CSS, and JS tabs
+- **Bidirectional Sync**: Changes sync between canvas and code editor
+- **Undo/Redo Integration**: Code changes are saved in the undo/redo history
 
-2. **Syntax Highlighting**
-   - Full syntax highlighting for HTML, CSS, and JavaScript
-   - Powered by CodeMirror 6 language extensions
-   - Dark theme (One Dark) for comfortable editing
+### 🎨 User Interface
 
-3. **Code Editing Features**
-   - Line numbers
-   - Auto-indentation
-   - Bracket matching
-   - Code folding
-   - Search and replace (Ctrl+F)
-   - Format document (Shift+Alt+F)
-
-4. **Bidirectional Sync**
-   - Extract code from canvas when opening editor
-   - Apply code changes back to canvas
-   - Automatic cleanup of editor artifacts (delete buttons, classes)
-   - Reinitialize canvas elements after applying changes
-
-5. **User Interface**
-   - Modal overlay with dark theme
-   - Responsive design (works on mobile and desktop)
-   - Statistics display (line count, character count)
-   - Apply and Cancel buttons
-   - Keyboard shortcuts (Escape to close, Ctrl+S to apply)
+- **Dark Theme**: Professional dark theme optimized for coding
+- **Modal Interface**: Full-screen modal for distraction-free editing
+- **Keyboard Shortcuts**: Quick access via keyboard shortcuts
+- **Responsive Design**: Works on all screen sizes
 
 ## Usage
 
 ### Opening the Code Editor
 
-There are three ways to open the code editor:
+There are multiple ways to open the code editor:
 
-1. **Menu**: Click on "Vista" → "Editor de Código"
-2. **Keyboard Shortcut**: Press `Ctrl+K`
-3. **Programmatically**: Call `window.openCodeEditor()`
+1. **Via Menu**: Click `Vista` → `Editor de Código`
+2. **Keyboard Shortcut**: Press `Ctrl+E` (or `Cmd+E` on Mac)
+3. **Programmatically**: Call `window.codeEditorPanel.open()`
 
 ### Editing Code
 
-1. **Switch Tabs**: Click on HTML, CSS, or JS tabs to switch between code types
-2. **Edit Code**: Type directly in the editor
-3. **Format Code**: Press `Shift+Alt+F` to format the current document
-4. **Apply Changes**: Click "Aplicar Cambios" or press `Ctrl+S`
-5. **Cancel**: Click "Cancelar" or press `Escape`
+1. **Select Tab**: Click on HTML, CSS, or JavaScript tab
+2. **Edit Code**: Make your changes in the editor
+3. **Apply Changes**: Click "Aplicar Cambios" button or press `Ctrl+S`
+4. **Cancel**: Click "Cancelar" to discard changes
+
+### Keyboard Shortcuts
+
+- `Ctrl+E` - Open code editor
+- `Ctrl+S` - Apply changes (when editor is open)
+- `Escape` - Close code editor
+- `Ctrl+Z` - Undo (in editor)
+- `Ctrl+Y` - Redo (in editor)
+
+## Technical Details
+
+### Architecture
+
+```
+CodeEditorPanel
+├── Modal UI
+│   ├── Header (title + close button)
+│   ├── Tabs (HTML, CSS, JS)
+│   ├── Editor Panes (CodeMirror instances)
+│   └── Footer (Cancel + Apply buttons)
+└── CodeMirror Editors
+    ├── HTML Editor (with html() language support)
+    ├── CSS Editor (with css() language support)
+    └── JS Editor (with javascript() language support)
+```
 
 ### Code Extraction
 
 When you open the code editor, it automatically extracts:
 
-- **HTML**: The innerHTML of the canvas, cleaned of editor artifacts
-- **CSS**: Inline styles from canvas elements, converted to CSS rules
-- **JavaScript**: Any inline scripts found in the canvas
+- **HTML**: The innerHTML of the canvas element
+- **CSS**: Inline styles from elements (converted to CSS rules)
+- **JavaScript**: Any inline scripts in the canvas
 
-### Applying Changes
+### Code Application
 
-When you click "Aplicar Cambios":
+When you apply changes:
 
-1. The HTML code is applied to the canvas
-2. CSS code is injected into a `<style>` tag in the document head
-3. Canvas elements are reinitialized with editor functionality
-4. The change is saved to the undo/redo history
-5. A success toast notification is shown
-
-## Technical Details
-
-### Dependencies
-
-```json
-{
-  "codemirror": "^6.0.0",
-  "@codemirror/lang-html": "^6.0.0",
-  "@codemirror/lang-css": "^6.0.0",
-  "@codemirror/lang-javascript": "^6.0.0",
-  "@codemirror/view": "^6.0.0",
-  "@codemirror/state": "^6.0.0",
-  "@codemirror/commands": "^6.0.0",
-  "@codemirror/language": "^6.0.0",
-  "@codemirror/autocomplete": "^6.0.0"
-}
-```
-
-### File Structure
-
-```
-vanilla-editor/
-└── src/
-    └── components/
-        └── CodeEditorPanel.js  # Main code editor component
-```
+1. HTML is inserted into the canvas
+2. CSS is added to a `<style>` tag in the document head
+3. JavaScript is executed via a `<script>` tag
+4. Canvas elements are re-initialized with event listeners
+5. Changes are saved to undo/redo history
 
 ### Integration Points
 
-1. **index.html**: Script import added
-2. **script.js**: `reinitializeCanvasElements()` function added
-3. **keyboardShortcuts.js**: Ctrl+K shortcut registered
-4. **Toolbar**: "Editor de Código" menu item added
+The code editor integrates with:
 
-### API
+- **Canvas**: Reads from and writes to the canvas element
+- **Undo/Redo Manager**: Saves state before applying changes
+- **Element Setup**: Re-initializes canvas elements after changes
+- **Toast Notifications**: Shows success/error messages
 
-#### Global Functions
+## API Reference
 
-```javascript
-// Open the code editor
-window.openCodeEditor()
-
-// Close the code editor
-window.closeCodeEditor()
-
-// Reinitialize canvas elements after code changes
-window.reinitializeCanvasElements()
-```
-
-#### CodeEditorPanel Class
+### CodeEditorPanel Class
 
 ```javascript
 class CodeEditorPanel {
-  constructor()
-  init()
+  // Open the code editor modal
   open()
+  
+  // Close the code editor modal
   close()
-  isOpen()
-  switchTab(tabName)
+  
+  // Switch between tabs (html, css, js)
+  switchTab(tab)
+  
+  // Apply code changes to canvas
+  apply()
+  
+  // Cancel and discard changes
+  cancel()
+  
+  // Extract code from canvas
   extractCodeFromCanvas()
-  applyChanges()
+  
+  // Format HTML with indentation
+  formatHTML(html)
+  
+  // Destroy the code editor panel
   destroy()
 }
 ```
 
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+K` | Open code editor |
-| `Escape` | Close code editor |
-| `Ctrl+S` | Apply changes |
-| `Shift+Alt+F` | Format document |
-| `Ctrl+F` | Find |
-| `Ctrl+H` | Find and replace |
-
-## Code Cleaning
-
-The editor automatically cleans the following from extracted HTML:
-
-- Delete buttons (`.delete-btn`)
-- Editor classes (`canvas-element`, `selected`)
-- Empty class attributes
-- Draggable attributes
-- Data attributes used by the editor
-
-## Styling
-
-The code editor uses a dark theme with the following color scheme:
-
-- Background: `#1e1e1e`
-- Header: `#252526`
-- Borders: `#3e3e42`
-- Text: `#cccccc`
-- Accent: `#007acc`
-
-## Error Handling
-
-The code editor includes error handling for:
-
-- Invalid HTML/CSS/JavaScript syntax
-- Missing canvas element
-- Failed code application
-- Editor initialization errors
-
-Errors are displayed as toast notifications to the user.
-
-## Future Enhancements
-
-Potential improvements for future versions:
-
-1. **Live Preview**: Real-time preview of code changes
-2. **Code Validation**: Syntax validation before applying
-3. **Prettier Integration**: Automatic code formatting
-4. **Emmet Support**: Abbreviation expansion
-5. **Code Snippets**: Predefined code templates
-6. **Split View**: Side-by-side code and canvas view
-7. **Version History**: Track code changes over time
-8. **Export Options**: Export code to separate files
-
-## Troubleshooting
-
-### Code Editor Won't Open
-
-- Check browser console for errors
-- Ensure CodeMirror dependencies are loaded
-- Verify `window.openCodeEditor` is defined
-
-### Changes Not Applied
-
-- Check for JavaScript errors in console
-- Ensure HTML is valid
-- Try closing and reopening the editor
-
-### Formatting Issues
-
-- Use `Shift+Alt+F` to format code
-- Check for unclosed tags or brackets
-- Ensure proper indentation
-
-## Examples
-
-### Opening the Editor Programmatically
+### Global Access
 
 ```javascript
-// Open the code editor
-window.openCodeEditor();
+// Access the code editor panel globally
+window.codeEditorPanel.open();
+window.codeEditorPanel.close();
+window.codeEditorPanel.switchTab('css');
+```
 
-// Wait for user to make changes...
+### Initialization
 
-// Check if editor is open
-if (window.codeEditorInstance && window.codeEditorInstance.isOpen()) {
-  console.log('Editor is open');
+```javascript
+// Initialize in script.js
+import('./src/components/CodeEditorPanel.js').then(module => {
+  const codeEditorPanel = module.initCodeEditorPanel();
+  window.codeEditorPanel = codeEditorPanel;
+});
+```
+
+## Customization
+
+### Styling
+
+The code editor styles can be customized by modifying the CSS in `CodeEditorPanel.js`:
+
+```javascript
+addStyles() {
+  // Modify colors, sizes, fonts, etc.
 }
 ```
 
-### Extracting Code Without Opening Editor
+### Editor Configuration
+
+CodeMirror editor configuration can be modified in the `initializeEditors()` method:
 
 ```javascript
-// Get current canvas HTML
-const canvas = document.getElementById('canvas');
-const html = canvas.innerHTML;
-
-// Clean HTML
-const cleanHTML = html
-  .replace(/<div class="delete-btn">×<\/div>/g, '')
-  .replace(/class="canvas-element[^"]*"/g, '')
-  .replace(/class="selected[^"]*"/g, '');
-
-console.log(cleanHTML);
+this.editors.html = new EditorView({
+  state: EditorState.create({
+    doc: this.originalCode.html,
+    extensions: [
+      basicSetup,
+      html(),
+      // Add more extensions here
+    ]
+  }),
+  parent: document.getElementById('htmlEditor')
+});
 ```
+
+## Troubleshooting
+
+### Editor Not Opening
+
+**Problem**: Code editor doesn't open when clicking the button
+
+**Solutions**:
+1. Check browser console for errors
+2. Verify CodeMirror dependencies are installed
+3. Ensure `window.codeEditorPanel` is initialized
+4. Check if modal element exists in DOM
+
+### Code Not Applying
+
+**Problem**: Changes don't appear on canvas after clicking "Apply"
+
+**Solutions**:
+1. Check for JavaScript errors in console
+2. Verify canvas element exists
+3. Check if `setupCanvasElements()` function is defined
+4. Ensure undo/redo manager is initialized
+
+### Syntax Highlighting Not Working
+
+**Problem**: Code appears without syntax highlighting
+
+**Solutions**:
+1. Verify language extensions are imported correctly
+2. Check CodeMirror version compatibility
+3. Ensure editor is initialized with correct language mode
+4. Check browser console for import errors
+
+## Best Practices
+
+### 1. Save Before Editing
+
+Always save your project before making major code changes in the editor.
+
+### 2. Test Changes
+
+After applying code changes, test your page thoroughly to ensure everything works as expected.
+
+### 3. Use Undo/Redo
+
+If something goes wrong, use the undo feature (`Ctrl+Z`) to revert changes.
+
+### 4. Format Code
+
+Keep your code well-formatted for better readability and maintainability.
+
+### 5. Backup Regularly
+
+Create backups of your projects regularly, especially before major code edits.
+
+## Examples
+
+### Example 1: Adding Custom CSS
+
+1. Open code editor (`Ctrl+E`)
+2. Switch to CSS tab
+3. Add your custom CSS:
+```css
+.my-custom-class {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  border-radius: 8px;
+}
+```
+4. Click "Aplicar Cambios"
+
+### Example 2: Adding JavaScript Functionality
+
+1. Open code editor
+2. Switch to JavaScript tab
+3. Add your script:
+```javascript
+document.querySelectorAll('.my-button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    alert('Button clicked!');
+  });
+});
+```
+4. Apply changes
+
+### Example 3: Editing HTML Structure
+
+1. Open code editor
+2. Stay on HTML tab (default)
+3. Modify the HTML structure
+4. Apply changes to see updates on canvas
+
+## Future Enhancements
+
+Planned features for future versions:
+
+- [ ] Code formatting (Prettier integration)
+- [ ] Code linting (ESLint, HTMLHint, Stylelint)
+- [ ] Emmet abbreviations support
+- [ ] Code snippets library
+- [ ] Multi-cursor editing
+- [ ] Find and replace
+- [ ] Code folding
+- [ ] Minimap
+- [ ] Git diff view
+- [ ] Export code to separate files
 
 ## Support
 
 For issues or questions:
 
 1. Check this documentation
-2. Review the code in `CodeEditorPanel.js`
+2. Review the troubleshooting section
 3. Check browser console for errors
 4. Create an issue on GitHub
 
-## License
+## Version History
 
-This code editor integration is part of the DragNDrop SAAS project and follows the same license.
+### v1.0.0 (Current)
+- Initial release
+- CodeMirror 6 integration
+- HTML, CSS, JS syntax highlighting
+- Tab interface
+- Bidirectional sync
+- Undo/redo integration
+- Keyboard shortcuts
 
 ---
 
 **Last Updated**: December 24, 2025  
-**Version**: 1.0.0  
-**Author**: BLACKBOX AI
+**Author**: SAAS-DND Team  
+**License**: Proprietary
