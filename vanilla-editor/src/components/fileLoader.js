@@ -520,4 +520,4 @@ class FileLoader {
   }
 }
 
-module.exports = FileLoader;
+window.FileLoader = FileLoader;

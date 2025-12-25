@@ -17,6 +17,15 @@
             console.error('❌ Failed to initialize Frontend Reader:', error);
         });
 
+        // Initialize ClassManager
+        import('./src/components/ClassManager.js').then(module => {
+            window.classManager = module.default;
+            window.classManager.init();
+            console.log('✅ ClassManager initialized');
+        }).catch(error => {
+            console.error('❌ Failed to initialize ClassManager:', error);
+        });
+
         // Plantillas precargadas
         const plantillas = [
             {
@@ -692,7 +701,7 @@
                 console.error('Error inicializando módulos:', error);
             }
         }
-        initializeNewModules();
+        // initializeNewModules();
 
         // Configurar búsqueda de componentes
         function setupComponentSearch() {
@@ -1796,6 +1805,12 @@
                      </div>`;
             html += '</div>';
 
+            // Sección Class Manager (visual class management)
+            if (window.classManager) {
+                window.classManager.update(element);
+                html += window.classManager.render();
+            }
+
             // Sección Dimensiones
             html += '<div class="property-section">';
             html += '<div class="section-title">Dimensiones</div>';
@@ -2178,7 +2193,17 @@
             html += '</div>';
 
             panel.innerHTML = html;
+            
+            // Setup ClassManager event listeners after rendering
+            if (window.classManager) {
+                setTimeout(() => {
+                    window.classManager.setupEventListeners();
+                }, 0);
+            }
         }
+        
+        // Expose loadProperties globally for ClassManager
+        window.loadProperties = loadProperties;
 
         // Actualizar estilo del elemento seleccionado
         function updateStyle(property, value) {
@@ -2833,6 +2858,65 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Exportar showToast globalmente
         window.showToast = showToast;
+
+        // Reinitialize canvas elements after code editor changes
+        function reinitializeCanvasElements() {
+            const canvas = document.getElementById('canvas');
+            if (!canvas) return;
+
+            const elements = canvas.querySelectorAll('*');
+            elements.forEach((element, index) => {
+                // Skip canvas itself and script/style elements
+                if (element.id === 'canvas' || element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+                
+                // Skip very small or invisible elements
+                if (element.offsetWidth === 0 && element.offsetHeight === 0) return;
+
+                // Assign unique ID if missing
+                if (!element.id || element.id === '') {
+                    element.id = 'element-' + (elementIdCounter++);
+                }
+                
+                element.classList.add('canvas-element');
+
+                // Remove existing delete button if any
+                const existingDeleteBtn = element.querySelector('.delete-btn');
+                if (existingDeleteBtn) {
+                    existingDeleteBtn.remove();
+                }
+
+                // Add delete button
+                const deleteBtn = document.createElement('div');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    deleteElement(element);
+                };
+                element.appendChild(deleteBtn);
+
+                // Add selection events
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectElement(element);
+                });
+
+                element.addEventListener('dblclick', function(e) {
+                    e.stopPropagation();
+                    makeElementEditable(element);
+                });
+
+                // Setup drag & drop
+                if (typeof setupElementDragAndDrop === 'function') {
+                    setupElementDragAndDrop(element);
+                }
+            });
+            
+            console.log(`✅ Canvas elements reinitialized: ${elements.length} elements processed`);
+        }
+        
+        // Export reinitializeCanvasElements globally
+        window.reinitializeCanvasElements = reinitializeCanvasElements;
 
         // Convertir RGB a HEX
         function rgbToHex(rgb) {
@@ -3902,6 +3986,56 @@ document.addEventListener('DOMContentLoaded', function() {
         // Crear instancia global del gestor de proyectos mejorado
         const enhancedProjectManager = new EnhancedProjectManager();
 
+        // Setup canvas elements after code editor changes
+        window.setupCanvasElements = function() {
+            const canvas = document.getElementById('canvas');
+            if (!canvas) return;
+            
+            const elements = canvas.querySelectorAll('*');
+            elements.forEach((element, index) => {
+                // Skip canvas itself and script/style elements
+                if (element.id === 'canvas' || element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+                
+                // Skip very small or invisible elements
+                if (element.offsetWidth === 0 && element.offsetHeight === 0) return;
+
+                // Assign unique ID if not present
+                if (!element.id || element.id === '') {
+                    element.id = 'element-' + (elementIdCounter++);
+                }
+                
+                element.classList.add('canvas-element');
+
+                // Add delete button
+                const deleteBtn = document.createElement('div');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    deleteElement(element);
+                };
+                element.appendChild(deleteBtn);
+
+                // Add selection events
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectElement(element);
+                });
+
+                element.addEventListener('dblclick', function(e) {
+                    e.stopPropagation();
+                    makeElementEditable(element);
+                });
+
+                // Setup drag & drop
+                if (typeof setupElementDragAndDrop === 'function') {
+                    setupElementDragAndDrop(element);
+                }
+            });
+            
+            console.log(`✅ Canvas elements re-initialized: ${elements.length} elements`);
+        };
+
         // Exportar funciones críticas al scope global para compatibilidad con event handlers inline
         window.startBlankProject = startBlankProject;
         window.loadTemplate = loadTemplate;
@@ -3983,3 +4117,22 @@ import('./src/ui/panelToggle.js').then(module => {
                 window.showToast(`Tema ${newTheme === 'dark' ? 'oscuro' : 'claro'} activado`);
             }
         };
+
+        // Initialize CodeMirror 6 Code Editor Panel
+        import('./src/components/CodeEditorPanel.js').then(module => {
+            const codeEditorPanel = module.initCodeEditorPanel();
+            window.codeEditorPanel = codeEditorPanel;
+            console.log('✅ CodeEditorPanel initialized');
+            
+            // Add keyboard shortcut Ctrl+E to open code editor
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    if (window.codeEditorPanel) {
+                        window.codeEditorPanel.open();
+                    }
+                }
+            });
+        }).catch(error => {
+            console.error('❌ Failed to initialize CodeEditorPanel:', error);
+        });
