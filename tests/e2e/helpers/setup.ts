@@ -14,9 +14,9 @@ import { Page, expect } from '@playwright/test';
  * Centralized configuration for easy maintenance
  */
 export const BASE_URLS = {
-  editor: 'http://localhost:5000',
-  frontend: 'http://localhost:5173',
-  api: 'http://localhost:3000/api',
+  editor: 'http://18.223.32.141/vanilla',
+  frontend: 'http://18.223.32.141',
+  api: 'http://18.223.32.141/api',
 } as const;
 
 /**
