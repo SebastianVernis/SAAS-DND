@@ -1,3 +1,4 @@
+import { logger } from './utils/logger.js';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -70,7 +71,7 @@ app.use('*', (req, res) => {
 
 // Global error handler
 app.use((err, req, res, _next) => {
-  console.error('❌ Error:', err);
+  logger.error('❌ Error:', err);
 
   // Validation errors
   if (err.name === 'ZodError') {
@@ -115,40 +116,40 @@ async function startServer() {
     // Test database connection
     const dbConnected = await testConnection();
     if (!dbConnected) {
-      console.error('❌ Failed to connect to database');
+      logger.error('❌ Failed to connect to database');
       process.exit(1);
     }
 
     // Verify email service
     const emailReady = await verifyEmailService();
     if (!emailReady) {
-      console.warn('⚠️  Email service not ready - emails will fail');
+      logger.warn('⚠️  Email service not ready - emails will fail');
     }
 
     // Start listening
     app.listen(PORT, () => {
-      console.log('\n🚀 DragNDrop Commercial API Server');
-      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-      console.log(`✅ Server running on http://localhost:${PORT}`);
-      console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`✅ Database: Connected`);
-      console.log(`${emailReady ? '✅' : '⚠️ '} Email: ${emailReady ? 'Ready' : 'Not configured'}`);
-      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+      logger.info('\n🚀 DragNDrop Commercial API Server');
+      logger.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      logger.info(`✅ Server running on http://localhost:${PORT}`);
+      logger.info(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
+      logger.info(`✅ Database: Connected`);
+      logger.info(`${emailReady ? '✅' : '⚠️ '} Email: ${emailReady ? 'Ready' : 'Not configured'}`);
+      logger.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    logger.error('❌ Failed to start server:', error);
     process.exit(1);
   }
 }
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('\n👋 SIGTERM received, shutting down gracefully...');
+  logger.info('\n👋 SIGTERM received, shutting down gracefully...');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log('\n👋 SIGINT received, shutting down gracefully...');
+  logger.info('\n👋 SIGINT received, shutting down gracefully...');
   process.exit(0);
 });
 

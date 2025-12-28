@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger.js';
 import { db } from '../db/client.js';
 import { users, organizations, organizationMembers, subscriptions, userPreferences } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
@@ -60,10 +61,10 @@ export async function register(req, res, next) {
     });
 
     if (!emailResult.success) {
-      console.error('Failed to send OTP email:', emailResult.error);
+      logger.error('Failed to send OTP email:', emailResult.error);
     }
 
-    console.log(`✅ User registered: ${email} (OTP: ${otp.code})`);
+    logger.info(`✅ User registered: ${email} (OTP: ${otp.code})`);
 
     res.status(201).json({
       message: 'User registered successfully. OTP sent to email.',
@@ -150,7 +151,7 @@ export async function verifyOtpHandler(req, res, next) {
       dashboardLink: `${process.env.FRONTEND_URL}/dashboard`,
     });
 
-    console.log(`✅ User verified: ${email}`);
+    logger.info(`✅ User verified: ${email}`);
 
     res.json({
       message: 'Email verified successfully',
@@ -201,7 +202,7 @@ export async function resendOtp(req, res, next) {
       code: otp.code,
     });
 
-    console.log(`📧 OTP resent to: ${email} (${otp.code})`);
+    logger.info(`📧 OTP resent to: ${email} (${otp.code})`);
 
     res.json({
       message: 'OTP resent successfully',
@@ -263,7 +264,7 @@ export async function login(req, res, next) {
       organizationId: membership.organizationId,
     });
 
-    console.log(`✅ User logged in: ${email}`);
+    logger.info(`✅ User logged in: ${email}`);
 
     res.json({
       message: 'Login successful',
@@ -334,7 +335,7 @@ export async function getSession(req, res, next) {
 // Logout (client-side only for JWT, but we can log it)
 export async function logout(req, res, next) {
   try {
-    console.log(`👋 User logged out: ${req.user.email}`);
+    logger.info(`👋 User logged out: ${req.user.email}`);
 
     res.json({
       message: 'Logged out successfully',

@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger.js';
 import { db } from '../db/client.js';
 import { organizations, userPreferences, projects } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
@@ -67,7 +68,7 @@ export async function completeOnboarding(req, res, next) {
       .where(eq(userPreferences.userId, userId))
       .limit(1);
 
-    console.log(`✅ Onboarding completed for user: ${req.user.email}`);
+    logger.info(`✅ Onboarding completed for user: ${req.user.email}`);
 
     res.json({
       message: 'Onboarding completed successfully',

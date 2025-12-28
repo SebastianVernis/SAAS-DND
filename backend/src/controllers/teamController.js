@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger.js';
 import { db } from '../db/client.js';
 import {
   organizationMembers,
@@ -143,7 +144,7 @@ export async function inviteTeamMember(req, res, next) {
       role,
     });
 
-    console.log(`📧 Team invitation sent to: ${email} (${req.organization.name})`);
+    logger.info(`📧 Team invitation sent to: ${email} (${req.organization.name})`);
 
     res.status(201).json({
       message: 'Invitation sent successfully',
@@ -225,7 +226,7 @@ export async function acceptInvitation(req, res, next) {
       .where(eq(organizations.id, invitation.organizationId))
       .limit(1);
 
-    console.log(`✅ User ${req.user.email} accepted invitation to ${organization.name}`);
+    logger.info(`✅ User ${req.user.email} accepted invitation to ${organization.name}`);
 
     res.json({
       message: 'Invitation accepted successfully',
@@ -290,7 +291,7 @@ export async function updateMemberRole(req, res, next) {
       .where(eq(organizationMembers.id, memberId))
       .returning();
 
-    console.log(`✅ Member role updated: ${memberId} → ${role}`);
+    logger.info(`✅ Member role updated: ${memberId} → ${role}`);
 
     res.json({
       message: 'Member role updated successfully',
@@ -345,7 +346,7 @@ export async function removeMember(req, res, next) {
     // Delete member
     await db.delete(organizationMembers).where(eq(organizationMembers.id, memberId));
 
-    console.log(`✅ Member removed: ${memberId}`);
+    logger.info(`✅ Member removed: ${memberId}`);
 
     res.json({
       message: 'Member removed successfully',
@@ -410,7 +411,7 @@ export async function revokeInvitation(req, res, next) {
       });
     }
 
-    console.log(`✅ Invitation revoked: ${invitationId}`);
+    logger.info(`✅ Invitation revoked: ${invitationId}`);
 
     res.json({
       message: 'Invitation revoked successfully',

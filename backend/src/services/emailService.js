@@ -1,3 +1,4 @@
+import { logger } from './utils/logger.js';
 import nodemailer from 'nodemailer';
 import fs from 'fs/promises';
 import path from 'path';
@@ -21,10 +22,10 @@ const transporter = nodemailer.createTransport({
 export async function verifyEmailService() {
   try {
     await transporter.verify();
-    console.log('✅ Email service ready');
+    logger.info('✅ Email service ready');
     return true;
   } catch (error) {
-    console.error('❌ Email service error:', error.message);
+    logger.error('❌ Email service error:', error.message);
     return false;
   }
 }
@@ -35,7 +36,7 @@ async function loadTemplate(templateName) {
     const templatePath = path.join(__dirname, '../templates/emails', `${templateName}.html`);
     return await fs.readFile(templatePath, 'utf-8');
   } catch (error) {
-    console.error(`Error loading template ${templateName}:`, error);
+    logger.error(`Error loading template ${templateName}:`, error);
     return null;
   }
 }
@@ -61,10 +62,10 @@ export async function sendEmail({ to, subject, html, text }) {
       text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML for text version
     });
     
-    console.log(`📧 Email sent to ${to}: ${info.messageId}`);
+    logger.info(`📧 Email sent to ${to}: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Error sending email:', error);
+    logger.error('Error sending email:', error);
     return { success: false, error: error.message };
   }
 }

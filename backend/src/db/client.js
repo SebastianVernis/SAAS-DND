@@ -1,3 +1,4 @@
+import { logger } from './utils/logger.js';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema.js';
@@ -24,10 +25,10 @@ export const db = drizzle(sql, { schema });
 export async function testConnection() {
   try {
     await sql`SELECT 1`;
-    console.log('✅ Database connected successfully');
+    logger.info('✅ Database connected successfully');
     return true;
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    logger.error('❌ Database connection failed:', error.message);
     return false;
   }
 }

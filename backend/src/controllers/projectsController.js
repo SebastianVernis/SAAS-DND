@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger.js';
 import { db } from '../db/client.js';
 import { projects, components } from '../db/schema.js';
 import { eq, and, desc } from 'drizzle-orm';
@@ -83,7 +84,7 @@ export async function createProject(req, res, next) {
       })
       .returning();
 
-    console.log(`✅ Project created: ${name} (${newProject.id})`);
+    logger.info(`✅ Project created: ${name} (${newProject.id})`);
 
     res.status(201).json({
       message: 'Project created successfully',
@@ -175,7 +176,7 @@ export async function updateProject(req, res, next) {
       .where(eq(projects.id, projectId))
       .returning();
 
-    console.log(`✅ Project updated: ${projectId}`);
+    logger.info(`✅ Project updated: ${projectId}`);
 
     res.json({
       message: 'Project updated successfully',
@@ -216,7 +217,7 @@ export async function deleteProject(req, res, next) {
     // Delete project (components will be deleted via CASCADE)
     await db.delete(projects).where(eq(projects.id, projectId));
 
-    console.log(`✅ Project deleted: ${projectId}`);
+    logger.info(`✅ Project deleted: ${projectId}`);
 
     res.json({
       message: 'Project deleted successfully',
@@ -298,7 +299,7 @@ export async function duplicateProject(req, res, next) {
       );
     }
 
-    console.log(`✅ Project duplicated: ${projectId} → ${duplicate.id}`);
+    logger.info(`✅ Project duplicated: ${projectId} → ${duplicate.id}`);
 
     res.status(201).json({
       message: 'Project duplicated successfully',
