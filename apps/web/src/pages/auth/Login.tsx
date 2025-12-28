@@ -35,12 +35,13 @@ export default function Login() {
       });
 
       navigate('/dashboard');
-    } catch (err: any) {
-      if (err.response?.data?.needsVerification) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { needsVerification?: boolean; error?: string } } };
+      if (error.response?.data?.needsVerification) {
         setError('Email no verificado. Por favor verifica tu email primero.');
         navigate(`/verify-otp?email=${formData.email}`);
       } else {
-        setError(err.response?.data?.error || 'Error al iniciar sesión');
+        setError(error.response?.data?.error || 'Error al iniciar sesión');
       }
     } finally {
       setLoading(false);

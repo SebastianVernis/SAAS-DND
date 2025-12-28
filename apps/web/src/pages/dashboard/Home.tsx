@@ -49,7 +49,8 @@ export default function DashboardHome() {
     try {
       const response = await projectsApi.duplicate(projectId);
       setProjects([response.data.project, ...projects]);
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { upgrade?: boolean } } };
       if (error.response?.data?.upgrade) {
         alert('Has alcanzado el límite de proyectos. Upgrade tu plan para crear más.');
       } else {

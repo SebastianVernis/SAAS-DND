@@ -4,7 +4,6 @@ import {
   invitations,
   users,
   organizations,
-  subscriptions,
 } from '../db/schema.js';
 import { eq, and } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';

@@ -25,7 +25,7 @@ export default function Sidebar() {
     return location.pathname.startsWith(href);
   };
 
-  const canAccess = (item: any) => {
+  const canAccess = (item: { requiresPlan?: string[] }) => {
     if (!item.requiresPlan) return true;
     return item.requiresPlan.includes(subscription?.plan);
   };

@@ -49,7 +49,7 @@ export default function EditorIframe({ src, title = 'Editor' }: EditorIframeProp
   };
 
   // Communication with iframe
-  const sendMessageToIframe = (action: string, data?: any) => {
+  const sendMessageToIframe = (action: string, data?: Record<string, unknown>) => {
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ action, ...data }, '*');
     }

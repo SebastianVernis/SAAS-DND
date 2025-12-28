@@ -66,7 +66,8 @@ export default function Team() {
       setInviteForm({ email: '', role: 'editor', message: '' });
       loadTeam(); // Reload to show new invitation
       alert('Invitación enviada por email');
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { upgrade?: boolean; error?: string } } };
       if (error.response?.data?.upgrade) {
         alert('Has alcanzado el límite de miembros. Upgrade tu plan.');
       } else {
@@ -83,7 +84,7 @@ export default function Team() {
     try {
       await teamApi.removeMember(memberId);
       setMembers(members.filter((m) => m.id !== memberId));
-    } catch (error) {
+    } catch {
       alert('Error al eliminar miembro');
     }
   };
@@ -94,7 +95,7 @@ export default function Team() {
     try {
       await teamApi.revokeInvitation(invitationId);
       setInvitations(invitations.filter((i) => i.id !== invitationId));
-    } catch (error) {
+    } catch {
       alert('Error al revocar invitación');
     }
   };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { projectsApi } from '../../services/api';
 import { useAuthStore } from '../../stores/authStore';
 import ProjectCard from '../../components/dashboard/ProjectCard';
@@ -28,20 +28,20 @@ export default function Projects() {
   });
   const [creating, setCreating] = useState(false);
 
-  useEffect(() => {
-    loadProjects();
-  }, [search]);
-
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     try {
       const response = await projectsApi.getAll({ search: search || undefined });
       setProjects(response.data.projects);
-    } catch (error) {
-      console.error('Error loading projects:', error);
+    } catch {
+      console.error('Error loading projects');
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +52,8 @@ export default function Projects() {
       setProjects([response.data.project, ...projects]);
       setShowCreateModal(false);
       setCreateForm({ name: '', description: '', template: 'blank' });
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { upgrade?: boolean } } };
       if (error.response?.data?.upgrade) {
         alert('Has alcanzado el límite de proyectos. Upgrade tu plan para crear más.');
       } else {
@@ -69,7 +70,7 @@ export default function Projects() {
     try {
       await projectsApi.delete(projectId);
       setProjects(projects.filter((p) => p.id !== projectId));
-    } catch (error) {
+    } catch {
       alert('Error al eliminar proyecto');
     }
   };
@@ -78,7 +79,8 @@ export default function Projects() {
     try {
       const response = await projectsApi.duplicate(projectId);
       setProjects([response.data.project, ...projects]);
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { upgrade?: boolean } } };
       if (error.response?.data?.upgrade) {
         alert('Has alcanzado el límite de proyectos.');
       } else {

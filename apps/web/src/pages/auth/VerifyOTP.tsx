@@ -105,8 +105,9 @@ export default function VerifyOTP() {
 
       // Redirect to onboarding or dashboard
       navigate('/onboarding');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Código OTP inválido');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      setError(error.response?.data?.error || 'Código OTP inválido');
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
     } finally {
@@ -123,8 +124,9 @@ export default function VerifyOTP() {
       setTimeLeft(600); // Reset timer
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Error al reenviar código');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      setError(error.response?.data?.error || 'Error al reenviar código');
     } finally {
       setResending(false);
     }

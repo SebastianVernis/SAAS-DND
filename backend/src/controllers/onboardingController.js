@@ -1,12 +1,12 @@
 import { db } from '../db/client.js';
-import { organizations, userPreferences, projects, components } from '../db/schema.js';
+import { organizations, userPreferences, projects } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import { PROJECT_TEMPLATES } from '../config/constants.js';
 
 // Complete onboarding
 export async function completeOnboarding(req, res, next) {
   try {
-    const { accountType, organization: orgData, userRole, preferences } = req.body;
+    const { accountType, organization: orgData, preferences } = req.body;
     const userId = req.user.id;
     const organizationId = req.organization.id;
 

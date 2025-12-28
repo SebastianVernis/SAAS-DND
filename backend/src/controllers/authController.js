@@ -1,11 +1,10 @@
 import { db } from '../db/client.js';
-import { users, otpCodes, organizations, organizationMembers, subscriptions, userPreferences } from '../db/schema.js';
-import { eq, and, gt } from 'drizzle-orm';
+import { users, organizations, organizationMembers, subscriptions, userPreferences } from '../db/schema.js';
+import { eq } from 'drizzle-orm';
 import { hashPassword, comparePassword } from '../utils/bcrypt.js';
 import { generateToken } from '../utils/jwt.js';
 import { createOtp, verifyOtp } from '../services/otpService.js';
 import { sendOtpEmail, sendWelcomeEmail } from '../services/emailService.js';
-import { v4 as uuidv4 } from 'uuid';
 
 // Register new user
 export async function register(req, res, next) {

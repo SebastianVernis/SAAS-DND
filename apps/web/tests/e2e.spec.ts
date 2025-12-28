@@ -166,7 +166,7 @@ test.describe('SaaS DND E2E Testing', () => {
     await expect(page).toHaveURL('/dashboard');
   });
 
-  test('should allow a user to use the vanilla editor', async ({ page, context }) => {
+  test('should allow a user to use the vanilla editor', async ({ context }) => {
     // Open the editor in a new tab
     const newPage = await context.newPage();
     await newPage.goto('/vanilla');

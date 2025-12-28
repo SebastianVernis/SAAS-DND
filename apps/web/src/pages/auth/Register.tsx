@@ -56,8 +56,9 @@ export default function Register() {
 
       // Redirect to OTP verification
       navigate(`/verify-otp?email=${formData.email}`);
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Error al registrar usuario');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      setError(error.response?.data?.error || 'Error al registrar usuario');
     } finally {
       setLoading(false);
     }

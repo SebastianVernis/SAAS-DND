@@ -58,7 +58,7 @@ export const authApi = {
 
 // Onboarding API
 export const onboardingApi = {
-  complete: (data: any) =>
+  complete: (data: Record<string, unknown>) =>
     api.post('/onboarding/complete', data),
   
   getStatus: () =>
@@ -100,7 +100,7 @@ export const projectsApi = {
   getById: (projectId: string) =>
     api.get(`/projects/${projectId}`),
   
-  update: (projectId: string, data: any) =>
+  update: (projectId: string, data: Record<string, unknown>) =>
     api.put(`/projects/${projectId}`, data),
   
   delete: (projectId: string) =>
