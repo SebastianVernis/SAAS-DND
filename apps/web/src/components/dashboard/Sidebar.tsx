@@ -27,7 +27,7 @@ export default function Sidebar() {
 
   const canAccess = (item: { requiresPlan?: string[] }) => {
     if (!item.requiresPlan) return true;
-    return item.requiresPlan.includes(subscription?.plan);
+    return subscription?.plan ? item.requiresPlan.includes(subscription.plan) : false;
   };
 
   return (
