@@ -1,5 +1,5 @@
-import { db, sql } from '../../src/db/client.js';
-import {
+const { db, sql } = require('../../src/db/client.js');
+const {
   users,
   otpCodes,
   organizations,
@@ -11,12 +11,12 @@ import {
   invitations,
   usageTracking,
   auditLogs,
-} from '../../src/db/schema.js';
+} = require('../../src/db/schema.js');
 
 /**
  * Clean all tables in the test database
  */
-export async function cleanDatabase() {
+async function cleanDatabase() {
   try {
     // Delete in order to respect foreign key constraints
     await db.delete(auditLogs);
@@ -39,7 +39,7 @@ export async function cleanDatabase() {
 /**
  * Create test user with organization
  */
-export async function createTestUser({
+async function createTestUser({
   email = 'test@example.com',
   password = 'Test1234',
   name = 'Test User',
@@ -47,7 +47,7 @@ export async function createTestUser({
   role = 'admin',
   plan = 'free',
 } = {}) {
-  const bcrypt = await import('bcryptjs');
+  const bcrypt = require('bcryptjs');
   const passwordHash = await bcrypt.hash(password, 4);
 
   // Create user
@@ -117,7 +117,7 @@ export async function createTestUser({
 /**
  * Create test project
  */
-export async function createTestProject({
+async function createTestProject({
   organizationId,
   userId,
   name = 'Test Project',
@@ -142,14 +142,14 @@ export async function createTestProject({
 /**
  * Create test invitation
  */
-export async function createTestInvitation({
+async function createTestInvitation({
   organizationId,
   invitedBy,
   email = 'invited@example.com',
   role = 'editor',
   status = 'pending',
 } = {}) {
-  const { v4: uuidv4 } = await import('uuid');
+  const { v4: uuidv4 } = require('uuid');
   const token = uuidv4();
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
@@ -173,8 +173,8 @@ export async function createTestInvitation({
 /**
  * Generate JWT token for test user
  */
-export async function generateTestToken(user, organizationId) {
-  const { generateToken } = await import('../../src/utils/jwt.js');
+async function generateTestToken(user, organizationId) {
+  const { generateToken } = require('../../src/utils/jwt.js');
   return generateToken({
     userId: user.id,
     email: user.email,
@@ -182,7 +182,7 @@ export async function generateTestToken(user, organizationId) {
   });
 }
 
-export default {
+module.exports = {
   cleanDatabase,
   createTestUser,
   createTestProject,

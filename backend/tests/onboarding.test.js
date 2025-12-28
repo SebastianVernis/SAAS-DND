@@ -1,9 +1,9 @@
-import request from 'supertest';
-import app from '../src/server.js';
-import { cleanDatabase, createTestUser, generateTestToken } from './helpers/testDb.js';
-import { db } from '../src/db/client.js';
-import { organizations, userPreferences, projects } from '../src/db/schema.js';
-import { eq } from 'drizzle-orm';
+const request = require('supertest');
+const app = require('../src/server.js');
+const { cleanDatabase, createTestUser, generateTestToken } = require('./helpers/testDb.js');
+const { db } = require('../src/db/client.js');
+const { organizations, userPreferences, projects } = require('../src/db/schema.js');
+const { eq } = require('drizzle-orm');
 
 describe('Onboarding API', () => {
   let testUser;

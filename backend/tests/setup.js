@@ -22,6 +22,14 @@ jest.mock('nodemailer', () => ({
   })),
 }));
 
+// Mock emailService to avoid import.meta issues
+jest.mock('../src/services/emailService.js', () => ({
+  sendOTPEmail: jest.fn(() => Promise.resolve({ messageId: 'test-id' })),
+  sendWelcomeEmail: jest.fn(() => Promise.resolve({ messageId: 'test-id' })),
+  sendInvitationEmail: jest.fn(() => Promise.resolve({ messageId: 'test-id' })),
+  verifyEmailService: jest.fn(() => Promise.resolve(true)),
+}));
+
 // Suppress console logs during tests (except errors)
 global.console = {
   ...console,

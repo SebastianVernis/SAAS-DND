@@ -1,14 +1,14 @@
-import request from 'supertest';
-import app from '../src/server.js';
+const request = require('supertest');
+const app = require('../src/server.js');
 import {
   cleanDatabase,
   createTestUser,
   generateTestToken,
   createTestProject,
 } from './helpers/testDb.js';
-import { db } from '../src/db/client.js';
-import { projects, components, organizationMembers } from '../src/db/schema.js';
-import { eq, and } from 'drizzle-orm';
+const { db } = require('../src/db/client.js');
+const { projects, components, organizationMembers } = require('../src/db/schema.js');
+const { eq, and } = require('drizzle-orm');
 
 describe('Projects API', () => {
   let adminUser;

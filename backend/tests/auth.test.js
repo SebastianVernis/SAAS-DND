@@ -1,9 +1,9 @@
-import request from 'supertest';
-import app from '../src/server.js';
-import { cleanDatabase, createTestUser, generateTestToken } from './helpers/testDb.js';
-import { db } from '../src/db/client.js';
-import { users, otpCodes } from '../src/db/schema.js';
-import { eq } from 'drizzle-orm';
+const request = require('supertest');
+const app = require('../src/server.js');
+const { cleanDatabase, createTestUser, generateTestToken } = require('./helpers/testDb.js');
+const { db } = require('../src/db/client.js');
+const { users, otpCodes } = require('../src/db/schema.js');
+const { eq } = require('drizzle-orm');
 
 describe('Authentication API', () => {
   beforeEach(async () => {
