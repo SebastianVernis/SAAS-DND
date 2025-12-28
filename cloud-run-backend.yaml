@@ -1,0 +1,73 @@
+# Google Cloud Run service configuration for Backend API
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: saas-dnd-backend
+  labels:
+    app: saas-dnd
+    component: backend
+    environment: production
+spec:
+  template:
+    metadata:
+      annotations:
+        # Autoscaling
+        autoscaling.knative.dev/minScale: '0'
+        autoscaling.knative.dev/maxScale: '10'
+        # CPU throttling
+        run.googleapis.com/cpu-throttling: 'true'
+        # Startup CPU boost
+        run.googleapis.com/startup-cpu-boost: 'true'
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: saas-dnd-backend-sa
+      containers:
+        - name: backend
+          image: gcr.io/PROJECT_ID/saas-dnd-backend:latest
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: '8080'
+            - name: FRONTEND_URL
+              value: 'https://saas-dnd-frontend-XXXXXXXXXX-uc.a.run.app'
+            - name: JWT_EXPIRES_IN
+              value: '7d'
+            - name: SMTP_HOST
+              value: 'smtp.gmail.com'
+            - name: SMTP_PORT
+              value: '587'
+            - name: SMTP_SECURE
+              value: 'false'
+            - name: SMTP_FROM
+              value: 'SAAS-DND <noreply@saasdnd.com>'
+          envFrom:
+            - secretRef:
+                name: backend-secrets
+          resources:
+            limits:
+              cpu: '1000m'
+              memory: '512Mi'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 10
+  traffic:
+    - percent: 100
+      latestRevision: true

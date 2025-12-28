@@ -1,0 +1,125 @@
+# Google Cloud Build configuration for SAAS-DND
+# This file defines the CI/CD pipeline for building and deploying to Cloud Run
+
+steps:
+  # Step 1: Build Backend Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-backend'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-backend:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-backend:latest'
+      - './backend'
+    waitFor: ['-']
+
+  # Step 2: Build Frontend Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-frontend'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-frontend:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-frontend:latest'
+      - '--build-arg'
+      - 'VITE_API_URL=${_API_URL}'
+      - './apps/web'
+    waitFor: ['-']
+
+  # Step 3: Push Backend Image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-backend'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-backend'
+    waitFor: ['build-backend']
+
+  # Step 4: Push Frontend Image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-frontend'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-frontend'
+    waitFor: ['build-frontend']
+
+  # Step 5: Deploy Backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy-backend'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'saas-dnd-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-backend:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--min-instances'
+      - '0'
+      - '--max-instances'
+      - '10'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,PORT=8080'
+      - '--set-secrets'
+      - 'DATABASE_URL=DATABASE_URL:latest,JWT_SECRET=JWT_SECRET:latest,SMTP_USER=SMTP_USER:latest,SMTP_PASS=SMTP_PASS:latest'
+    waitFor: ['push-backend']
+
+  # Step 6: Deploy Frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy-frontend'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'saas-dnd-frontend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/saas-dnd-frontend:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--memory'
+      - '256Mi'
+      - '--cpu'
+      - '1'
+      - '--min-instances'
+      - '0'
+      - '--max-instances'
+      - '10'
+    waitFor: ['push-frontend', 'deploy-backend']
+
+# Substitution variables (can be overridden)
+substitutions:
+  _REGION: 'us-central1'
+  _API_URL: 'https://saas-dnd-backend-XXXXXXXXXX-uc.a.run.app'
+
+# Build options
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  
+# Timeout for the entire build
+timeout: '1800s'
+
+# Images to be pushed to Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/saas-dnd-backend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/saas-dnd-backend:latest'
+  - 'gcr.io/$PROJECT_ID/saas-dnd-frontend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/saas-dnd-frontend:latest'
