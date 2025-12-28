@@ -1,0 +1,52 @@
+# Google Cloud Run service configuration for Frontend Web
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: saas-dnd-frontend
+  labels:
+    app: saas-dnd
+    component: frontend
+    environment: production
+spec:
+  template:
+    metadata:
+      annotations:
+        # Autoscaling
+        autoscaling.knative.dev/minScale: '0'
+        autoscaling.knative.dev/maxScale: '10'
+        # CPU throttling
+        run.googleapis.com/cpu-throttling: 'true'
+        # Startup CPU boost
+        run.googleapis.com/startup-cpu-boost: 'true'
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - name: frontend
+          image: gcr.io/PROJECT_ID/saas-dnd-frontend:latest
+          ports:
+            - name: http1
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: '1000m'
+              memory: '256Mi'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 10
+  traffic:
+    - percent: 100
+      latestRevision: true
