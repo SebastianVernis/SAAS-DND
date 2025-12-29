@@ -22,41 +22,91 @@ export async function requireAuth(req, res, next) {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
 
-    // Get user
-    const [user] = await db.select().from(users).where(eq(users.id, decoded.userId)).limit(1);
+    // Optimized: Single query with JOINs to get user + membership + organization + subscription
+    // This eliminates N+1 query pattern (4 queries → 1 query)
+    const result = await db
+      .select({
+        // User fields
+        userId: users.id,
+        userEmail: users.email,
+        userName: users.name,
+        userImage: users.image,
+        userEmailVerified: users.emailVerified,
+        userCreatedAt: users.createdAt,
+        // Membership fields
+        membershipId: organizationMembers.id,
+        membershipRole: organizationMembers.role,
+        membershipStatus: organizationMembers.status,
+        membershipJoinedAt: organizationMembers.joinedAt,
+        // Organization fields
+        orgId: organizations.id,
+        orgName: organizations.name,
+        orgSlug: organizations.slug,
+        orgType: organizations.type,
+        orgIndustry: organizations.industry,
+        orgTeamSize: organizations.teamSize,
+        // Subscription fields
+        subId: subscriptions.id,
+        subPlan: subscriptions.plan,
+        subStatus: subscriptions.status,
+        subCurrentPeriodStart: subscriptions.currentPeriodStart,
+        subCurrentPeriodEnd: subscriptions.currentPeriodEnd,
+        subCancelAtPeriodEnd: subscriptions.cancelAtPeriodEnd,
+      })
+      .from(users)
+      .leftJoin(organizationMembers, eq(organizationMembers.userId, users.id))
+      .leftJoin(organizations, eq(organizations.id, organizationMembers.organizationId))
+      .leftJoin(subscriptions, eq(subscriptions.organizationId, organizations.id))
+      .where(eq(users.id, decoded.userId))
+      .limit(1);
 
-    if (!user) {
+    if (!result || result.length === 0) {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    // Get user's organization membership
-    const [membership] = await db
-      .select()
-      .from(organizationMembers)
-      .where(eq(organizationMembers.userId, user.id))
-      .limit(1);
+    const data = result[0];
 
-    if (membership) {
-      // Get organization
-      const [org] = await db
-        .select()
-        .from(organizations)
-        .where(eq(organizations.id, membership.organizationId))
-        .limit(1);
+    // Reconstruct user object
+    req.user = {
+      id: data.userId,
+      email: data.userEmail,
+      name: data.userName,
+      image: data.userImage,
+      emailVerified: data.userEmailVerified,
+      createdAt: data.userCreatedAt,
+    };
 
-      // Get subscription
-      const [sub] = await db
-        .select()
-        .from(subscriptions)
-        .where(eq(subscriptions.organizationId, org.id))
-        .limit(1);
+    // Add organization data if user has membership
+    if (data.membershipId) {
+      req.membership = {
+        id: data.membershipId,
+        organizationId: data.orgId,
+        userId: data.userId,
+        role: data.membershipRole,
+        status: data.membershipStatus,
+        joinedAt: data.membershipJoinedAt,
+      };
 
-      req.organization = org;
-      req.subscription = sub;
-      req.membership = membership;
+      req.organization = {
+        id: data.orgId,
+        name: data.orgName,
+        slug: data.orgSlug,
+        type: data.orgType,
+        industry: data.orgIndustry,
+        teamSize: data.orgTeamSize,
+      };
+
+      req.subscription = {
+        id: data.subId,
+        organizationId: data.orgId,
+        plan: data.subPlan,
+        status: data.subStatus,
+        currentPeriodStart: data.subCurrentPeriodStart,
+        currentPeriodEnd: data.subCurrentPeriodEnd,
+        cancelAtPeriodEnd: data.subCancelAtPeriodEnd,
+      };
     }
 
-    req.user = user;
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);

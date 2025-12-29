@@ -101,24 +101,76 @@ export async function getProject(req, res, next) {
     const { projectId } = req.params;
     const organizationId = req.organization.id;
 
-    // Get project
-    const [project] = await db
-      .select()
+    // Optimized: Single query with LEFT JOIN to get project + components
+    // This eliminates N+1 query pattern (2 queries → 1 query)
+    const result = await db
+      .select({
+        // Project fields
+        projectId: projects.id,
+        projectName: projects.name,
+        projectDescription: projects.description,
+        projectHtml: projects.html,
+        projectCss: projects.css,
+        projectJs: projects.js,
+        projectThumbnail: projects.thumbnail,
+        projectIsPublic: projects.isPublic,
+        projectCreatedBy: projects.createdBy,
+        projectCreatedAt: projects.createdAt,
+        projectUpdatedAt: projects.updatedAt,
+        projectOrganizationId: projects.organizationId,
+        // Component fields (will be null if no components)
+        componentId: components.id,
+        componentName: components.name,
+        componentType: components.type,
+        componentHtml: components.html,
+        componentCss: components.css,
+        componentProps: components.props,
+        componentPosition: components.position,
+        componentCreatedAt: components.createdAt,
+        componentUpdatedAt: components.updatedAt,
+      })
       .from(projects)
-      .where(and(eq(projects.id, projectId), eq(projects.organizationId, organizationId)))
-      .limit(1);
+      .leftJoin(components, eq(components.projectId, projects.id))
+      .where(and(eq(projects.id, projectId), eq(projects.organizationId, organizationId)));
 
-    if (!project) {
+    if (!result || result.length === 0) {
       return res.status(404).json({
         error: 'Project not found',
       });
     }
 
-    // Get components
-    const projectComponents = await db
-      .select()
-      .from(components)
-      .where(eq(components.projectId, projectId));
+    // Reconstruct project object from first row
+    const firstRow = result[0];
+    const project = {
+      id: firstRow.projectId,
+      organizationId: firstRow.projectOrganizationId,
+      name: firstRow.projectName,
+      description: firstRow.projectDescription,
+      html: firstRow.projectHtml,
+      css: firstRow.projectCss,
+      js: firstRow.projectJs,
+      thumbnail: firstRow.projectThumbnail,
+      isPublic: firstRow.projectIsPublic,
+      createdBy: firstRow.projectCreatedBy,
+      createdAt: firstRow.projectCreatedAt,
+      updatedAt: firstRow.projectUpdatedAt,
+    };
+
+    // Reconstruct components array (filter out null components from LEFT JOIN)
+    const projectComponents = result
+      .filter((row) => row.componentId !== null)
+      .map((row) => ({
+        id: row.componentId,
+        projectId: firstRow.projectId,
+        name: row.componentName,
+        type: row.componentType,
+        html: row.componentHtml,
+        css: row.componentCss,
+        props: row.componentProps,
+        position: row.componentPosition,
+        createdAt: row.componentCreatedAt,
+        updatedAt: row.componentUpdatedAt,
+      }));
 
     res.json({
       project,
@@ -251,52 +303,65 @@ export async function duplicateProject(req, res, next) {
       });
     }
 
-    // Get original project
-    const [original] = await db
-      .select()
+    // Optimized: Get original project with components in single query
+    const originalData = await db
+      .select({
+        projectId: projects.id,
+        projectName: projects.name,
+        projectDescription: projects.description,
+        projectHtml: projects.html,
+        projectCss: projects.css,
+        projectJs: projects.js,
+        componentId: components.id,
+        componentName: components.name,
+        componentType: components.type,
+        componentHtml: components.html,
+        componentCss: components.css,
+        componentProps: components.props,
+        componentPosition: components.position,
+      })
       .from(projects)
-      .where(and(eq(projects.id, projectId), eq(projects.organizationId, organizationId)))
-      .limit(1);
+      .leftJoin(components, eq(components.projectId, projects.id))
+      .where(and(eq(projects.id, projectId), eq(projects.organizationId, organizationId)));
 
-    if (!original) {
+    if (!originalData || originalData.length === 0) {
       return res.status(404).json({
         error: 'Project not found',
       });
     }
+
+    const original = originalData[0];
 
     // Create duplicate
     const [duplicate] = await db
       .insert(projects)
       .values({
         organizationId,
-        name: `${original.name} (Copy)`,
-        description: original.description,
-        html: original.html,
-        css: original.css,
-        js: original.js,
+        name: `${original.projectName} (Copy)`,
+        description: original.projectDescription,
+        html: original.projectHtml,
+        css: original.projectCss,
+        js: original.projectJs,
         isPublic: false, // Duplicates are private by default
         createdBy: userId,
       })
       .returning();
 
-    // Get and duplicate components
-    const originalComponents = await db
-      .select()
-      .from(components)
-      .where(eq(components.projectId, projectId));
+    // Duplicate components (already fetched in the JOIN)
+    const originalComponents = originalData
+      .filter((row) => row.componentId !== null)
+      .map((row) => ({
+        projectId: duplicate.id,
+        name: row.componentName,
+        type: row.componentType,
+        html: row.componentHtml,
+        css: row.componentCss,
+        props: row.componentProps,
+        position: row.componentPosition,
+      }));
 
     if (originalComponents.length > 0) {
-      await db.insert(components).values(
-        originalComponents.map((comp) => ({
-          projectId: duplicate.id,
-          name: comp.name,
-          type: comp.type,
-          html: comp.html,
-          css: comp.css,
-          props: comp.props,
-          position: comp.position,
-        }))
-      );
+      await db.insert(components).values(originalComponents);
     }
 
     logger.info(`✅ Project duplicated: ${projectId} → ${duplicate.id}`);

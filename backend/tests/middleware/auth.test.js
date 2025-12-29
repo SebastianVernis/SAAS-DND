@@ -53,36 +53,45 @@ describe('Auth Middleware', () => {
       const token = generateToken({ userId: mockUser.id });
       req.headers.authorization = `Bearer ${token}`;
 
-      // Mock database calls
-      const selectMock = jest.fn()
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([mockUser]),
+      // Mock database calls for optimized JOIN query
+      const mockJoinResult = [{
+        userId: mockUser.id,
+        userEmail: mockUser.email,
+        userName: mockUser.name,
+        userImage: null,
+        userEmailVerified: false,
+        userCreatedAt: new Date(),
+        membershipId: mockMembership.id,
+        membershipRole: mockMembership.role,
+        membershipStatus: 'active',
+        membershipJoinedAt: new Date(),
+        orgId: mockOrganization.id,
+        orgName: mockOrganization.name,
+        orgSlug: 'test-org',
+        orgType: 'personal',
+        orgIndustry: null,
+        orgTeamSize: null,
+        subId: mockSubscription.id,
+        subPlan: mockSubscription.plan,
+        subStatus: 'active',
+        subCurrentPeriodStart: new Date(),
+        subCurrentPeriodEnd: new Date(),
+        subCancelAtPeriodEnd: false,
+      }];
+
+      const selectMock = jest.fn().mockReturnValue({
+        from: jest.fn().mockReturnValue({
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  limit: jest.fn().mockResolvedValue(mockJoinResult),
+                }),
+              }),
             }),
           }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([mockMembership]),
-            }),
-          }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([mockOrganization]),
-            }),
-          }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([mockSubscription]),
-            }),
-          }),
-        });
+        }),
+      });
 
       db.select = selectMock;
 
@@ -130,8 +139,14 @@ describe('Auth Middleware', () => {
 
       const selectMock = jest.fn().mockReturnValue({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            limit: jest.fn().mockResolvedValue([]), // No user found
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  limit: jest.fn().mockResolvedValue([]), // No user found
+                }),
+              }),
+            }),
           }),
         }),
       });
@@ -154,22 +169,45 @@ describe('Auth Middleware', () => {
       const token = generateToken({ userId: mockUser.id });
       req.headers.authorization = `Bearer ${token}`;
 
-      // Mock database calls - user exists but no membership
-      const selectMock = jest.fn()
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([mockUser]),
+      // Mock database calls - user exists but no membership (LEFT JOIN returns nulls)
+      const mockJoinResult = [{
+        userId: mockUser.id,
+        userEmail: mockUser.email,
+        userName: mockUser.name,
+        userImage: null,
+        userEmailVerified: false,
+        userCreatedAt: new Date(),
+        membershipId: null, // No membership
+        membershipRole: null,
+        membershipStatus: null,
+        membershipJoinedAt: null,
+        orgId: null,
+        orgName: null,
+        orgSlug: null,
+        orgType: null,
+        orgIndustry: null,
+        orgTeamSize: null,
+        subId: null,
+        subPlan: null,
+        subStatus: null,
+        subCurrentPeriodStart: null,
+        subCurrentPeriodEnd: null,
+        subCancelAtPeriodEnd: null,
+      }];
+
+      const selectMock = jest.fn().mockReturnValue({
+        from: jest.fn().mockReturnValue({
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  limit: jest.fn().mockResolvedValue(mockJoinResult),
+                }),
+              }),
             }),
           }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              limit: jest.fn().mockResolvedValue([]), // No membership
-            }),
-          }),
-        });
+        }),
+      });
 
       db.select = selectMock;
 
@@ -187,8 +225,14 @@ describe('Auth Middleware', () => {
 
       const selectMock = jest.fn().mockReturnValue({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            limit: jest.fn().mockRejectedValue(new Error('Database error')),
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  limit: jest.fn().mockRejectedValue(new Error('Database error')),
+                }),
+              }),
+            }),
           }),
         }),
       });
