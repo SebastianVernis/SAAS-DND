@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import 'dotenv/config';
 
-import { testConnection } from './db/client.js';
+import { testConnection, closeConnections, logPoolStats } from './db/client.js';
 import { verifyEmailService } from './services/emailService.js';
 import { initializeRedis, closeRedis, isRedisAvailable } from './services/cacheService.js';
 import { RATE_LIMITS } from './config/constants.js';
@@ -137,6 +137,7 @@ async function startServer() {
       logger.info(`✅ Server running on http://localhost:${PORT}`);
       logger.info(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
       logger.info(`✅ Database: Connected`);
+      logPoolStats();
       logger.info(`${emailReady ? '✅' : '⚠️ '} Email: ${emailReady ? 'Ready' : 'Not configured'}`);
       logger.info(`${redisReady ? '✅' : '⚠️ '} Redis: ${redisReady ? 'Connected' : 'Disabled/Not available'}`);
       logger.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
@@ -151,12 +152,14 @@ async function startServer() {
 process.on('SIGTERM', async () => {
   logger.info('\n👋 SIGTERM received, shutting down gracefully...');
   await closeRedis();
+  await closeConnections();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   logger.info('\n👋 SIGINT received, shutting down gracefully...');
   await closeRedis();
+  await closeConnections();
   process.exit(0);
 });
 
