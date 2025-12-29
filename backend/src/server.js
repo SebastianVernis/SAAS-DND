@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import compression from 'compression';
 import 'dotenv/config';
 
 import { testConnection, closeConnections, logPoolStats } from './db/client.js';
@@ -27,6 +28,27 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
     credentials: true,
+  })
+);
+
+// Response compression middleware
+// Compress responses > 1KB using gzip/deflate
+app.use(
+  compression({
+    // Only compress responses larger than 1KB
+    threshold: 1024,
+    // Compression level: 6 is a good balance between speed and compression ratio
+    // 1 = fastest, least compression; 9 = slowest, best compression
+    level: 6,
+    // Filter function to determine what to compress
+    filter: (req, res) => {
+      // Don't compress if client doesn't support it
+      if (req.headers['x-no-compression']) {
+        return false;
+      }
+      // Use compression's default filter (checks Content-Type)
+      return compression.filter(req, res);
+    },
   })
 );
 
