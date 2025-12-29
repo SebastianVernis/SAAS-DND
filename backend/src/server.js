@@ -17,6 +17,9 @@ import onboardingRoutes from './routes/onboarding.js';
 import teamRoutes from './routes/team.js';
 import projectsRoutes from './routes/projects.js';
 
+// Cache headers middleware
+import { smartCache } from './middleware/cacheHeaders.js';
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -66,6 +69,10 @@ const generalLimiter = rateLimit({
 });
 
 app.use('/api/', generalLimiter);
+
+// HTTP caching headers
+// Automatically sets appropriate Cache-Control headers based on route
+app.use(smartCache);
 
 // Health check
 app.get('/health', (req, res) => {
