@@ -38,7 +38,9 @@ export const organizations = pgTable('organizations', {
   teamSize: varchar('team_size', { length: 50 }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
-});
+}, (table) => ({
+  slugIdx: index('idx_organizations_slug').on(table.slug),
+}));
 
 // Subscriptions (plan management)
 export const subscriptions = pgTable('subscriptions', {
@@ -53,7 +55,10 @@ export const subscriptions = pgTable('subscriptions', {
   stripeSubscriptionId: varchar('stripe_subscription_id', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
-});
+}, (table) => ({
+  orgIdx: index('idx_subscriptions_org').on(table.organizationId),
+  stripeCustomerIdx: index('idx_subscriptions_stripe_customer').on(table.stripeCustomerId),
+}));
 
 // Organization members (team management)
 export const organizationMembers = pgTable('organization_members', {
@@ -85,6 +90,9 @@ export const invitations = pgTable('invitations', {
 }, (table) => ({
   tokenIdx: index('idx_invitations_token').on(table.token),
   emailIdx: index('idx_invitations_email').on(table.email),
+  orgIdx: index('idx_invitations_org').on(table.organizationId),
+  // Composite index for common query pattern: WHERE organizationId = ? AND status = ?
+  orgStatusIdx: index('idx_invitations_org_status').on(table.organizationId, table.status),
 }));
 
 // Projects
@@ -103,6 +111,9 @@ export const projects = pgTable('projects', {
   updatedAt: timestamp('updated_at').defaultNow(),
 }, (table) => ({
   orgIdx: index('idx_projects_org').on(table.organizationId),
+  createdByIdx: index('idx_projects_created_by').on(table.createdBy),
+  // Composite index for sorting by updatedAt within organization
+  orgUpdatedIdx: index('idx_projects_org_updated').on(table.organizationId, table.updatedAt),
 }));
 
 // Components (project elements)
