@@ -7,6 +7,7 @@ import 'dotenv/config';
 
 import { testConnection } from './db/client.js';
 import { verifyEmailService } from './services/emailService.js';
+import { initializeRedis, closeRedis, isRedisAvailable } from './services/cacheService.js';
 import { RATE_LIMITS } from './config/constants.js';
 
 // Routes
@@ -126,6 +127,9 @@ async function startServer() {
       logger.warn('⚠️  Email service not ready - emails will fail');
     }
 
+    // Initialize Redis cache
+    const redisReady = await initializeRedis();
+
     // Start listening
     app.listen(PORT, () => {
       logger.info('\n🚀 DragNDrop Commercial API Server');
@@ -134,6 +138,7 @@ async function startServer() {
       logger.info(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
       logger.info(`✅ Database: Connected`);
       logger.info(`${emailReady ? '✅' : '⚠️ '} Email: ${emailReady ? 'Ready' : 'Not configured'}`);
+      logger.info(`${redisReady ? '✅' : '⚠️ '} Redis: ${redisReady ? 'Connected' : 'Disabled/Not available'}`);
       logger.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
     });
   } catch (error) {
@@ -143,13 +148,15 @@ async function startServer() {
 }
 
 // Handle graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   logger.info('\n👋 SIGTERM received, shutting down gracefully...');
+  await closeRedis();
   process.exit(0);
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   logger.info('\n👋 SIGINT received, shutting down gracefully...');
+  await closeRedis();
   process.exit(0);
 });
 
